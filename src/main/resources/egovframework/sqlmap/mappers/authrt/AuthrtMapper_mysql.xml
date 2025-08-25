@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.authrt.mapper.AuthrtMapper">
+
+	<select id="selectAuthrtList" parameterType="HashMap" resultType="authrt">
+		SELECT AUTHRT_ID, AUTHRT_CD,  AUTHRT_NM, AUTHRT_EXPLN, FRST_RGTR_ID, FRST_REG_DT, LAST_MDFR_ID, LAST_MDFCN_DT
+		FROM VST_AUTHRT
+		WHERE 1 = 1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND (AUTHRT_CD LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			AUTHRT_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+		ORDER BY <choose>
+			<when test="orderColumn != null and orderColumn != ''">
+				${orderColumn}
+			</when>
+			<otherwise>
+				FRST_REG_DT
+			</otherwise>
+		</choose> <choose>
+			<when test="ascDesc != null and ascDesc != ''">
+				${ascDesc}
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<select id="selectAuthrtListTotCnt" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) totCnt
+		FROM VST_AUTHRT
+		WHERE 1 = 1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND (AUTHRT_CD LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			AUTHRT_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+	</select>
+
+	<select id="selectAuthrtDetail" parameterType="Long" resultType="authrt">
+		SELECT AUTHRT_ID, AUTHRT_CD, AUTHRT_NM, AUTHRT_EXPLN, FRST_RGTR_ID, FRST_REG_DT, LAST_MDFR_ID, LAST_MDFCN_DT
+		FROM VST_AUTHRT
+		WHERE AUTHRT_ID = #{authrtId}
+	</select>
+
+	<insert id="insertAuthrt" parameterType="authrt" useGeneratedKeys="true" keyProperty="authrtId">
+		INSERT INTO VST_AUTHRT (AUTHRT_CD, AUTHRT_NM, AUTHRT_EXPLN, FRST_RGTR_ID, FRST_REG_DT)
+		VALUES (#{authrtCd}, #{authrtNm}, #{authrtExpln}, #{frstRgtrId}, NOW())
+	</insert>
+
+	<update id="updateAuthrt" parameterType="authrt">
+		UPDATE VST_AUTHRT
+		SET AUTHRT_CD = #{authrtCd},
+			AUTHRT_NM = #{authrtNm},
+			AUTHRT_EXPLN = #{authrtExpln},
+			LAST_MDFR_ID = #{lastMdfrId},
+			LAST_MDFCN_DT = NOW()
+		WHERE AUTHRT_ID = #{authrtId}
+	</update>
+
+	<select id="selectAllAuthrtList" resultType="authrt">
+		SELECT AUTHRT_ID,  AUTHRT_CD, AUTHRT_NM, AUTHRT_EXPLN
+		FROM VST_AUTHRT
+		WHERE AUTHRT_CD NOT IN ('ROLE_ANONYMOUS')
+	</select>
+
+	<insert id="insertMenuAuthrt" parameterType="authrt">
+		INSERT INTO VST_MENU_AUTHRT (MENU_ID, AUTHRT_ID)
+		VALUES
+		<foreach collection="menuList" item="item" separator=",">
+			(#{item.menuId}, #{authrtId})
+		</foreach>
+	</insert>
+
+	<delete id="deleteMenuAuthrt" parameterType="Long">
+		DELETE FROM VST_MENU_AUTHRT
+		WHERE AUTHRT_ID = #{authrtId}
+	</delete>
+
+	<select id="selectMenuAuthrtList" parameterType="Long" resultType="menu">
+		SELECT A.MENU_ID
+		FROM VST_MENU_AUTHRT A
+				 LEFT JOIN VST_AUTHRT B ON A.AUTHRT_ID = B.AUTHRT_ID
+		WHERE A.AUTHRT_ID = #{authrtId}
+	</select>
+
+	<select id="selectBbsAuthrtList" resultType="authrt">
+		SELECT AUTHRT_ID, AUTHRT_CD, AUTHRT_NM
+		FROM VST_AUTHRT
+	</select>
+
+	<delete id="deleteAuthrt" parameterType="Long">
+		DELETE FROM VST_AUTHRT
+		WHERE AUTHRT_ID = #{authrtId}
+	</delete>
+
+	<delete id="deleteMbrAuthrt" parameterType="Long">
+		DELETE FROM VST_MBR_AUTHRT
+		WHERE AUTHRT_ID = #{authrtId}
+	</delete>
+
+	<delete id="deleteBbsAuthrt" parameterType="Long">
+		DELETE FROM VST_BBS_AUTHRT
+		WHERE AUTHRT_ID = #{authrtId}
+	</delete>
+
+	<delete id="deleteMbrAuthrtByUUID" parameterType="String">
+		DELETE FROM VST_MBR_AUTHRT
+		WHERE MBR_ID = (SELECT MBR_ID FROM VST_MBR WHERE UUID = #{uuid})
+	</delete>
+
+	<insert id="insertMbrAuthrtByUUID" parameterType="mbr">
+		INSERT INTO VST_MBR_AUTHRT (MBR_ID, AUTHRT_ID)
+		VALUES
+		    <foreach collection="authrtList" item="authrt" separator=",">
+				((SELECT MBR_ID FROM VST_MBR WHERE UUID = #{uuid}), #{authrt.authrtId})
+			</foreach>
+	</insert>
+
+	<insert id="insertMbrAuthrtByMbrId" parameterType="mbr">
+		INSERT INTO VST_MBR_AUTHRT (MBR_ID, AUTHRT_ID)
+		VALUES
+		<foreach collection="authrtList" item="authrt" separator=",">
+			(#{mbrId}, #{authrt.authrtId})
+		</foreach>
+	</insert>
+
+	<insert id="insertMbrOrgAuthrtByUUID" parameterType="mbrOrg">
+		INSERT INTO VST_MBR_AUTHRT (MBR_ID, AUTHRT_ID)
+		VALUES
+		<foreach collection="authrtList" item="authrt" separator=",">
+			((SELECT MBR_ID FROM VST_MBR WHERE UUID = #{uuid}), #{authrt.authrtId})
+		</foreach>
+	</insert>
+
+	<insert id="insertMbrOrgAuthrtByMbrId" parameterType="mbrOrg">
+		INSERT INTO VST_MBR_AUTHRT (MBR_ID, AUTHRT_ID)
+		VALUES
+		<foreach collection="authrtList" item="authrt" separator=",">
+			(#{mbrId}, #{authrt.authrtId})
+		</foreach>
+	</insert>
+</mapper>

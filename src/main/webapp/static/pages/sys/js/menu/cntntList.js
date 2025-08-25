@@ -1,0 +1,397 @@
+/**
+ * Page User List
+ */
+
+'use strict';
+
+// Datatable (js)
+function cntntDtLoad(e) {
+    let borderColor, bodyBg, headingColor;
+
+    borderColor = config.colors.borderColor;
+    bodyBg = config.colors.bodyBg;
+    headingColor = config.colors.headingColor;
+
+    // Variable declaration for table
+    const dt_popup_table = document.querySelector('.datatables-lists'),
+        userView = 'app-user-view-account.html',
+        statusObj = {
+            1: {title: 'Pending', class: 'bg-label-warning'},
+            2: {title: 'Active', class: 'bg-label-success'},
+            3: {title: 'Inactive', class: 'bg-label-secondary'}
+        };
+    var select2 = $('.select2');
+
+    if (select2.length) {
+        var $this = select2;
+        $this.wrap('<div class="position-relative"></div>').select2({
+            placeholder: 'Select Country',
+            dropdownParent: $this.parent()
+        });
+    }
+
+    // Users datatable
+    if (dt_popup_table) {
+        if ($.fn.dataTable.isDataTable('.datatables-lists')) {
+            $(".datatables-lists").DataTable().destroy();
+            $(".datatables-lists").empty();
+        }
+        const dt_banner = new DataTable(dt_popup_table, {
+            ajax: {
+                url: '/api/sys/cntnts/list',
+                type: "GET",
+                dataSrc: 'data',
+                data: function (d) {
+                    return d;
+                }
+            },
+            serverSide: true,
+            columns: [
+                // columns according to JSON
+                {data: 'cntntsId'},
+                {data: 'cntntsNm'},
+                {data: 'cntntsDc'},
+                {data: 'frstRegistDt'},
+            ],
+            columnDefs: [
+                {
+                    // For Responsive
+                    searchable: false,
+                    orderable: false,
+                    responsivePriority: 2,
+                    targets: 0,
+                    title: "",
+                    render: function (data, type, full, meta) {
+                        return `<input type="radio" class="form-check-input" name="checkRadio" value="${data}"/>`
+                    }
+                },
+                {
+                    targets: 1,
+                    responsivePriority: 3,
+                    orderable: false,
+                    title: '콘텐츠명',
+                    render: function (data, type, full, meta) {
+                        return data;
+                    }
+                },
+                {
+                    targets: 2,
+                    orderable: false,
+                    title: '콘텐츠설명',
+                    render: function (data, type, full, meta) {
+                        return data;
+                    }
+                },
+                {
+                    targets: 3,
+                    orderable: false,
+                    title: '등록일자',
+                    render: function (data, type, full, meta) {
+                        return data;
+                    }
+                }
+            ],
+            select: false,
+            order: [[3, 'desc']],
+            layout: {
+                topStart: {
+                    rowClass: 'row mx-3 my-0 justify-content-between',
+                    features: [
+                        {
+                            pageLength: {
+                                menu: [10, 25, 50, 100],
+                                text: '_MENU_'
+                            }
+                        }
+                    ]
+                },
+                topEnd: {
+                    features: [
+                        {
+                            search: {
+                                placeholder: '검색어를 입력하세요',
+                                text: '_INPUT_'
+                            }
+                        },
+                        {
+                            buttons: [
+                                {
+                                    extend: 'collection',
+                                    className: 'btn btn-label-secondary dropdown-toggle',
+                                    text: '<span class="d-flex align-items-center gap-2"><i class="icon-base bx bx-export icon-sm"></i> <span class="d-none d-sm-inline-block">내보내기</span></span>',
+                                    buttons: [
+                                        {
+                                            extend: 'print',
+                                            text: `<span class="d-flex align-items-center"><i class="icon-base bx bx-printer me-2"></i>인쇄</span>`,
+                                            className: 'dropdown-item',
+                                            exportOptions: {
+                                                columns: [0, 1, 2, 3],
+                                                format: {
+                                                    body: function (inner, coldex, rowdex) {
+                                                        if (inner.length <= 0) return inner;
+                                                        const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
+                                                        let result = '';
+                                                        el.forEach(item => {
+                                                            if (item.classList && item.classList.contains('user-name')) {
+                                                                result += item.lastChild.firstChild.textContent;
+                                                            } else {
+                                                                result += item.textContent || item.innerText || '';
+                                                            }
+                                                        });
+                                                        return result;
+                                                    }
+                                                }
+                                            },
+                                            customize: function (win) {
+                                                win.document.body.style.color = config.colors.headingColor;
+                                                win.document.body.style.borderColor = config.colors.borderColor;
+                                                win.document.body.style.backgroundColor = config.colors.bodyBg;
+                                                const table = win.document.body.querySelector('table');
+                                                table.classList.add('compact');
+                                                table.style.color = 'inherit';
+                                                table.style.borderColor = 'inherit';
+                                                table.style.backgroundColor = 'inherit';
+                                            }
+                                        },
+                                        {
+                                            extend: 'csv',
+                                            text: `<span class="d-flex align-items-center"><i class="icon-base bx bx-file me-2"></i>Csv</span>`,
+                                            className: 'dropdown-item',
+                                            exportOptions: {
+                                                columns: [0, 1, 2, 3],
+                                                format: {
+                                                    body: function (inner, coldex, rowdex) {
+                                                        if (inner.length <= 0) return inner;
+                                                        const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
+                                                        let result = '';
+                                                        el.forEach(item => {
+                                                            if (item.classList && item.classList.contains('user-name')) {
+                                                                result += item.lastChild.firstChild.textContent;
+                                                            } else {
+                                                                result += item.textContent || item.innerText || '';
+                                                            }
+                                                        });
+                                                        return result;
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            extend: 'excel',
+                                            text: `<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-export me-2"></i>Excel</span>`,
+                                            className: 'dropdown-item',
+                                            exportOptions: {
+                                                columns: [0, 1, 2, 3],
+                                                format: {
+                                                    body: function (inner, coldex, rowdex) {
+                                                        if (inner.length <= 0) return inner;
+                                                        const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
+                                                        let result = '';
+                                                        el.forEach(item => {
+                                                            if (item.classList && item.classList.contains('user-name')) {
+                                                                result += item.lastChild.firstChild.textContent;
+                                                            } else {
+                                                                result += item.textContent || item.innerText || '';
+                                                            }
+                                                        });
+                                                        return result;
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            extend: 'pdf',
+                                            text: `<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-pdf me-2"></i>Pdf</span>`,
+                                            className: 'dropdown-item',
+                                            exportOptions: {
+                                                columns: [0, 1, 2, 3],
+                                                format: {
+                                                    body: function (inner, coldex, rowdex) {
+                                                        if (inner.length <= 0) return inner;
+                                                        const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
+                                                        let result = '';
+                                                        el.forEach(item => {
+                                                            if (item.classList && item.classList.contains('user-name')) {
+                                                                result += item.lastChild.firstChild.textContent;
+                                                            } else {
+                                                                result += item.textContent || item.innerText || '';
+                                                            }
+                                                        });
+                                                        return result;
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            extend: 'copy',
+                                            text: `<i class="icon-base bx bx-copy me-1"></i>복사`,
+                                            className: 'dropdown-item',
+                                            exportOptions: {
+                                                columns: [0, 1, 2, 3],
+                                                format: {
+                                                    body: function (inner, coldex, rowdex) {
+                                                        if (inner.length <= 0) return inner;
+                                                        const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
+                                                        let result = '';
+                                                        el.forEach(item => {
+                                                            if (item.classList && item.classList.contains('user-name')) {
+                                                                result += item.lastChild.firstChild.textContent;
+                                                            } else {
+                                                                result += item.textContent || item.innerText || '';
+                                                            }
+                                                        });
+                                                        return result;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                            ]
+                        }
+                    ]
+                },
+                bottomStart: {
+                    rowClass: 'row mx-3 justify-content-between',
+                    features: ['info']
+                },
+                bottomEnd: {
+                    paging: {
+                        firstLast: false
+                    }
+                }
+            },
+            language: lang_kor,
+            // For responsive popup
+            responsive: {
+                details: {
+                    display: DataTable.Responsive.display.modal({
+                        header: function (row) {
+                            const data = row.data();
+                            return 'Details of ' + data['full_name'];
+                        }
+                    }),
+                    type: 'column',
+                    renderer: function (api, rowIdx, columns) {
+                        const data = columns
+                            .map(function (col) {
+                                return col.title !== '' // Do not show row in modal popup if title is blank (for check box)
+                                    ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
+                      <td>${col.title}:</td>
+                      <td>${col.data}</td>
+                    </tr>`
+                                    : '';
+                            })
+                            .join('');
+
+                        if (data) {
+                            const div = document.createElement('div');
+                            div.classList.add('table-responsive');
+                            const table = document.createElement('table');
+                            div.appendChild(table);
+                            table.classList.add('table');
+                            const tbody = document.createElement('tbody');
+                            tbody.innerHTML = data;
+                            table.appendChild(tbody);
+                            return div;
+                        }
+                        return false;
+                    }
+                }
+            },
+            initComplete: function () {
+                const api = this.api();
+
+                
+            },
+        });
+
+        //? The 'delete-record' class is necessary for the functionality of the following code.
+        function deleteRecord(event) {
+            let row = document.querySelector('.dtr-expanded');
+            if (event) {
+                row = event.target.parentElement.closest('tr');
+            }
+            if (row) {
+                dt_banner.row(row).remove().draw();
+            }
+        }
+
+        function bindDeleteEvent() {
+            const userListTable = document.querySelector('.datatables-popups');
+            const modal = document.querySelector('.dtr-bs-modal');
+
+            if (userListTable && userListTable.classList.contains('collapsed')) {
+                if (modal) {
+                    modal.addEventListener('click', function (event) {
+                        if (event.target.parentElement.classList.contains('delete-record')) {
+                            deleteRecord();
+                            const closeButton = modal.querySelector('.btn-close');
+                            if (closeButton) closeButton.click(); // Simulates a click on the close button
+                        }
+                    });
+                }
+            } else {
+                const tableBody = userListTable?.querySelector('tbody');
+                if (tableBody) {
+                    tableBody.addEventListener('click', function (event) {
+                        if (event.target.parentElement.classList.contains('delete-record')) {
+                            deleteRecord(event);
+                        }
+                    });
+                }
+            }
+        }
+
+        // Initial event binding
+        bindDeleteEvent();
+
+        // Re-bind events when modal is shown or hidden
+        document.addEventListener('show.bs.modal', function (event) {
+            if (event.target.classList.contains('dtr-bs-modal')) {
+                bindDeleteEvent();
+            }
+        });
+
+        document.addEventListener('hide.bs.modal', function (event) {
+            if (event.target.classList.contains('dtr-bs-modal')) {
+                bindDeleteEvent();
+            }
+        });
+        // To remove default btn-secondary in export buttons
+        $('.dt-buttons > .btn-group > button').removeClass('btn-secondary');
+    }
+
+// Filter form control to default size
+// ? setTimeout used for user-list table initialization
+    setTimeout(() => {
+        const elementsToModify = [
+            {selector: '.dt-buttons .btn', classToRemove: 'btn-secondary'},
+            {selector: '.dt-search .form-control', classToRemove: 'form-control-sm'},
+            {selector: '.dt-length .form-select', classToRemove: 'form-select-sm', classToAdd: 'ms-0'},
+            {selector: '.dt-length', classToAdd: 'mb-md-6 mb-0'},
+            {selector: '.dt-search', classToAdd: 'mb-md-6 mb-2'},
+            {
+                selector: '.dt-layout-end',
+                classToRemove: 'justify-content-between',
+                classToAdd: 'd-flex gap-md-4 justify-content-md-between justify-content-center gap-4 flex-wrap mt-0'
+            },
+            {selector: '.dt-layout-start', classToAdd: 'mt-0'},
+            {selector: '.dt-buttons', classToAdd: 'd-flex gap-4 mb-md-0 mb-6'},
+            {selector: '.dt-layout-table', classToRemove: 'row mt-2'},
+            {selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive'}
+        ];
+
+        // Delete record
+        elementsToModify.forEach(({selector, classToRemove, classToAdd}) => {
+            document.querySelectorAll(selector).forEach(element => {
+                if (classToRemove) {
+                    classToRemove.split(' ').forEach(className => element.classList.remove(className));
+                }
+                if (classToAdd) {
+                    classToAdd.split(' ').forEach(className => element.classList.add(className));
+                }
+            });
+        });
+    }, 100);
+}

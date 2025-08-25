@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.banner.mapper.BannerMapper">
+
+    <!-- 메인 페이지의 배너 목록을 조회한다. -->
+    <select id="selectBannerListMain" parameterType="map" resultType="egovMap">
+        SELECT
+            A.URL,
+            A.NEW_BRWS_AT,
+            A.DC,
+            B.ATCH_FILE_ID WEB_ID,
+            C.ATCH_FILE_ID MOB_ID
+        FROM VST_BANNER A
+        LEFT OUTER JOIN VST_ATCHFILE B ON (A.BANNER_ID = B.UPPER_ID AND B.FILE_SE = 'WEB_BANNER')
+        LEFT OUTER JOIN VST_ATCHFILE C ON (A.BANNER_ID = C.UPPER_ID AND C.FILE_SE = 'MOB_BANNER')
+        WHERE <![CDATA[ A.NTCE_BGNDE <= NOW() AND A.NTCE_ENDDE >= NOW()
+          AND A.REFLCT_AT = 'Y' AND A.BANNER_SE_CODE = 'BA001' ]]>
+        ORDER BY A.SORT_ORDR
+    </select>
+
+</mapper>

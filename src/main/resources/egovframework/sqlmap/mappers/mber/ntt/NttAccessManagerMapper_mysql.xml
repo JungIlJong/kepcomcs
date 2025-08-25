@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.ntt.mapper.NttAccessManagerMapper">
+    <select id="getNttValidation" parameterType="Long" resultType="com.daonplace.vasanta.domain.ntt.service.impl.NttAccessManagerImpl$Access">
+        SELECT
+            PASSWORD,
+            SECRET_AT,
+            FRST_REGISTER_ID
+        FROM VST_NTT
+        WHERE NTT_ID = #{nttId} AND USE_AT = 'Y'
+    </select>
+
+    <select id="isExist" parameterType="Long" resultType="boolean">
+        SELECT COUNT(*) FROM VST_NTT WHERE NTT_ID = #{nttId} AND USE_AT = 'Y';
+    </select>
+
+</mapper>

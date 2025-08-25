@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.report.mapper.ReportMapper">
+
+    <insert
+            id="insertReport"
+            parameterType="com.daonplace.vasanta.domain.report.dto.Report">
+        INSERT INTO VST_REPORT (
+            TARGET_TYPE,
+            TARGET_ID,
+            REPORTER_ID,
+            REASON_CODE,
+            DETAIL_MESSAGE,
+            CREATED_AT
+        ) VALUES (
+                #{targetType},
+                #{targetId},
+                #{reporterId},
+                #{reasonCode},
+                #{detailMessage},
+                NOW()
+        )
+    </insert>
+</mapper>

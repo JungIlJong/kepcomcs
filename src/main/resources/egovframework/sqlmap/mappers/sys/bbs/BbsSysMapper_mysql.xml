@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.bbs.mapper.BbsSysMapper">
+
+    <!-- 게시판 상세정보 Map -->
+    <resultMap id="detailMap" type="Map">
+        <result column="BBS_ID" property="bbsId" />
+        <result column="BBS_NM" property="bbsNm" />
+        <result column="BBS_TY_CODE" property="bbsTyCode" />
+        <result column="FILE_ATCH_SIZE" property="fileAtchSize" />
+        <result column="FILE_ATCH_CO" property="fileAtchCo" />
+        <result column="SECRET_USE_AT" property="secretUseAt" />
+        <result column="ANSWER_AT" property="answerAt" />
+        <result column="USE_AT" property="useAt" />
+        <result column="REPLY_AT" property="replyAt" />
+        <result column="PERM_EXTSN" property="permExtsn" />
+        <collection  property="roles" ofType="string" javaType="List">
+            <result column="AUTHRT_ID" property="authrtId" />
+            <result column="AUTHOR_LIST" property="authorList" />
+        </collection>
+    </resultMap>
+
+    <!-- 게시판을 생성한다. -->
+    <insert id="insertBbs" parameterType="sysBbs" useGeneratedKeys="true" keyColumn="BBS_ID" keyProperty="bbsId">
+        INSERT INTO VST_BBS (
+            BBS_NM,
+            BBS_TY_CODE,
+            FILE_ATCH_SIZE,
+            FILE_ATCH_CO,
+            SECRET_USE_AT,
+            ANSWER_AT,
+            USE_AT,
+            REPLY_AT,
+            PERM_EXTSN,
+            FRST_REGISTER_ID,
+            FRST_REGIST_DT
+        ) VALUES (
+            #{bbsNm},
+            #{bbsTyCode},
+            #{fileAtchSize},
+            #{fileAtchCo},
+            <choose>
+                  <when test="bbsTyCode == 'BBS_QNA'">
+                      'Y',
+                  </when>
+                  <otherwise>
+                      'N',
+                  </otherwise>
+            </choose>
+            #{answerAt},
+            'Y',
+        <choose>
+            <when test="bbsTyCode == 'BBS_QNA'">
+                'Y',
+            </when>
+            <otherwise>
+                'N',
+            </otherwise>
+        </choose>
+            #{permExtsn},
+            #{frstRegisterId},
+            NOW()
+        )
+    </insert>
+
+    <!-- 게시판을 수정한다. -->
+    <update id="updateBbs" parameterType="sysBbs">
+        UPDATE
+            VST_BBS
+        SET
+            BBS_NM = #{bbsNm},
+        <if test="bbsTyCode != null and bbsTyCode != ''">
+            BBS_TY_CODE = #{bbsTyCode},
+        </if>
+            FILE_ATCH_CO = #{fileAtchCo},
+            FILE_ATCH_SIZE = #{fileAtchSize},
+        <choose>
+            <when test="bbsTyCode == 'BBS_QNA'">
+                SECRET_USE_AT = 'Y',
+            </when>
+            <otherwise>
+                SECRET_USE_AT = 'N',
+            </otherwise>
+        </choose>
+            ANSWER_AT = #{answerAt},
+            <if test="useAt != null">
+            USE_AT = #{useAt},
+            </if>
+        <choose>
+            <when test="bbsTyCode == 'BBS_QNA'">
+                REPLY_AT = 'Y',
+            </when>
+            <otherwise>
+                REPLY_AT = 'N',
+            </otherwise>
+        </choose>
+            PERM_EXTSN = #{permExtsn},
+            LAST_UPDUSR_ID = #{lastUpdusrId},
+            LAST_UPDT_DT = now()
+        WHERE BBS_ID = #{bbsId}
+
+    </update>
+
+    <!-- 게시판을 삭제한다. -->
+    <delete id="deleteBbsById" parameterType="String">
+        DELETE FROM VST_BBS WHERE BBS_ID = #{bbsId}
+    </delete>
+
+    <!-- 게시판 목록을 조회한다. -->
+    <select id="selectBbsList" parameterType="map" resultType="egovMap">
+        SELECT
+            BBS_ID,
+            BBS_NM,
+            BBS_TY_CODE,
+            USE_AT,
+            DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT
+        FROM VST_BBS
+        WHERE 1 = 1
+        <if test="minDate != null and minDate != '' and maxDate != null and maxDate != ''">
+            <![CDATA[AND(DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') >= #{minDate} AND DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') <= #{maxDate})]]>
+        </if>
+        <if test="bbsTyCode != null and bbsTyCode != ''">
+            AND BBS_TY_CODE = #{bbsTyCode}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (BBS_ID LIKE CONCAT('%', #{searchKeyword} , '%') OR BBS_NM LIKE CONCAT('%', #{searchKeyword} , '%'))
+        </if>
+        ORDER BY
+        <choose>
+            <when test="orderColumn != null and orderColumn != ''">
+                ${orderColumn}
+            </when>
+            <otherwise>
+                BBS_ID
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="ascDesc != null and ascDesc != ''">
+                ${ascDesc}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <!-- 게시판 총 갯수를 조회한다. -->
+    <select id="selectBbsListTotCnt" parameterType="map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM VST_BBS
+        WHERE 1 = 1
+        <if test="minDate != null and minDate != '' and maxDate != null and maxDate != ''">
+            <![CDATA[AND(DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') >= #{minDate} AND DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') <= #{maxDate})]]>
+        </if>
+        <if test="bbsTyCode != null and bbsTyCode != ''">
+            AND BBS_TY_CODE = #{bbsTyCode}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (BBS_ID LIKE CONCAT('%', #{searchKeyword} , '%') OR BBS_NM LIKE CONCAT('%', #{searchKeyword} , '%'))
+        </if>
+        ORDER BY FRST_REGIST_DT DESC
+    </select>
+
+    <!-- 게시판의 상세정보를 조회한다. -->
+    <select id="selectBbsDetail" parameterType="string" resultMap="detailMap">
+        SELECT
+            A.BBS_ID,
+            A.BBS_NM,
+            A.BBS_TY_CODE,
+            A.FILE_ATCH_SIZE,
+            A.FILE_ATCH_CO,
+            A.SECRET_USE_AT,
+            A.ANSWER_AT,
+            A.USE_AT,
+            A.REPLY_AT,
+            REPLACE(PERM_EXTSN, ' ', '') PERM_EXTSN,
+            B.AUTHRT_ID,
+            B.AUTHOR_LIST
+        FROM
+            VST_BBS A
+        LEFT OUTER JOIN VST_BBS_AUTHRT B ON A.BBS_ID = B.BBS_ID
+        WHERE
+            A.BBS_ID = #{bbsId}
+    </select>
+
+    <!-- 관리자의 게시판 권한을 조회한다. -->
+    <select id="selectBbsPermissionInfo" resultType="egovMap" parameterType="Map">
+        SELECT
+            A.BBS_ID,
+            A.BBS_NM,
+            A.BBS_TY_CODE,
+            A.FILE_ATCH_SIZE,
+            A.FILE_ATCH_CO,
+            A.SECRET_USE_AT,
+            A.ANSWER_AT,
+            A.USE_AT,
+            A.REPLY_AT,
+            REPLACE(PERM_EXTSN, ' ', '') PERM_EXTSN,
+            B.AUTHOR_LIST
+        FROM VST_BBS A
+        LEFT OUTER JOIN VST_BBS_AUTHRT B ON B.BBS_ID = A.BBS_ID
+        LEFT OUTER JOIN VST_MBR_AUTHRT C ON C.AUTHRT_ID = B.AUTHRT_ID
+        WHERE A.BBS_ID = #{bbsId} and C.MBR_ID = #{mbrId}
+    </select>
+
+    <!-- 사용가능한 모든 게시판을 조회한다. -->
+    <select id="selectAllEnabled" resultType="egovMap">
+    SELECT
+        BBS_ID,
+        BBS_NM,
+        BBS_TY_CODE,
+        FILE_ATCH_SIZE,
+        FILE_ATCH_CO,
+        REPLACE(PERM_EXTSN, ' ', '') PERM_EXTSN
+    FROM VST_BBS
+    WHERE USE_AT = 'Y'
+    </select>
+</mapper>

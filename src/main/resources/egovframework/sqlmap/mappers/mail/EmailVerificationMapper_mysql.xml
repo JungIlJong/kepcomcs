@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.mail.mapper.EmailVerificationMapper">
+
+    <insert id="insertEmailVerification" parameterType="com.daonplace.vasanta.domain.mail.dto.EmailVerification">
+        INSERT INTO email_verification (
+            email_addr,
+            verification_code,
+            expiry_time,
+            verified,
+            created_at
+        ) VALUES (
+            #{emailAddr},
+            #{verificationCode},
+            #{expiryTime},
+            #{verified},
+            NOW()
+        )
+    </insert>
+
+    <select id="selectEmailVerification" parameterType="com.daonplace.vasanta.domain.mail.dto.EmailVerification" resultType="com.daonplace.vasanta.domain.mail.dto.EmailVerification">
+        SELECT
+            email_addr AS emailAddr,
+            verification_code AS verificationCode,
+            expiry_time AS expiryTime,
+            verified,
+            verified_time AS verifiedTime,
+            created_at AS createdAt
+        FROM
+            email_verification
+        WHERE
+            email_addr = #{emailAddr}
+            AND verification_code = #{verificationCode}
+            AND expiry_time > NOW()
+    </select>
+
+    <update id="updateEmailVerification" parameterType="com.daonplace.vasanta.domain.mail.dto.EmailVerification">
+        UPDATE email_verification
+        SET
+            verified = #{verified},
+            verified_time = NOW()
+        WHERE
+            email_addr = #{emailAddr}
+            AND verification_code = #{verificationCode}
+    </update>
+
+    <delete id="deleteExpiredVerification">
+        DELETE FROM email_verification
+        WHERE expiry_time &lt; NOW()
+    </delete>
+
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.cntnts.mapper.CntntsHistSysMapper">
+
+    <!-- 콘텐츠 이력을 생성한다. -->
+    <insert id="insertCntntsHist" parameterType="cntntsHist">
+        INSERT INTO VST_CNTNTS_HIST (
+            CNTNTS_ID,
+            CNTNTS_NM,
+            HIST_SE_CODE,
+            LAST_UPDUSR_ID,
+            LAST_UPDT_DT
+        )
+        VALUES (
+            #{cntntsId},
+            #{cntntsNm},
+            #{histSeCode},
+            #{lastUpdusrId},
+            NOW()
+        )
+    </insert>
+
+    <!-- 콘텐츠 이력 목록을 조회한다. -->
+    <select id="selectCntntsHistList" parameterType="Map" resultType="egovMap">
+        SELECT
+            A.CNTNTS_HIST_ID,
+            A.CNTNTS_ID,
+            A.CNTNTS_NM,
+            HIST_SE_CODE,
+            B.ID,
+            DATE_FORMAT(A.LAST_UPDT_DT, '%Y-%m-%d %H:%i') LAST_UPDT_DT
+        FROM VST_CNTNTS_HIST A
+        LEFT OUTER JOIN VST_MBR B ON B.MBR_ID = A.LAST_UPDUSR_ID
+        LEFT OUTER JOIN VST_CNTNTS C ON C.CNTNTS_ID = A.CNTNTS_ID
+        WHERE 1 = 1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (B.ID LIKE CONCAT('%', #{searchKeyword}, '%') OR A.CNTNTS_ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        <if test="minDate != null and minDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.LAST_UPDT_DT, '%Y-%m-%d') >= #{minDate} ]]>
+        </if>
+        <if test="maxDate != null and maxDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.LAST_UPDT_DT, '%Y-%m-%d') <= #{maxDate} ]]>
+        </if>
+        ORDER BY
+        <choose>
+            <when test="orderColumn != null and orderColumn != ''">
+                ${orderColumn}
+            </when>
+            <otherwise>
+                A.CNTNTS_HIST_ID
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="ascDesc != null and ascDesc != ''">
+                ${ascDesc}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <!-- 콘텐츠 이력 총 갯수를 조회한다. -->
+    <select id="selectCntntsHistTotCnt" resultType="int" parameterType="Map">
+        SELECT
+            COUNT(*)
+        FROM VST_CNTNTS_HIST A
+        LEFT OUTER JOIN VST_MBR B ON B.MBR_ID = A.LAST_UPDUSR_ID
+        LEFT OUTER JOIN VST_CNTNTS C ON C.CNTNTS_ID = A.CNTNTS_ID
+        WHERE 1 = 1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (B.ID LIKE CONCAT('%', #{searchKeyword}, '%') OR A.CNTNTS_ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        <if test="minDate != null and minDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.LAST_UPDT_DT, '%Y-%m-%d') >= #{minDate} ]]>
+        </if>
+        <if test="maxDate != null and maxDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.LAST_UPDT_DT, '%Y-%m-%d') <= #{maxDate} ]]>
+        </if>
+    </select>
+</mapper>

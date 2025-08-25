@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.push.mapper.PushSysMapper">
+
+	<select id="selectPushList" parameterType="HashMap" resultType="egovMap">
+		SELECT PUSH_LOG_ID,
+		       MESSAGE_TITLE,
+		       MESSAGE_BODY,
+		       SENDER,
+		       SENT_COUNT,
+		       SUCCESS_COUNT,
+		       FAILED_COUNT,
+		       DATE_FORMAT(SENT_AT, '%Y-%m-%d %H:%i:%s') AS SENT_AT
+		FROM VST_PUSH_LOG
+		WHERE 1 = 1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND	(MESSAGE_TITLE LIKE CONCAT('%', #{searchKeyword}, '%') OR MESSAGE_BODY LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+		ORDER BY
+		<choose>
+			<when test="orderColumn != null and orderColumn != ''">
+				${orderColumn}
+			</when>
+			<otherwise>
+				SENT_AT
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="ascDesc != null and ascDesc != ''">
+				${ascDesc}
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<select id="selectPushListTotCnt" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) totCnt
+		FROM VST_PUSH_LOG
+		WHERE 1 = 1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND	(MESSAGE_TITLE LIKE CONCAT('%', #{searchKeyword}, '%') OR MESSAGE_BODY LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+	</select>
+
+	<insert id="insertPushLog" parameterType="pushLog">
+		INSERT INTO VST_PUSH_LOG (MESSAGE_TITLE, MESSAGE_BODY, TOKENS, SENDER, SENT_COUNT, SUCCESS_COUNT, FAILED_COUNT, SENT_AT)
+		VALUES (#{messageTitle}, #{messageBody}, #{tokens}, #{sender}, #{sentCount}, #{successCount}, #{failedCount}, NOW())
+	</insert>
+
+	<select id="selectPushLogXlsx" parameterType="HashMap" resultType="pushLog">
+		SELECT *
+		FROM VST_PUSH_LOG
+		WHERE PUSH_LOG_ID = #{pushLogId}
+	</select>
+
+</mapper>

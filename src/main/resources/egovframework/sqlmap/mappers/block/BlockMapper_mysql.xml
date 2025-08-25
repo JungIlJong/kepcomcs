@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.block.mapper.BlockMapper">
+
+    <insert
+            id="insertBlock"
+            parameterType="com.daonplace.vasanta.domain.block.dto.Block">
+        INSERT INTO VST_BLOCK (
+            TARGET_TYPE,
+            TARGET_ID,
+            BLOCKER_ID,
+            CREATED_AT
+        ) VALUES (
+            #{targetType},
+            #{targetId},
+            #{blockerId},
+            NOW()
+        )
+    </insert>
+</mapper>

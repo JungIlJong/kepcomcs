@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.login.mapper.SnsLoginMapper">
+
+	<select id="selectSnsMemberInfo" parameterType="Map" resultType="Map">
+		SELECT
+			VMS.SNS_ID AS SNS_ID,
+			VMS.MBR_ID AS MBER_ID,
+			VMS.EML_ADDR AS EMAIL,
+			VMS.PROVIDER AS PROVIDER,
+			VMS.PROVIDER_ID AS PROVIDER_ID,
+			VMS.REG_DT AS REG_DT,
+			VM.ID AS LOGIN_ID
+		FROM VST_MBR_SNS VMS
+		INNER JOIN VST_MBR VM ON VMS.MBR_ID = VM.MBR_ID
+		WHERE PROVIDER_ID = #{providerId} AND PROVIDER = #{provider}
+	</select>
+
+	<insert id="insertMberSns" parameterType="Map">
+		INSERT INTO VST_MBR_SNS (
+			SNS_ID,
+			EML_ADDR,
+			PROVIDER,
+			PROVIDER_ID,
+			MBR_ID,
+			REG_DT
+		) VALUES (
+					 #{snsId},
+					 #{email},
+					 #{provider},
+					 #{id},
+					 #{mbrId},
+					 NOW()
+				 )
+	</insert>
+
+	<select id="checkMberExist" parameterType="Map" resultType="Map">
+		SELECT MBER_ID AS USER_ID,
+			   PASSWORD AS PASSWORD,
+			   MBER_NM AS USER_NM,
+			   ESNTL_ID AS ESNTL_ID,
+			   STTUS_CODE AS STTUS_CODE,
+			   EMAIL_ADRES AS EMAIL_ADRES,
+			   LOCK_AT AS LOCK_AT,
+			   LOCK_CNT AS LOCK_CNT
+		FROM VST_MBER
+		WHERE MBER_ID = #{mberId}
+	</select>
+
+	<insert id="insertMber" parameterType="Map">
+		INSERT INTO VST_MBER (
+			MBER_ID,
+			ESNTL_ID,
+			PASSWORD,
+			MBER_NM,
+			STTUS_CODE,
+			EMAIL_ADRES,
+			MBTLNUM,
+			FXNUM,
+			AREA_NO,
+			MIDDLE_TELNO,
+			END_TELNO,
+			ZIP,
+			ADRES,
+			DETAIL_ADRES,
+			LOCK_AT,
+			LOCK_CNT,
+			FRST_REGISTER_ID,
+			FRST_REGIST_DT
+		) VALUES (
+					 #{mberId},
+					 #{esntlId},
+					 #{password},
+					 #{mberNm},
+					 'A',
+					 #{emailAdres},
+					 #{mbtlnum},
+					 #{fxnum},
+					 #{areaNo},
+					 #{middleTelno},
+					 #{endTelno},
+					 #{zip},
+					 #{adres},
+					 #{detailAdres},
+					 'N',
+					 0,
+					 #{mberId},
+					 NOW()
+				 )
+	</insert>
+
+</mapper>

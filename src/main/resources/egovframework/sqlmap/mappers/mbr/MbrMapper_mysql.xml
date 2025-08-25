@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.mbr.mapper.MbrMapper">
+
+    <resultMap id="mbrAuthrt" type="mbr">
+        <id property="mbrId" column="MBR_ID"/>
+        <result property="uuid" column="UUID"/>
+        <result property="id" column="ID"/>
+        <result property="mbrNm" column="MBR_NM"/>
+        <result property="emlAddr" column="EML_ADDR"/>
+        <result property="mblTelno" column="MBL_TELNO"/>
+        <result property="fxno" column="FXNO"/>
+        <result property="zip" column="ZIP"/>
+        <result property="addr" column="ADDR"/>
+        <result property="daddr" column="DADDR"/>
+        <result property="lgnLckYn" column="LGN_LCK_YN"/>
+        <result property="lgnFailNmtm" column="LGN_FAIL_NMTM"/>
+        <result property="sttsCd" column="STTS_CD"/>
+        <result property="reportIds" column="REPORT_IDS"/>
+        <result property="blockIds" column="BLOCK_IDS"/>
+        <collection property="authrtList" ofType="authrt">
+            <result property="authrtId" column="AUTHRT_ID"/>
+            <result property="authrtCd" column="AUTHRT_CD"/>
+            <result property="authrtNm" column="AUTHRT_NM"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectMbrList" parameterType="HashMap" resultType="mbr">
+        SELECT *
+        FROM VST_MBR A
+        WHERE 1 = 1
+        <if test="searchKeyword != null and searchKeyword != ''">
+           AND (ID LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                MBR_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+                EML_ADDR LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        <if test="maxDate != null and maxDate != '' and minDate != null and minDate != ''">
+            AND DATE_FORMAT(FRST_REG_DT, '%Y-%m-%d') <![CDATA[>=]]> #{minDate} AND DATE_FORMAT(FRST_REG_DT, '%Y-%m-%d') <![CDATA[<=]]> #{maxDate}
+        </if>
+        ORDER BY
+        <choose>
+            <when test="orderColumn != null and orderColumn != ''">
+                ${orderColumn}
+            </when>
+            <otherwise>
+                FRST_REG_DT
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="ascDesc != null and ascDesc != ''">
+                ${ascDesc}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <select id="selectMbrListTotCnt" parameterType="HashMap" resultType="int">
+        SELECT COUNT(*) AS totCnt
+        FROM VST_MBR
+        WHERE 1 = 1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (ID LIKE CONCAT('%', #{searchKeyword}, '%') OR
+            MBR_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+            EML_ADDR LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        <if test="maxDate != null and maxDate != '' and minDate != null and minDate != ''">
+            AND DATE_FORMAT(FRST_REG_DT, '%Y-%m-%d') <![CDATA[>=]]> #{minDate} AND DATE_FORMAT(FRST_REG_DT, '%Y-%m-%d') <![CDATA[<=]]> #{maxDate}
+        </if>
+    </select>
+
+    <select id="selectMbrDetailByUUID" parameterType="String" resultMap="mbrAuthrt">
+        SELECT A.MBR_ID,
+               A.UUID,
+               A.ID,
+               A.MBR_NM,
+               A.EML_ADDR,
+               A.MBL_TELNO,
+               A.FXNO,
+               A.ZIP,
+               A.ADDR,
+               A.DADDR,
+               A.REPORT_IDS,
+               A.BLOCK_IDS,
+               A.LGN_LCK_YN,
+               A.LGN_FAIL_NMTM,
+               A.STTS_CD,
+               C.AUTHRT_ID,
+               C.AUTHRT_CD,
+               C.AUTHRT_NM
+        FROM VST_MBR A
+        LEFT JOIN VST_MBR_AUTHRT B ON A.MBR_ID = B.MBR_ID
+        LEFT JOIN VST_AUTHRT C ON B.AUTHRT_ID = C.AUTHRT_ID
+        WHERE A.UUID = #{uuid}
+    </select>
+
+    <insert id="insertMbr" parameterType="mbr" useGeneratedKeys="true" keyProperty="mbrId">
+        INSERT INTO VST_MBR (UUID, ID, PSWD, MBR_NM, EML_ADDR, MBL_TELNO, FXNO, ZIP, ADDR, DADDR, STTS_CD, FRST_RGTR_ID, FRST_REG_DT, DVC_PUSH_TOKEN, REPORT_IDS, BLOCK_IDS)
+        VALUES (UUID(), #{id}, #{pswd}, #{mbrNm}, #{emlAddr}, #{mblTelno}, #{fxno}, #{zip}, #{addr}, #{daddr}, #{sttsCd}, #{frstRgtrId}, NOW(), #{dvcPushToken}, '', '')
+    </insert>
+
+    <update id="updateMbrByUUID" parameterType="mbr">
+        UPDATE VST_MBR
+        SET MBR_NM = #{mbrNm},
+        <if test='pswd != null and pswd != ""'>
+            PSWD = #{pswd},
+        </if>
+        EML_ADDR = #{emlAddr},
+        MBL_TELNO = #{mblTelno},
+        FXNO = #{fxno},
+        ZIP = #{zip},
+        ADDR = #{addr},
+        DADDR = #{daddr},
+        <if test='sttsCd != null and sttsCd != ""'>
+            STTS_CD = #{sttsCd},
+        </if>
+        LAST_MDFR_ID = #{lastMdfrId},
+        LAST_MDFCN_DT = NOW()
+        WHERE UUID = #{uuid}
+    </update>
+
+    <select id="countMbrById" parameterType="String" resultType="int">
+        SELECT COUNT(*) AS cnt
+        FROM VST_MBR
+        WHERE ID = #{id}
+    </select>
+
+    <select id="countMbrByEmail" parameterType="HashMap" resultType="int">
+        SELECT COUNT(*) AS cnt
+        FROM VST_MBR
+        WHERE 1 = 1
+        <if test="emlAddr != null and emlAddr != ''">
+            AND EML_ADDR = #{emlAddr}
+        </if>
+        <if test="uuid != null and uuid != ''">
+            AND UUID != #{uuid}
+        </if>
+    </select>
+
+    <delete id="deleteMbr" parameterType="String">
+        DELETE FROM VST_MBR
+        WHERE UUID = #{uuid}
+    </delete>
+
+    <update id="updateMbrLock" parameterType="String">
+        UPDATE VST_MBR
+        SET LGN_LCK_YN = 'N',
+            LGN_FAIL_NMTM = 0
+        WHERE UUID = #{uuid}
+    </update>
+
+    <select id="selectMbrPushList" parameterType="HashMap" resultType="mbr">
+        SELECT MBR_ID, MBR_NM, ID, DVC_PUSH_TOKEN
+        FROM VST_MBR
+        WHERE STTS_CD = 'A'
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (ID LIKE CONCAT('%', #{searchKeyword}, '%') OR
+            MBR_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        ORDER BY FRST_REG_DT DESC
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <select id="selectMbrPushListTotCnt" parameterType="HashMap" resultType="int">
+        SELECT COUNT(*) AS totCnt
+        FROM VST_MBR
+        WHERE STTS_CD = 'A'
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (ID LIKE CONCAT('%', #{searchKeyword}, '%') OR
+            MBR_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+    </select>
+
+    <select id="selectMbrPushListAll" parameterType="HashMap" resultType="mbr">
+        SELECT MBR_ID, MBR_NM, ID, DVC_PUSH_TOKEN, UUID
+        FROM VST_MBR
+        WHERE STTS_CD = 'A'
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (ID LIKE CONCAT('%', #{searchKeyword}, '%') OR
+            MBR_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        ORDER BY FRST_REG_DT DESC
+    </select>
+
+    <update id="withDrawByUuid" parameterType="String">
+        UPDATE
+            VST_MBR
+        SET
+            STTS_CD = 'D'
+        WHERE UUID = #{uuid}
+    </update>
+
+    <update id="reportMbr" parameterType="HashMap">
+        UPDATE
+            VST_MBR
+        SET
+            REPORT_IDS = CONCAT(REPLACE(REPORT_IDS, CONCAT(#{mbrId}, ","), ""), #{mbrId}, ",")
+        WHERE MBR_ID = #{frstRgstId}
+    </update>
+
+    <update id="blockMbr" parameterType="HashMap">
+        UPDATE
+            VST_MBR
+        SET
+            BLOCK_IDS = CONCAT(REPLACE(BLOCK_IDS, CONCAT(#{mbrId}, ","), ""), #{mbrId}, ",")
+        WHERE MBR_ID = #{frstRgstId}
+    </update>
+
+    <update id="updateMbrReportIds" parameterType="String">
+        UPDATE VST_MBR
+        SET REPORT_IDS = ''
+        WHERE UUID = #{uuid}
+    </update>
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.accessip.mapper.AccessIpMapper">
+
+	<!-- 접근IP 목록 정보를 조회한다. -->
+	<select id="selectAccessIpList" parameterType="HashMap" resultType="egovMap">
+		SELECT IP_ID,
+		       IP_ADRES,
+		       IP_DC,
+		       DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d %H:%i:%s') AS FRST_REGIST_DT
+		FROM VST_ACCESSIP
+		WHERE 1 = 1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND	(IP_ADRES LIKE CONCAT('%', #{searchKeyword}, '%') OR IP_DC LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+		ORDER BY
+		<choose>
+			<when test="orderColumn != null and orderColumn != ''">
+				${orderColumn}
+			</when>
+			<otherwise>
+				FRST_REGIST_DT
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="ascDesc != null and ascDesc != ''">
+				${ascDesc}
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<!-- 접근IP 총 갯수를 조회한다. -->
+	<select id="selectAccessIpListTotCnt" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) totCnt
+		FROM VST_ACCESSIP
+		WHERE 1 = 1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND	(IP_ADRES LIKE CONCAT('%', #{searchKeyword}, '%') OR IP_DC LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+		ORDER BY
+		<choose>
+			<when test="orderColumn != null and orderColumn != ''">
+				${orderColumn}
+			</when>
+			<otherwise>
+				FRST_REGIST_DT
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="ascDesc != null and ascDesc != ''">
+				${ascDesc}
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 접근IP 전체 목록 정보를 조회한다. -->
+	<select id="selectAllAccessIpList" resultType="accessIp">
+		SELECT IP_ADRES
+		FROM VST_ACCESSIP
+		WHERE 1 = 1
+	</select>
+
+	<!-- 접근IP 상세 정보를 조회한다. -->
+	<select id="selectAccessIpDetail" parameterType="String" resultType="accessIp">
+		SELECT IP_ID, IP_ADRES, IP_DC, FRST_REGISTER_ID, FRST_REGIST_DT, LAST_UPDUSR_ID, LAST_UPDT_DT
+		FROM VST_ACCESSIP
+		WHERE IP_ID = #{ipId}
+	</select>
+
+	<!-- 접근IP 정보를 등록한다. -->
+	<insert id="insertAccessIp" parameterType="accessIp">
+		INSERT INTO VST_ACCESSIP (IP_ADRES, IP_DC, FRST_REGISTER_ID, FRST_REGIST_DT)
+		VALUES (#{ipAdres}, #{ipDc}, #{frstRegisterId}, NOW())
+	</insert>
+
+	<!-- 접근IP 정보를 수정한다. -->
+	<update id="updateAccessIp" parameterType="accessIp">
+		UPDATE VST_ACCESSIP
+		SET IP_ADRES = #{ipAdres},
+		    IP_DC = #{ipDc},
+			LAST_UPDUSR_ID = #{lastUpdusrId},
+			LAST_UPDT_DT = NOW()
+		WHERE IP_ID = #{ipId}
+	</update>
+
+	<!-- 접근IP 정보를 삭제한다. -->
+	<delete id="deleteAccessIp" parameterType="String">
+		DELETE FROM VST_ACCESSIP
+		WHERE IP_ID = #{ipId}
+	</delete>
+
+	<!-- 접근IP 엑셀 정보를 조회한다. -->
+	<select id="selectAccessIpXlsx" parameterType="HashMap" resultType="xlsxAccessIp">
+		SELECT IP_ADRES, IP_DC
+		FROM VST_ACCESSIP
+		WHERE 1 = 1
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchCondition == 'ALL'">
+					AND	((IP_ADRES LIKE CONCAT('%', #{searchKeyword}, '%')) OR (IP_DC LIKE CONCAT('%', #{searchKeyword}, '%')))
+				</when>
+				<when test="searchCondition == 'IP_ADRES'">
+					AND	IP_ADRES LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<when test="searchCondition == 'IP_DC'">
+					AND	IP_DC LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+	</select>
+
+	<select id="selectAllAccessIpList2" resultType="String">
+		SELECT IP_ADRES
+		FROM VST_ACCESSIP
+		WHERE 1 = 1
+	</select>
+
+</mapper>

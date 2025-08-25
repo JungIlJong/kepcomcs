@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.login.mapper.LoginMapper">
+
+	<select id="selectMbrById" parameterType="String" resultType="loginVO">
+		SELECT MBR_ID,
+		       UUID,
+		       ID,
+		       PSWD,
+		       MBR_NM,
+		       EML_ADDR,
+		       MBL_TELNO,
+		       FXNO,
+		       ZIP,
+		       ADDR,
+		       DADDR,
+		       LGN_LCK_YN,
+		       LGN_FAIL_NMTM,
+		       FRST_RGTR_ID,
+		       FRST_REG_DT,
+		       LAST_MDFR_ID,
+		       LAST_MDFCN_DT,
+		       STTS_CD,
+		       DVC_PUSH_TOKEN
+		FROM VST_MBR
+		WHERE ID = #{username}
+	</select>
+
+	<update id="updateMbrLgnLckById" parameterType="String">
+		UPDATE VST_MBR
+		SET LGN_LCK_YN = 'Y'
+		WHERE ID = #{id}
+	</update>
+
+	<update id="increaseMbrLgnFailNmtmById" parameterType="String">
+		UPDATE VST_MBR
+		SET LGN_FAIL_NMTM = LGN_FAIL_NMTM + 1
+		WHERE ID = #{id}
+	</update>
+
+	<update id="resetMbrLgnLckById" parameterType="String">
+		UPDATE VST_MBR
+		SET LGN_LCK_YN = 'N',
+			LGN_FAIL_NMTM = 0
+		WHERE ID = #{id}
+	</update>
+
+	<select id="selectMbrRoleByMbrId" parameterType="Long" resultType="String">
+		SELECT C.AUTHRT_CD
+		FROM VST_MBR A
+				 LEFT JOIN VST_MBR_AUTHRT B ON A.MBR_ID = B.MBR_ID
+				 LEFT JOIN VST_AUTHRT C ON B.AUTHRT_ID = C.AUTHRT_ID
+		WHERE A.MBR_ID = #{mbrId}
+	</select>
+
+	<select id="selectMbrByMbrNmAndEmlAddr" parameterType="findId" resultType="mbr">
+		SELECT MBR_NM,
+		       ID
+		FROM VST_MBR
+		WHERE MBR_NM = #{mbrNm} ANd EML_ADDR = #{emlAddr}
+	</select>
+
+	<select id="selectMbrByIdAndMbrNmAndEmlAddr" parameterType="findPw" resultType="mbr">
+		SELECT MBR_ID, UUID
+		FROM VST_MBR
+		WHERE ID = #{id} AND MBR_NM = #{mbrNm} ANd EML_ADDR = #{emlAddr}
+	</select>
+
+	<update id="updateMbrPswdByUuid" parameterType="resetPw">
+		UPDATE VST_MBR
+		SET PSWD = #{pswd}
+		WHERE UUID = #{uuid}
+	</update>
+
+	<update id="updateMbrDvcPushTokenById" parameterType="loginVO">
+		UPDATE VST_MBR
+		SET DVC_PUSH_TOKEN = #{dvcPushToken}
+		WHERE ID = #{id}
+	</update>
+
+
+
+</mapper>

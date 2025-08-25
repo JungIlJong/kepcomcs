@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.approval.mapper.ApprovalDocumentMapper">
+
+	<resultMap id="approvalDocumentMap" type="approvalDocument">
+		<id property="approvalDocumentId" column="approval_document_id"/>
+		<result property="creatorId" column="creator_id"/>
+		<result property="approvalYn" column="approval_yn"/>
+		<result property="approvalTitle" column="approval_title"/>
+		<result property="approvalContent" column="approval_content"/>
+		<result property="approvalStatus" column="approval_status"/>
+		<result property="approvalMyLineId" column="approval_my_line_id"/>
+		<collection property="approvalLines" ofType="approvalLine">
+			<result property="approvalLineId" column="approval_line_id"/>
+			<result property="approverId" column="approver_id"/>
+			<result property="approvalOrder" column="approval_order"/>
+			<result property="approvalStatus" column="approval_line_status"/>
+			<result property="approvedAt" column="approved_at"/>
+			<result property="approverNm" column="MBR_NM"/>
+		</collection>
+	</resultMap>
+
+	<select id="selectInboxApprovalDocumentList" parameterType="HashMap" resultType="egovMap">
+		SELECT ad.approval_title,
+		VM.MBR_NM,
+		DATE_FORMAT(ad.created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
+		ad.approval_status,
+		CASE
+			WHEN ad.approval_status = 'N' THEN '결재요청'
+			WHEN ad.approval_status = 'P' THEN '결재중'
+			WHEN ad.approval_status = 'A' THEN '결재완료'
+			WHEN ad.approval_status = 'D' THEN '반려'
+			WHEN ad.approval_status = 'C' THEN '취소'
+		END AS approval_status_nm,
+		ad.approval_document_id
+		FROM approval_documents ad
+		LEFT JOIN VST_MBR VM ON ad.creator_id = VM.MBR_ID
+		LEFT JOIN approval_lines al ON ad.approval_document_id = al.approval_document_id
+		WHERE al.approver_id = #{approverId}
+		<if test='approvalStatus != null and approvalStatus != ""'>
+			AND ad.approval_status = #{approvalStatus}
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchCondition == 'approval_title'">
+					AND	ad.approval_title LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+		ORDER BY ad.created_at DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<select id="selectInboxApprovalDocumentListTotCnt" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) AS totCnt
+		FROM approval_documents ad
+		LEFT JOIN approval_lines al ON ad.approval_document_id = al.approval_document_id
+		WHERE al.approver_id = #{approverId}
+		<if test='approvalStatus != null and approvalStatus != ""'>
+			AND ad.approval_status = #{approvalStatus}
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchCondition == 'approval_title'">
+					AND	ad.approval_title LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+	</select>
+
+	<select id="selectOutboxApprovalDocumentList" parameterType="HashMap" resultType="egovMap">
+		SELECT ad.approval_title,
+		VM.MBR_NM,
+		DATE_FORMAT(ad.created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
+		ad.approval_status,
+		CASE
+			WHEN ad.approval_status = 'N' THEN '결재전'
+			WHEN ad.approval_status = 'P' THEN '결재중'
+			WHEN ad.approval_status = 'A' THEN '결재완료'
+			WHEN ad.approval_status = 'D' THEN '반려'
+			WHEN ad.approval_status = 'C' THEN '취소'
+		END AS approval_status_nm,
+		ad.approval_document_id
+		FROM approval_documents ad
+		LEFT JOIN VST_MBR VM ON ad.creator_id = VM.MBR_ID
+		WHERE ad.creator_id = #{creatorId}
+		<if test='approvalStatus != null and approvalStatus != ""'>
+			AND ad.approval_status = #{approvalStatus}
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchCondition == 'approval_title'">
+					AND	ad.approval_title LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+		ORDER BY ad.created_at DESC
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<select id="selectOutboxApprovalDocumentListTotCnt" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) AS totCnt
+		FROM approval_documents ad
+		WHERE ad.creator_id = #{creatorId}
+		<if test='approvalStatus != null and approvalStatus != ""'>
+			AND ad.approval_status = #{approvalStatus}
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchCondition == 'approval_title'">
+					AND	ad.approval_title LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+	</select>
+
+	<select id="selectApprovalDocument" parameterType="HashMap" resultMap="approvalDocumentMap">
+		SELECT ad.approval_document_id,
+		       ad.approval_title,
+		       ad.approval_content,
+		       ad.approval_status,
+		       ad.creator_id,
+		       (SELECT al3.approval_line_id
+		        FROM approval_lines al3
+		        WHERE al3.approver_id = #{approverId}
+		          AND al3.approval_document_id = #{approvalDocumentId}) AS approval_my_line_id,
+		       al.approval_line_id,
+		       al.approval_status AS approval_line_status,
+		       al.approval_order,
+		       al.approver_id,
+		       al.approved_at,
+		       VM.MBR_NM,
+		       (SELECT
+		            CASE
+		                WHEN al2.approval_status = 'N' THEN 'Y'
+		        		ELSE 'N'
+					END AS approval_yn
+		        FROM approval_lines al2
+		        WHERE al2.approver_id = #{approverId}
+		        AND al2.approval_document_id = #{approvalDocumentId}) AS approval_yn
+		FROM approval_documents ad
+		LEFT JOIN approval_lines al ON ad.approval_document_id = al.approval_document_id
+		LEFT JOIN VST_MBR VM ON al.approver_id = VM.MBR_ID
+		WHERE ad.approval_document_id = #{approvalDocumentId}
+	</select>
+
+	<insert id="insertApprovalDocument" parameterType="approvalDocument" useGeneratedKeys="true" keyColumn="approval_document_id" keyProperty="approvalDocumentId">
+		INSERT INTO approval_documents (approval_title, approval_content, approval_status, creator_id, created_at)
+		VALUES (#{approvalTitle}, #{approvalContent}, #{approvalStatus}, #{creatorId}, #{createdAt})
+	</insert>
+
+	<update id="cancelApprovalDocument" parameterType="Long">
+		UPDATE approval_documents
+		SET approval_status = 'C'
+		WHERE approval_document_id = #{approvalDocumentId}
+	</update>
+
+	<update id="rejectApprovalDocument" parameterType="Long">
+		UPDATE approval_documents
+		SET approval_status = 'D'
+		WHERE approval_document_id = #{approvalDocumentId}
+	</update>
+
+	<update id="acceptApprovalDocument" parameterType="Long">
+		UPDATE approval_documents
+		SET approval_status = 'A'
+		WHERE approval_document_id = #{approvalDocumentId}
+	</update>
+
+	<update id="pendingApprovalDocument" parameterType="Long">
+		UPDATE approval_documents
+		SET approval_status = 'P'
+		WHERE approval_document_id = #{approvalDocumentId}
+	</update>
+
+
+</mapper>

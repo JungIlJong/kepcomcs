@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.popup.mapper.PopupMapper">
+
+    <!-- 게시 상태(Y)인 팝업 목록을 조회한다 -->
+    <select id="selectActivePopupList" resultType="egovMap">
+        SELECT A.POPUP_NM,
+               A.URL,
+               B.ATCH_FILE_ID
+        FROM VST_POPUP A
+                 LEFT OUTER JOIN VST_ATCHFILE B ON A.POPUP_ID = B.UPPER_ID
+        WHERE <![CDATA[
+              A.NTCE_BGNDE <= NOW()
+          AND A.NTCE_ENDDE >= NOW()
+          AND A.NTCE_AT = 'Y']]>
+        ORDER BY A.SORT_ORDR ASC
+    </select>
+
+</mapper>

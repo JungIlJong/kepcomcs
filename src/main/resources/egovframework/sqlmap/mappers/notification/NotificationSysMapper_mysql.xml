@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.notification//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.notification.mapper.NotificationMapper">
+
+	<select id="selectNotificationList" resultType="notification">
+		SELECT NTF_ID,
+		       NTF_TITLE,
+			   NTF_CONTENT,
+			   NTF_REDIRECT_URL,
+			   NTF_TARGET_ID,
+			   NTF_READ_YN,
+			   DATE_FORMAT(NTF_REGIST_DT, '%Y-%m-%d %H:%i:%s') AS ntf_regist_dt
+		FROM VST_NTF
+		ORDER BY ntf_regist_dt DESC
+	</select>
+
+	<select id="apiNotificationListByMbrId" resultType="notification" parameterType="Map">
+		SELECT NTF_ID,
+			   NTF_TITLE,
+			   NTF_CONTENT,
+			   NTF_REDIRECT_URL,
+			   NTF_TARGET_ID,
+			   NTF_READ_YN,
+			   DATE_FORMAT(NTF_REGIST_DT, '%Y-%m-%d %H:%i:%s') AS ntf_regist_dt
+		FROM VST_NTF
+		WHERE NTF_TARGET_ID = #{ntfTargetId}
+		ORDER BY ntf_regist_dt DESC
+	</select>
+
+	<insert id="insertNotification" parameterType="notification" useGeneratedKeys="true" keyProperty="ntfId">
+		INSERT INTO VST_NTF (
+			NTF_TITLE,
+			NTF_CONTENT,
+			NTF_REDIRECT_URL,
+			NTF_TARGET_ID,
+			NTF_READ_YN,
+			NTF_REGIST_DT
+		) VALUES (
+		          #{ntfTitle},
+		          #{ntfContent},
+		          #{ntfRedirectUrl},
+		          #{ntfTargetId},
+		          "N",
+		          DEFAULT
+		)
+	</insert>
+
+	<update id="updateNotificationByNtfId" parameterType="notification">
+		UPDATE VST_NTF
+		SET
+		<if test="ntfTitle != null and ntfTitle != ''">
+		    NTF_TITLE = #{ntfTitle},
+		</if>
+		<if test="ntfContent != null and ntfContent != ''">
+			NTF_CONTENT = #{ntfContent},
+		</if>
+		<if test="ntfRedirectUrl != null and ntfRedirectUrl != ''">
+			NTF_REDIRECT_URL = #{ntfRedirectUrl},
+		</if>
+		<if test="ntfTargetId != null and ntfTargetId != ''">
+			NTF_TARGET_ID = #{ntfTargetId},
+		</if>
+		NTF_READ_YN = #{ntfReadYn}
+		WHERE NTF_ID = #{ntfId}
+	</update>
+
+	<delete id="deleteNotification" parameterType="Long">
+		DELETE FROM VST_NTF WHERE NTF_ID = #{ntfId}
+	</delete>
+
+	<select id="selectNotificationDetailById" parameterType="String" resultType="notification">
+		SELECT NTF_ID,
+			   NTF_TITLE,
+			   NTF_CONTENT,
+			   NTF_REDIRECT_URL,
+			   NTF_TARGET_ID,
+			   NTF_READ_YN,
+			   DATE_FORMAT(NTF_REGIST_DT, '%Y-%m-%d %H:%i:%s') AS ntf_regist_dt
+		FROM VST_NTF
+		WHERE NTF_ID = #{ntfId}
+	</select>
+
+</mapper>

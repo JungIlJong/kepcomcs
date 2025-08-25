@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.cmmncode.mapper.CmmnCodeMapper">
+
+	<select id="selectCmmnCodeList" parameterType="HashMap" resultType="cmmnCode">
+		SELECT UPPER_CODE_ID,
+		       CODE_ID,
+		       CODE,
+		       CODE_NM,
+		       USE_YN,
+		       CODE_ORDR,
+		       CODE_DEPTH,
+		       SYSTEM_CODE_YN
+		FROM VST_CMMNCODE
+		WHERE 1 = 1
+	</select>
+
+	<select id="selectCmmnCodeByCode" resultType="cmmnCode">
+		SELECT UPPER_CODE_ID,
+			   CODE_ID,
+			   CODE,
+			   CODE_NM,
+			   USE_YN,
+			   CODE_ORDR,
+			   CODE_DEPTH,
+			   SYSTEM_CODE_YN
+		FROM VST_CMMNCODE
+		WHERE CODE = #{code}
+	</select>
+
+	<select id="selectCmmnCodeListByUpperCodeId" parameterType="Long" resultType="cmmnCode">
+		SELECT UPPER_CODE_ID,
+			   CODE_ID,
+			   CODE,
+			   CODE_NM,
+			   USE_YN,
+			   CODE_ORDR,
+			   CODE_DEPTH,
+			   SYSTEM_CODE_YN
+		FROM VST_CMMNCODE
+		WHERE UPPER_CODE_ID = #{upperCodeId}
+	</select>
+
+	<insert id="insertCmmnCode" parameterType="cmmnCode" useGeneratedKeys="true" keyProperty="codeId">
+		INSERT INTO VST_CMMNCODE (UPPER_CODE_ID, CODE, CODE_NM, CODE_ORDR, CODE_DEPTH, USE_YN, FRST_RGTR_ID, FRST_REG_DT)
+		VALUES (#{upperCodeId}, #{code}, #{codeNm}, #{codeOrdr}, #{codeDepth}, #{useYn}, #{frstRgtrId}, NOW())
+	</insert>
+
+	<select id="selectNextCodeOrdrByUpperCodeId" parameterType="Long" resultType="int">
+		SELECT IFNULL(MAX(CODE_ORDR), 0) + 1
+		FROM VST_CMMNCODE
+		WHERE UPPER_CODE_ID = #{upperCodeId}
+	</select>
+
+	<select id="selectCmmnCodeByCodeId" resultType="cmmnCode">
+		SELECT CODE_ID,
+		       CODE_NM,
+		       UPPER_CODE_ID
+		FROM VST_CMMNCODE
+		WHERE CODE_ID = #{codeId}
+	</select>
+
+	<update id="updateCmmnCode" parameterType="cmmnCode">
+		UPDATE VST_CMMNCODE
+		SET CODE_NM = #{codeNm},
+		    CODE_ORDR = #{codeOrdr},
+		    CODE = #{code},
+		    USE_YN = #{useYn},
+		    LAST_MDFR_ID = #{lastMdfrId},
+		    LAST_MDFCN_DT = NOW()
+		WHERE CODE_ID = #{codeId}
+	</update>
+
+	<delete id="deleteCmmnCodeByCodeId" parameterType="Long">
+		DELETE FROM VST_CMMNCODE
+		WHERE CODE_ID = #{codeId}
+	</delete>
+
+</mapper>

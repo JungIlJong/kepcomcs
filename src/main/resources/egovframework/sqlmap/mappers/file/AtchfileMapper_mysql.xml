@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.atchfile.mapper.AtchfileMapper">
+
+    <!-- 부모ID의 파일 목록을 조회한다. -->
+    <select id="selectAtchfileByUpperId" parameterType="String" resultType="atchfile">
+        SELECT
+            ATCH_FILE_ID,
+            FILE_STRE_COURS,
+            STRE_FILE_NM,
+            FILE_EXTSN,
+            ORIGNL_FILE_NM,
+            FILE_SIZE,
+            FILE_SE,
+            UPPER_ID,
+            FRST_REGISTER_ID,
+            FRST_REGIST_DT
+        FROM VST_ATCHFILE WHERE UPPER_ID = #{id}
+    </select>
+
+    <!-- 파일을 생성한다. -->
+    <insert id="insertAtchfile" parameterType="atchfile" useGeneratedKeys="true" keyColumn="ATCH_FILE_ID" keyProperty="atchFileId">
+        INSERT INTO VST_ATCHFILE (
+            FILE_STRE_COURS,
+            STRE_FILE_NM,
+            FILE_EXTSN,
+            ORIGNL_FILE_NM,
+            FILE_SIZE,
+            <if test="upperId != null">
+                UPPER_ID,
+            </if>
+            <if test="fileSe != null">
+                FILE_SE,
+            </if>
+            FRST_REGISTER_ID,
+            FRST_REGIST_DT
+        ) VALUES (
+            #{fileStreCours},
+            #{streFileNm},
+            #{fileExtsn},
+            #{orignlFileNm},
+            #{fileSize},
+        <if test="upperId != null">
+            #{upperId},
+        </if>
+        <if test="fileSe != null">
+            #{fileSe},
+        </if>
+            #{frstRegisterId},
+            NOW()
+        )
+    </insert>
+
+    <!-- 파일을 삭제한다. -->
+    <delete id="deleteAtchfileById" parameterType="String">
+        DELETE FROM VST_ATCHFILE WHERE ATCH_FILE_ID = #{id}
+    </delete>
+
+    <!-- 부모ID의 파일을 삭제한다. -->
+    <delete id="deleteAtchfileByUpperId" parameterType="String">
+        DELETE FROM VST_ATCHFILE WHERE UPPER_ID = #{id}
+    </delete>
+
+    <!-- 파일의 상세정보를 조회한다. -->
+    <select id="selectAtchfileDetail" parameterType="String" resultType="atchfile">
+        SELECT
+            ATCH_FILE_ID,
+            FILE_STRE_COURS,
+            STRE_FILE_NM,
+            FILE_EXTSN,
+            ORIGNL_FILE_NM,
+            FILE_SIZE,
+            UPPER_ID,
+            FILE_SE,
+            FRST_REGISTER_ID,
+            FRST_REGIST_DT
+        FROM
+        VST_ATCHFILE
+        WHERE
+            ATCH_FILE_ID = #{fileId}
+    </select>
+
+    <!-- 파일 목록을 조회한다. -->
+    <select id="selectAtchFile" resultType="egovMap" parameterType="map">
+        SELECT
+            ATCH_FILE_ID,
+            FILE_STRE_COURS,
+            STRE_FILE_NM,
+            FILE_EXTSN,
+            ORIGNL_FILE_NM,
+            FILE_SE,
+            FILE_SIZE,
+            UPPER_ID,
+            FRST_REGISTER_ID,
+            FRST_REGIST_DT
+        FROM
+            VST_ATCHFILE
+        WHERE
+            1 = 1 AND UPPER_ID = #{upperId} AND FILE_SE = #{fileSe}
+    </select>
+</mapper>

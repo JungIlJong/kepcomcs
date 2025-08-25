@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.popup.mapper.PopupSysMapper">
+
+    <!-- 팝업을 생성한다. -->
+    <insert id="insertPopup" parameterType="sysPopup" useGeneratedKeys="true" keyColumn="POPUP_ID" keyProperty="popupId">
+        INSERT INTO VST_POPUP (
+            POPUP_NM,
+            SORT_ORDR,
+            <if test="url != null">
+                URL,
+            </if>
+            POPUP_WIDTH_LC,
+            POPUP_WIDTH_SIZE,
+            POPUP_VRTICL_LC,
+            POPUP_VRTICL_SIZE,
+            NTCE_AT,
+            NTCE_BGNDE,
+            NTCE_ENDDE,
+            FRST_REGISTER_ID,
+            FRST_REGIST_DT
+        ) VALUES (
+            #{popupNm},
+            #{sortOrdr},
+            <if test="url != null">
+            #{url},
+            </if>
+            '0',
+            400,
+            '0',
+            400,
+            #{ntceAt},
+            #{ntceBgnde},
+            #{ntceEndde},
+            #{frstRegisterId},
+            now()
+        )
+    </insert>
+
+    <!-- 팝업을 수정한다. -->
+    <update id="updatePopup" parameterType="sysPopup">
+        UPDATE
+            VST_POPUP
+        SET
+            POPUP_NM = #{popupNm},
+            SORT_ORDR = #{sortOrdr},
+            <if test="url != null">
+            URL = #{url},
+            </if>
+            POPUP_WIDTH_LC = '0',
+            POPUP_WIDTH_SIZE = 400,
+            POPUP_VRTICL_LC = '0',
+            POPUP_VRTICL_SIZE = 400,
+            NTCE_AT = #{ntceAt},
+            NTCE_BGNDE = #{ntceBgnde},
+            NTCE_ENDDE = #{ntceEndde},
+            LAST_UPDUSR_ID = #{lastUpdusrId},
+            LAST_UPDT_DT = now()
+        WHERE POPUP_ID = #{popupId}
+
+    </update>
+
+    <!-- 팝업을 삭제한다. -->
+    <delete id="deletePopup" parameterType="String">
+        DELETE FROM VST_POPUP WHERE POPUP_ID = #{popupId}
+    </delete>
+
+    <!-- 팝업 목록을 조회한다. -->
+    <select id="selectPopupList" parameterType="Map" resultType="egovMap">
+        SELECT
+            POPUP_ID,
+            POPUP_NM,
+            SORT_ORDR,
+            NTCE_AT,
+            DATE_FORMAT(NTCE_BGNDE, '%Y-%m-%d %H:%i') NTCE_BGNDE,
+            DATE_FORMAT(NTCE_ENDDE, '%Y-%m-%d %H:%i') NTCE_ENDDE,
+            FRST_REGISTER_ID,
+            DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT
+        FROM VST_POPUP
+        WHERE 1 = 1
+        <if test="ntceAt != null and ntceAt != ''">
+            AND NTCE_AT = #{ntceAt}
+        </if>
+        <if test="stDt != null and stDt != '' and endDt != null and endDt != ''">
+            <![CDATA[AND(DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') >= #{stDt} AND DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') <= #{endDt})]]>
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND POPUP_NM LIKE CONCAT('%', #{searchKeyword} , '%')
+        </if>
+        ORDER BY POPUP_ID DESC
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+
+    </select>
+
+    <!-- 팝업 총 갯수를 조회한다. -->
+    <select id="selectPopupListTotCnt" parameterType="Map" resultType="int">
+
+    SELECT
+            COUNT(*)
+        FROM VST_POPUP
+        WHERE 1 = 1
+        <if test="ntceAt != null and ntceAt != ''">
+            AND NTCE_AT = #{ntceAt}
+        </if>
+        <if test="stDt != null and stDt != '' and endDt != null and endDt != ''">
+            <![CDATA[AND(DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') >= #{stDt} AND DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') <= #{endDt})]]>
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND POPUP_NM LIKE CONCAT('%', #{searchKeyword} , '%')
+        </if>
+    </select>
+
+    <!-- 팝업 상세정보를 조회한다. -->
+    <select id="selectPopupDetail" parameterType="String" resultType="egovMap">
+        SELECT
+            A.POPUP_ID,
+            A.POPUP_NM,
+            A.SORT_ORDR,
+            A.URL,
+            A.POPUP_WIDTH_LC,
+            A.POPUP_WIDTH_SIZE,
+            A.POPUP_VRTICL_LC,
+            A.POPUP_VRTICL_SIZE,
+            A.NTCE_AT,
+            DATE_FORMAT(A.NTCE_BGNDE, '%Y-%m-%d %H:%i') NTCE_BGNDE,
+            DATE_FORMAT(A.NTCE_ENDDE, '%Y-%m-%d %H:%i') NTCE_ENDDE,
+            A.FRST_REGISTER_ID,
+            A.STOPVEW_SETUP_AT,
+            DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT,
+            B.STRE_FILE_NM,
+            B.ORIGNL_FILE_NM,
+            B.FILE_EXTSN,
+            B.ATCH_FILE_ID
+        FROM
+            VST_POPUP A
+        LEFT OUTER JOIN VST_ATCHFILE B ON B.UPPER_ID = A.POPUP_ID AND B.FILE_SE = "POPUP"
+        WHERE A.POPUP_ID = #{popupId}
+    </select>
+
+    <!-- 게시 상태(Y)인 팝업 개수를 조회한다 -->
+    <select id="selectActivePopupCount" resultType="int">
+        SELECT COUNT(*)
+        FROM VST_POPUP
+        WHERE NTCE_AT = 'Y'
+        <![CDATA[
+          AND NTCE_BGNDE <= NOW()
+          AND NTCE_ENDDE >= NOW()
+        ]]>
+    </select>
+</mapper>

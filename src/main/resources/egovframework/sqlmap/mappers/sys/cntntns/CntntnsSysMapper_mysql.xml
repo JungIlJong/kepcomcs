@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.cntnts.mapper.CntntnsSysMapper">
+
+    <!-- 콘텐츠를 생성한다. -->
+    <insert id="saveCntnts" parameterType="content" useGeneratedKeys="true" keyProperty="cntntsId" keyColumn="CNTNTS_ID">
+        INSERT INTO VST_CNTNTS (
+            CNTNTS_NM,
+            CNTNTS_CN,
+            <if test="cntntsDc != null">
+            CNTNTS_DC,
+            </if>
+            FRST_REGISTER_ID,
+            FRST_REGIST_DT
+        ) VALUES (
+            #{cntntsNm},
+            #{cntntsCn},
+        <if test="cntntsDc != null">
+            #{cntntsDc},
+        </if>
+            #{frstRegisterId},
+            NOW()
+        )
+    </insert>
+
+    <!-- 콘텐츠를 수정한다. -->
+    <update id="updateCntnts" parameterType="content">
+        UPDATE
+            VST_CNTNTS
+        SET
+            CNTNTS_NM = #{cntntsNm},
+            CNTNTS_CN = #{cntntsCn},
+            CNTNTS_DC = #{cntntsDc},
+            LAST_UPDUSR_ID = #{lastUpdusrId},
+            LAST_UPDT_DT = NOW()
+        WHERE
+            CNTNTS_ID = #{cntntsId}
+    </update>
+
+    <!-- 콘텐츠를 삭제한다. -->
+    <delete id="deleteById" parameterType="string">
+        DELETE FROM VST_CNTNTS WHERE CNTNTS_ID = #{cntntsId}
+    </delete>
+
+    <!-- 콘텐츠 목록을 조회한다. -->
+    <select id="selectContentList" parameterType="Map" resultType="egovMap">
+        SELECT
+            A.CNTNTS_ID,
+            A.CNTNTS_NM,
+            A.CNTNTS_DC,
+            B.ID,
+            DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT
+        FROM
+            VST_CNTNTS A
+        LEFT OUTER JOIN VST_MBR B ON B.MBR_ID = A.FRST_REGISTER_ID
+        WHERE 1 = 1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (A.CNTNTS_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR A.CNTNTS_ID LIKE CONCAT('%', #{searchKeyword}, '%') OR B.ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        <if test="minDate != null and minDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') >= #{minDate} ]]>
+        </if>
+        <if test="maxDate != null and maxDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') <= #{maxDate} ]]>
+        </if>
+        ORDER BY
+        <choose>
+            <when test="orderColumn != null and orderColumn != ''">
+                ${orderColumn}
+            </when>
+            <otherwise>
+                A.CNTNTS_ID
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="ascDesc != null and ascDesc != ''">
+                ${ascDesc}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <!-- 콘텐츠 총 갯수를 조회한다. -->
+    <select id="selectContentTonCnt" parameterType="Map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+        VST_CNTNTS A
+        LEFT OUTER JOIN VST_MBR B ON B.MBR_ID = A.FRST_REGISTER_ID
+        WHERE 1 = 1
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (A.CNTNTS_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR A.CNTNTS_ID LIKE CONCAT('%', #{searchKeyword}, '%') OR B.ID LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        <if test="minDate != null and minDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') >= #{minDate} ]]>
+        </if>
+        <if test="maxDate != null and maxDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') <= #{maxDate} ]]>
+        </if>
+    </select>
+
+    <!-- 콘텐츠의 상세정보를 조회한다. -->
+    <select id="selectContentDetail" parameterType="String" resultType="egovMap">
+        SELECT
+            CNTNTS_ID,
+            CNTNTS_NM,
+            CNTNTS_CN,
+            CNTNTS_DC,
+            FRST_REGISTER_ID,
+            LAST_UPDUSR_ID,
+            LAST_UPDT_DT,
+            DATE_FORMAT(FRST_REGIST_DT, '%y-%m-%d') FRST_REGIST_DT
+        FROM
+            VST_CNTNTS
+        WHERE
+            CNTNTS_ID = #{cnmtntsId}
+    </select>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.ntt.mapper.NttCommandMapper">
+
+    <insert id="insertNtt" parameterType="mberNtt" useGeneratedKeys="true" keyColumn="NTT_ID" keyProperty="nttId">
+        INSERT INTO VST_NTT (
+        BBS_ID,
+        NTT_SJ,
+        NTT_CN,
+        RDCNT,
+        WRTER_NM,
+        SECRET_AT,
+        USE_AT,
+        NOTICE_AT,
+        PASSWORD,
+        THUMB_URL,
+        FRST_REGISTER_ID,
+        FRST_REGIST_DT,
+        REPORT_IDS,
+        BLOCK_IDS
+        ) VALUES (
+        #{bbsId},
+        #{nttSj},
+        #{nttCn},
+        0,
+        #{wrterNm},
+        <choose>
+            <when test="secretAt != null">
+                #{secretAt},
+            </when>
+            <otherwise>
+                'N',
+            </otherwise>
+        </choose>
+        'Y',
+        'N',
+        #{password},
+        #{thumbUrl},
+        #{frstRegisterId},
+        NOW(),
+        '',
+        ''
+        )
+    </insert>
+
+    <update id="updateNtt" parameterType="mberNtt">
+        UPDATE
+        VST_NTT
+        SET
+            BBS_ID = #{bbsId},
+            NTT_SJ = #{nttSj},
+            NTT_CN = #{nttCn},
+            <if test="secretAt != null">
+                SECRET_AT = #{secretAt},
+            </if>
+            <if test="useAt != null">
+                USE_AT = #{useAt},
+            </if>
+            PASSWORD = #{password},
+            WRTER_NM = #{wrterNm},
+            THUMB_URL = #{thumbUrl},
+            LAST_UPDUSR_ID = #{lastUpdusrId},
+            LAST_UPDT_DT = NOW()
+        WHERE NTT_ID = #{nttId}
+    </update>
+
+    <!-- 조회 수를 증가한다. -->
+    <update id="incrementRdcnt" parameterType="Long">
+        UPDATE
+            VST_NTT
+        SET
+            RDCNT = RDCNT + 1
+        WHERE NTT_ID = #{nttId}
+    </update>
+
+    <update id="deleteNtt" parameterType="Long">
+        UPDATE
+            VST_NTT
+        SET
+            USE_AT = 'N'
+        WHERE NTT_ID = #{nttId}
+    </update>
+
+    <update id="reportNtt" parameterType="HashMap">
+        UPDATE
+            VST_NTT
+        SET
+            REPORT_IDS = CONCAT(REPLACE(REPORT_IDS, CONCAT(#{mbrId}, ","), ""), #{mbrId}, ",")
+        WHERE NTT_ID = #{nttId}
+    </update>
+
+    <update id="blockNtt" parameterType="HashMap">
+        UPDATE
+            VST_NTT
+        SET
+            BLOCK_IDS = CONCAT(REPLACE(BLOCK_IDS, CONCAT(#{mbrId}, ","), ""), #{mbrId}, ",")
+        WHERE NTT_ID = #{nttId}
+    </update>
+</mapper>

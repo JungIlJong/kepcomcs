@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.dashboard.mapper.DashBoardSysMapper">
+
+	<select
+			id="selectWeeklyVisitorsByDate"
+			parameterType="String"
+			resultType="com.daonplace.vasanta.domain.dashboard.dto.WeeklyVisitorItem">
+		SELECT
+			DATE_FORMAT(d.target_date, '%d') AS date,
+			IFNULL(COUNT(vll.CNTN_DT), 0) AS visitCount
+		FROM (
+				 SELECT STR_TO_DATE(#{date}, '%Y-%m-%d') AS target_date
+			 ) d
+				 LEFT JOIN VST_LGN_LOG vll
+						   ON DATE(vll.CNTN_DT) = d.target_date
+		GROUP BY date
+	</select>
+
+	<select id="selectUserRankingsByDate"
+			parameterType="String"
+			resultType="com.daonplace.vasanta.domain.dashboard.dto.UserRankingItem">
+		SELECT
+			VM.MBR_ID mbrId,
+			VM.MBR_NM mbrNm,
+			COUNT(VN.NTT_ID) postCount
+		FROM VST_MBR VM
+		LEFT OUTER JOIN VST_NTT VN ON VM.MBR_ID = VN.FRST_REGISTER_ID
+		WHERE DATE_FORMAT(VN.FRST_REGIST_DT, '%Y-%m') = #{date}
+		GROUP BY VM.MBR_ID, VM.MBR_NM
+		ORDER BY postCount DESC
+		LIMIT 5
+	</select>
+
+	<select id="selectTopBbs" resultType="Long">
+		SELECT
+			VN.BBS_ID
+		FROM VST_NTT VN
+		GROUP BY VN.BBS_ID
+		ORDER BY COUNT(VN.NTT_ID) DESC
+		LIMIT 5
+	</select>
+
+	<select id="selectBoardStatisticsItemsByDate"
+			parameterType="Map"
+			resultType="com.daonplace.vasanta.domain.dashboard.dto.BoardStatisticsItem$BoardResultItem">
+		SELECT
+		VB.BBS_ID,
+		VB.BBS_NM,
+		COUNT(VN.NTT_ID) AS postCount
+		FROM VST_BBS VB
+		LEFT JOIN VST_NTT VN ON VB.BBS_ID = VN.BBS_ID
+		AND <![CDATA[ DATE_FORMAT(VN.FRST_REGIST_DT, '%Y-%m') <= #{date} ]]>
+		WHERE VB.BBS_ID IN
+		<foreach collection="bbses" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+		GROUP BY VB.BBS_ID, VB.BBS_NM
+	</select>
+
+	<select id="selectApprovalDocumentsInputItems"
+			parameterType="String"
+			resultType="com.daonplace.vasanta.domain.dashboard.dto.ApprovalInputItem">
+		SELECT
+			ad.approval_title,
+			VM.MBR_NM,
+			DATE_FORMAT(ad.created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
+			ad.approval_status,
+			'결재요청' approval_status_nm,
+			ad.approval_document_id
+		FROM approval_documents ad
+		LEFT JOIN VST_MBR VM ON ad.creator_id = VM.MBR_ID
+		LEFT JOIN approval_lines al ON ad.approval_document_id = al.approval_document_id
+		WHERE al.approver_id = #{approverId} AND ad.approval_status = 'N'
+		ORDER BY ad.approval_document_id DESC
+	</select>
+
+	<select id="selectUserCountByDate"
+			parameterType="String"
+			resultType="com.daonplace.vasanta.domain.dashboard.dto.UserCountItem">
+		SELECT
+			COUNT(VM.MBR_ID) userCount,
+			#{date} DATE
+		FROM VST_MBR VM
+		WHERE DATE_FORMAT(VM.FRST_REG_DT, '%Y-%m') <![CDATA[ <= #{date} ]]>
+	</select>
+
+</mapper>

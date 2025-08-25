@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.ntt.mapper.NttSysMapper">
+
+    <!-- 게시글 상세정보 Map -->
+    <resultMap id="detailMap" type="Map">
+        <result column="NTT_ID" property="nttId" />
+        <result column="BBS_ID" property="bbsId" />
+        <result column="PARNTSCTT_ID" property="parntscttId" />
+        <result column="NTT_SJ" property="nttSj" />
+        <result column="NTT_CN" property="nttCn" />
+        <result column="WRTER_NM" property="wrterNm" />
+        <result column="RDCNT" property="rdcnt" />
+        <result column="SECRET_AT" property="secretAt" />
+        <result column="NOTICE_AT" property="noticeAt" />
+        <result column="USE_AT" property="useAt" />
+        <result column="PASSWORD" property="password" />
+        <result column="FRST_REGISTER_ID" property="frstRegisterId" />
+        <result column="FRST_REGIST_DT" property="frstRegiminDate" />
+        <result column="LAST_UPDUSR_ID" property="lastUpdusrId" />
+        <result column="LAST_UPDT_DT" property="lastUpdtDt" />
+        <result column="REPLY_ID" property="replyId" />
+        <result column="REPLY_SJ" property="replySj" />
+        <result column="REPLY_CN" property="replyCn" />
+        <result column="REPLY_NM" property="replyNm" />
+        <result column="REPLY_DT" property="replyDt" />
+        <result column="REPORT_IDS" property="reportIds" />
+        <result column="BLOCK_IDS" property="blockIds" />
+        <collection  property="files" ofType="Map" javaType="List">
+            <result column="ATCH_FILE_ID" property="atchFileId" />
+            <result column="ORIGNL_FILE_NM" property="orignlFileNm" />
+            <result column="FILE_EXTSN" property="fileExtsn" />
+            <result column="FILE_SIZE" property="fileSize" />
+        </collection>
+        <collection  property="replyFiles" ofType="Map" javaType="List">
+            <result column="REPLY_ATCH_FILE_ID" property="atchFileId" />
+            <result column="REPLY_ORIGNL_FILE_NM" property="orignlFileNm" />
+            <result column="REPLY_FILE_EXTSN" property="fileExtsn" />
+            <result column="REPLY_FILE_SIZE" property="fileSize" />
+        </collection>
+    </resultMap>
+
+    <!-- 질문글 답글 상세 정보 Map -->
+    <resultMap id="replyMap" type="Map">
+        <result column="NTT_ID" property="nttId" />
+        <result column="BBS_ID" property="bbsId" />
+        <result column="PARNTSCTT_ID" property="parntscttId" />
+        <result column="NTT_SJ" property="nttSj" />
+        <result column="NTT_CN" property="nttCn" />
+        <result column="WRTER_NM" property="wrterNm" />
+        <result column="RDCNT" property="rdcnt" />
+        <result column="SECRET_AT" property="secretAt" />
+        <result column="NOTICE_AT" property="noticeAt" />
+        <result column="USE_AT" property="useAt" />
+        <result column="FRST_REGISTER_ID" property="frstRegisterId" />
+        <result column="FRST_REGIST_DT" property="frstRegiminDate" />
+        <result column="LAST_UPDUSR_ID" property="lastUpdusrId" />
+        <result column="LAST_UPDT_DT" property="lastUpdtDt" />
+        <result column="REPLY_ID" property="replyId" />
+        <result column="REPLY_SJ" property="replySj" />
+        <result column="REPLY_CN" property="replyCn" />
+        <result column="PERM_EXTSN" property="permExtsn" />
+        <result column="FILE_ATCH_SIZE" property="fileAtchSize" />
+        <result column="FILE_ATCH_CO" property="fileAtchCo" />
+        <collection  property="files" ofType="Map" javaType="List">
+            <result column="ATCH_FILE_ID" property="atchFileId" />
+            <result column="ORIGNL_FILE_NM" property="orignlFileNm" />
+            <result column="FILE_EXTSN" property="fileExtsn" />
+            <result column="FILE_SIZE" property="fileSize" />
+        </collection>
+        <collection  property="replyFiles" ofType="Map" javaType="List">
+            <result column="REPLY_ATCH_FILE_ID" property="atchFileId" />
+            <result column="REPLY_ORIGNL_FILE_NM" property="orignlFileNm" />
+            <result column="REPLY_FILE_EXTSN" property="fileExtsn" />
+            <result column="REPLY_FILE_SIZE" property="fileSize" />
+        </collection>
+    </resultMap>
+
+    <!-- 게시글을 생성한다. -->
+    <insert id="insertNtt" parameterType="sysNtt" useGeneratedKeys="true" keyColumn="NTT_ID" keyProperty="nttId">
+        INSERT INTO VST_NTT (
+            BBS_ID,
+            PARNTSCTT_ID,
+            NTT_SJ,
+            NTT_CN,
+            RDCNT,
+            WRTER_NM,
+            SECRET_AT,
+            NOTICE_AT,
+            USE_AT,
+            <if test="thumbUrl != null">
+            THUMB_URL,
+            </if>
+            FRST_REGISTER_ID,
+            FRST_REGIST_DT
+        )   VALUES (
+            #{bbsId},
+            #{parntscttId},
+            #{nttSj},
+            #{nttCn},
+            0,
+            #{wrterNm},
+            <choose>
+                <when test="secretAt != null">
+                    #{secretAt},
+                </when>
+                <otherwise>
+                    'N',
+                </otherwise>
+            </choose>
+        <choose>
+            <when test="noticeAt != null">
+                #{noticeAt},
+            </when>
+            <otherwise>
+                'N',
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="useAt != null">
+                #{useAt},
+            </when>
+            <otherwise>
+                'Y',
+            </otherwise>
+        </choose>
+        <if test="thumbUrl != null">
+            #{thumbUrl},
+        </if>
+            #{frstRegisterId},
+            NOW()
+        )
+    </insert>
+
+    <!-- 게시글을 수정한다. -->
+    <update id="updateNtt" parameterType="sysNtt">
+        UPDATE
+            VST_NTT
+        SET
+            BBS_ID = #{bbsId},
+        <if test="parntscttId != null">
+            PARNTSCTT_ID = #{parntscttId},
+        </if>
+            NTT_SJ = #{nttSj},
+            NTT_CN = #{nttCn},
+        <if test="secretAt != null">
+            SECRET_AT = #{secretAt},
+        </if>
+        <choose>
+            <when test='noticeAt != null and noticeAt == "Y"'>
+                NOTICE_AT = 'Y',
+            </when>
+            <when test='noticeAt != null and noticeAt == "N"'>
+                NOTICE_AT = 'N',
+            </when>
+            <otherwise>
+                NOTICE_AT = 'N',
+            </otherwise>
+        </choose>
+        <if test="useAt != null">
+            USE_AT = #{useAt},
+        </if>
+        <if test="wrterNm != null">
+            WRTER_NM = #{wrterNm},
+        </if>
+        <if test="thumbUrl != null">
+            THUMB_URL = #{thumbUrl},
+        </if>
+            LAST_UPDUSR_ID = #{lastUpdusrId},
+            LAST_UPDT_DT = NOW()
+        WHERE NTT_ID = #{nttId}
+    </update>
+
+    <!-- 조회수를 증가한다. -->
+    <update id="increseRdcnt" parameterType="string">
+        UPDATE
+            VST_NTT
+        SET
+            RDCNT = RDCNT + 1
+        WHERE NTT_ID = #{nttId}
+    </update>
+
+    <!-- 게시글을 삭제한다. -->
+    <delete id="deleteNtt" parameterType="string">
+        DELETE FROM VST_NTT WHERE NTT_ID = #{nttId}
+    </delete>
+
+    <!-- 게시글 목록을 조회한다. -->
+    <select id="selectNttList" parameterType="map" resultType="egovMap">
+        SELECT
+            A.NTT_ID,
+            A.BBS_ID,
+            EXISTS(SELECT 1 FROM VST_NTT D WHERE D.PARNTSCTT_ID = A.NTT_ID) PARNTSCTT_ID,
+            A.NTT_SJ,
+            A.RDCNT,
+            A.SECRET_AT,
+            A.NOTICE_AT,
+            A.USE_AT,
+            A.WRTER_NM,
+            A.FRST_REGISTER_ID,
+            DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT,
+            B.BBS_NM,
+            B.BBS_TY_CODE,
+            B.REPLY_AT
+        FROM VST_NTT A
+        LEFT OUTER JOIN VST_BBS B ON B.BBS_ID = A.BBS_ID
+        WHERE 1 = 1 AND A.PARNTSCTT_ID IS NULL
+        <if test="bbsId != null and bbsId != ''">
+            AND A.BBS_ID = #{bbsId}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (A.NTT_SJ LIKE CONCAT('%', #{searchKeyword}, '%') OR A.WRTER_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        <if test="minDate != null and minDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') >= #{minDate} ]]>
+        </if>
+        <if test="maxDate != null and maxDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') <= #{maxDate} ]]>
+        </if>
+        ORDER BY
+        <choose>
+            <when test="orderColumn != null and orderColumn != ''">
+                ${orderColumn}
+            </when>
+            <otherwise>
+                A.FRST_REGIST_DT
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="ascDesc != null and ascDesc != ''">
+                ${ascDesc}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <!-- 게시글 총 갯수를 조회한다. -->
+    <select id="selectNttListTotCnt" parameterType="map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM VST_NTT A
+        LEFT OUTER JOIN VST_BBS B ON B.BBS_ID = A.BBS_ID
+        WHERE 1 = 1 AND A.PARNTSCTT_ID IS NULL
+        <if test="bbsId != null and bbsId != ''">
+            AND A.BBS_ID = #{bbsId}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND A.NTT_SJ LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        <if test="minDate != null and minDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') >= #{minDate} ]]>
+        </if>
+        <if test="maxDate != null and maxDate != ''">
+            AND <![CDATA[ DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') <= #{maxDate} ]]>
+        </if>
+        ORDER BY A.FRST_REGIST_DT DESC
+    </select>
+
+    <!-- 게시글 상세정보를 조회한다. -->
+    <select id="selectNttDetail" parameterType="String" resultMap="detailMap">
+        SELECT
+            A.NTT_ID,
+            A.BBS_ID,
+            A.PARNTSCTT_ID,
+            A.NTT_SJ,
+            A.NTT_CN,
+            A.RDCNT,
+            A.SECRET_AT,
+            A.NOTICE_AT,
+            A.USE_AT,
+            A.WRTER_NM,
+            A.FRST_REGISTER_ID,
+            DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d %H:%i') FRST_REGIST_DT,
+            A.LAST_UPDUSR_ID,
+            DATE_FORMAT(A.LAST_UPDT_DT, '%Y-%m-%d %H:%i'),
+            A.REPORT_IDS,
+            A.BLOCK_IDS,
+            B.ATCH_FILE_ID,
+            B.ORIGNL_FILE_NM,
+            B.FILE_EXTSN,
+            B.FILE_SIZE,
+            D.FILE_ATCH_SIZE,
+            D.PERM_EXTSN,
+            D.FILE_ATCH_CO,
+            E.NTT_ID REPLY_ID,
+            E.NTT_SJ REPLY_SJ,
+            E.NTT_CN REPLY_CN,
+            F.ATCH_FILE_ID REPLY_ATCH_FILE_ID,
+            F.ORIGNL_FILE_NM REPLY_ORIGNL_FILE_NM,
+            F.FILE_EXTSN REPLY_FILE_EXTSN,
+            F.FILE_SIZE REPLY_FILE_SIZE
+        FROM
+            VST_NTT A
+                LEFT OUTER JOIN VST_ATCHFILE B ON (A.NTT_ID = B.UPPER_ID AND B.FILE_SE = 'NTT')
+                LEFT OUTER JOIN VST_BBS D ON D.BBS_ID = A.BBS_ID
+                LEFT OUTER JOIN VST_NTT E ON A.NTT_ID = E.PARNTSCTT_ID
+                LEFT OUTER JOIN VST_ATCHFILE F ON E.NTT_ID = F.UPPER_ID
+        WHERE A.NTT_ID = #{nttId}
+    </select>
+
+    <select id="selectReplyDetail" parameterType="string" resultType="egovMap">
+        SELECT
+            A.NTT_ID,
+            A.BBS_ID,
+            A.NTT_SJ,
+            A.NTT_CN,
+            A.RDCNT,
+            A.SECRET_AT,
+            A.NOTICE_AT,
+            A.USE_AT,
+            A.WRTER_NM,
+            A.FRST_REGISTER_ID,
+            DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d %H:%i') FRST_REGIST_DT
+        FROM VST_NTT A
+        WHERE A.PARNTSCTT_ID = #{nttId}
+    </select>
+
+    <delete id="deleteByBbsId" parameterType="String">
+        DELETE FROM VST_NTT WHERE BBS_ID = #{bbsId}
+    </delete>
+
+    <update id="updateNttReportIds" parameterType="String">
+        UPDATE VST_NTT
+        SET REPORT_IDS = ''
+        WHERE NTT_ID = #{nttId}
+    </update>
+</mapper>

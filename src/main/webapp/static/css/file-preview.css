@@ -1,0 +1,17 @@
+/* 파일 프리뷰 공통 스타일 */
+.file-item {
+    width: 120px;
+}
+
+.file-name-display {
+    width: 120px;
+    font-size: 11px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 3px 6px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

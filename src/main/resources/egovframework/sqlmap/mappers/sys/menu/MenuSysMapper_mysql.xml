@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.menu.mapper.MenuSysMapper">
+
+	<resultMap id="menuRole" type="egovMap">
+		<id property="menuId" column="MENU_ID"/>
+		<result property="url" column="URL"/>
+		<collection property="roleList" ofType="egovMap" javaType="List">
+			<id property="authrtId" column="AUTHRT_ID"/>
+			<result property="authrtCd" column="AUTHRT_CD"/>
+		</collection>
+	</resultMap>
+
+	<select id="selectMenuListAll" resultType="menu">
+		SELECT MENU_ID,
+		       ID,
+			   MENU_NM,
+			   UPPER_MENU_ID,
+			   MENU_ORDR,
+			   MENU_TY,
+			   MENU_DP,
+			   CNTC_ID,
+			   URL,
+			   USE_AT,
+			   GNB_AT,
+			   MENU_SE
+		FROM VST_MENU
+		WHERE MENU_SE = #{menuSe}
+	</select>
+
+	<select id="selectMenuList" resultType="menu">
+		SELECT MENU_ID,
+		       ID,
+			   MENU_NM,
+			   UPPER_MENU_ID,
+			   MENU_ORDR,
+			   MENU_TY,
+			   MENU_DP,
+			   CNTC_ID,
+			   URL,
+			   USE_AT,
+			   GNB_AT,
+			   MENU_SE
+		FROM VST_MENU
+		WHERE MENU_SE = #{menuSe}
+		AND USE_AT = 'Y'
+		ORDER BY MENU_DP ASC, MENU_ORDR ASC
+	</select>
+
+	<insert id="insertMenu" parameterType="menu" useGeneratedKeys="true" keyProperty="menuId">
+		INSERT INTO VST_MENU (
+		                      MENU_NM,
+		                      UPPER_MENU_ID,
+		                      MENU_ORDR,
+		                      MENU_TY,
+		                      URL,
+		                      MENU_DP,
+		                      GNB_AT,
+		                      USE_AT,
+		                      MENU_SE
+		) VALUES (
+		          #{menuNm},
+		          #{upperMenuId},
+		          #{menuOrdr},
+		          'DIR',
+		          #{url},
+		          #{menuDp},
+		          #{gnbAt},
+		          #{useAt},
+		          #{menuSe}
+		)
+	</insert>
+
+	<select id="selectNextMenuOrdrByUpperMenuId" parameterType="Long" resultType="int">
+		SELECT IFNULL(MAX(MENU_ORDR), 0) + 1
+		FROM VST_MENU
+		WHERE UPPER_MENU_ID = #{upperMenuId}
+	</select>
+
+	<update id="updateMenu" parameterType="menu">
+		UPDATE VST_MENU
+		SET ID = #{id},
+		    MENU_NM = #{menuNm},
+		    UPPER_MENU_ID = #{upperMenuId},
+		    MENU_ORDR = #{menuOrdr},
+		    MENU_TY = #{menuTy},
+		    GNB_AT = #{gnbAt},
+		    USE_AT = #{useAt},
+		    URL = #{url}
+		WHERE MENU_ID = #{menuId}
+	</update>
+
+	<delete id="deleteMenu" parameterType="Long">
+		DELETE FROM VST_MENU WHERE MENU_ID = #{menuId}
+	</delete>
+
+	<select id="selectMenuListByRole" resultType="menu">
+		SELECT A.ID,
+		A.MENU_ID,
+		A.MENU_NM,
+		A.UPPER_MENU_ID,
+		A.MENU_ORDR,
+		A.MENU_TY,
+		A.MENU_DP,
+		A.CNTC_ID,
+		A.URL,
+		A.USE_AT,
+		A.GNB_AT,
+		A.MENU_SE
+		FROM VST_MENU A
+		WHERE A.MENU_ID IN (SELECT DISTINCT B.MENU_ID
+		FROM VST_MENU_AUTHRT B
+		LEFT JOIN VST_AUTHRT C ON B.AUTHRT_ID = C.AUTHRT_ID
+		WHERE C.AUTHRT_CD IN
+		<foreach collection="authorityList" item="item" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+		)
+		AND A.MENU_SE = 'MNGR'
+		AND A.USE_AT = 'Y'
+		ORDER BY A.MENU_DP ASC, A.MENU_ORDR ASC
+	</select>
+
+	<select id="selectMenuById" parameterType="String" resultType="menu">
+		SELECT MENU_ID,
+			   ID,
+			   MENU_NM,
+			   UPPER_MENU_ID,
+			   MENU_ORDR,
+			   MENU_TY,
+			   MENU_DP,
+			   CNTC_ID,
+			   URL,
+			   USE_AT,
+			   GNB_AT,
+			   MENU_SE
+		FROM VST_MENU
+		WHERE ID = #{id}
+	</select>
+
+</mapper>

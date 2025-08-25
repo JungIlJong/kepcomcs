@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.mapmarker.mapper.MapMarkerMapper">
+
+    <select id="selectAllOnlyUseY"
+            resultType="com.daonplace.vasanta.domain.mapmarker.dto.SearchMapMarkerResponse">
+        SELECT
+            MARKER_ID as markerId,
+            NAME as name,
+            DESCRIPTION as description,
+            LATITUDE as latitude,
+            LONGITUDE as longitude,
+            ICON_URL as iconUrl,
+            road_address as roadAddress,
+            jibun_address as jibunAddress,
+            detail_address as detailAddress,
+            CATEGORY_CODE1 as categoryCode1,
+            CATEGORY_CODE2 as categoryCode2
+        FROM VST_MAP_MARKER
+        WHERE USE_YN = 'Y'
+        <if test="categoryCode1 != null and !categoryCode1.isEmpty()">
+            AND CATEGORY_CODE1 = #{categoryCode1}
+        </if>
+        <if test="categoryCode2 != null and !categoryCode2.isEmpty()">
+            AND CATEGORY_CODE2 = #{categoryCode2}
+        </if>
+        <if test="searchKeyword != null and !searchKeyword.isEmpty()">
+            <choose>
+                <when test="searchCondition != null and searchCondition == 'name'">
+                    AND NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                </when>
+                <when test="searchCondition != null and searchCondition == 'address'">
+                    AND (road_address LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR jibun_address LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR detail_address LIKE CONCAT('%', #{searchKeyword}, '%'))
+                </when>
+                <otherwise>
+                    AND (NAME LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR DESCRIPTION LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR road_address LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR jibun_address LIKE CONCAT('%', #{searchKeyword}, '%')
+                    OR detail_address LIKE CONCAT('%', #{searchKeyword}, '%'))
+                </otherwise>
+            </choose>
+        </if>
+        ORDER BY MARKER_ID
+    </select>
+</mapper>

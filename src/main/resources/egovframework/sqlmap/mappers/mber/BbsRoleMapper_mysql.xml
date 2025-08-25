@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.bbs.mapper.BbsRoleMapper">
+
+    <select id="checkRole" parameterType="HashMap" resultType="String">
+        SELECT A.USE_AT FROM VST_BBS A
+        LEFT OUTER JOIN VST_BBS_AUTHRT B ON B.BBS_ID = A.BBS_ID
+        LEFT OUTER JOIN VST_AUTHRT C ON C.AUTHRT_ID = B.AUTHRT_ID
+        WHERE A.BBS_ID = #{bbsId}  AND B.AUTHOR_LIST LIKE CONCAT('%', #{action}, '%')
+        <choose>
+            <when test="mbrId == null or mbrId == '' or mbrId == 'null'">
+                AND C.AUTHRT_CD = 'ROLE_ANONYMOUS'
+            </when>
+            <otherwise>
+                AND C.AUTHRT_CD = (
+                    SELECT D.AUTHRT_CD
+                    FROM VST_MBR_AUTHRT MA
+                    JOIN VST_AUTHRT D ON D.AUTHRT_ID = MA.AUTHRT_ID
+                    WHERE MA.MBR_ID = #{mbrId}
+                    LIMIT 1
+                )
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="checkSecret" parameterType="map" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM VST_BBS A
+        WHERE
+        <if test="uuid == nul">
+
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.lgnlog.mapper.LgnLogMapper">
+
+	<select id="selectLgnLogList" parameterType="HashMap" resultType="lgnLog">
+		SELECT ACSR_NM,
+		       ACSR_ID,
+		       ACSR_IP_ADDR,
+		       CNTN_SE,
+		       ACSR_OS_NM,
+		       CNTN_DT
+		FROM VST_LGN_LOG
+		WHERE 1 = 1
+		<if test="(minDate != null and minDate != '') and (maxDate != null and maxDate != '')">
+		AND CNTN_DT BETWEEN STR_TO_DATE(#{minDate}, '%Y-%m-%d') AND (STR_TO_DATE(#{maxDate}, '%Y-%m-%d') + 1)
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND (ACSR_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			ACSR_IP_ADDR LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			ACSR_OS_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+		ORDER BY
+		<choose>
+			<when test="orderColumn != null and orderColumn != ''">
+				${orderColumn}
+			</when>
+			<otherwise>
+				CNTN_DT
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="ascDesc != null and ascDesc != ''">
+				${ascDesc}
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<select id="selectLgnLogListTotCnt" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) totCnt
+		FROM VST_LGN_LOG
+		WHERE 1 = 1
+		<if test="(minDate != null and minDate != '') and (maxDate != null and maxDate != '')">
+			AND CNTN_DT BETWEEN STR_TO_DATE(#{minDate}, '%Y-%m-%d') AND (STR_TO_DATE(#{maxDate}, '%Y-%m-%d') + 1)
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND (ACSR_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			ACSR_IP_ADDR LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			ACSR_OS_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+	</select>
+
+	<insert id="insertLgnLog" parameterType="lgnLog">
+		INSERT INTO VST_LGN_LOG (ACSR_NM, ACSR_ID, ACSR_IP_ADDR, CNTN_SE, ACSR_OS_NM, CNTN_DT)
+		VALUES (#{acsrNm}, #{acsrId}, #{acsrIpAddr}, #{cntnSe}, #{acsrOsNm}, NOW())
+	</insert>
+
+</mapper>

@@ -1,0 +1,75 @@
+/* ======================================
+   CSS Variables for Theme Configuration
+   ====================================== */
+
+/* Light Theme Variables */
+[data-bs-theme=light][data-skin=bordered] {
+    --bs-logo-box-bg: #fff;
+    --bs-text-dark-rgb: 107, 108, 157;
+}
+
+/* Dark Theme Variables */
+[data-bs-theme=dark][data-skin=bordered] {
+    --bs-body-bg: #0c0e19;
+    --bs-logo-box-bg: #393a5a;
+    --bs-text-dark-rgb: #f5f5f9;
+}
+
+/* ======================================
+   Background Components
+   ====================================== */
+
+/* Section Background */
+[data-bs-theme=light][data-skin=bordered] .bg-vasanta-section {
+    background-color: #f5f5f9;
+}
+
+[data-bs-theme=dark][data-skin=bordered] .bg-vasanta-section {
+    background-color: #232333;
+}
+
+/* ======================================
+   Logo Components
+   ====================================== */
+
+/* Logo Box */
+.vasanta-logo-box {
+    background-color: var(--bs-logo-box-bg);
+    transition: box-shadow 0.3s ease;
+}
+
+.vasanta-logo-box:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Logo Image Filter */
+.logo-img {
+    filter: none;
+    transition: filter 0.3s ease;
+}
+
+[data-bs-theme="dark"] .logo-img {
+    filter: grayscale(1) brightness(10) contrast(0.4);
+    transition: filter 0.3s ease;
+}
+
+/* ======================================
+   Text Components
+   ====================================== */
+
+.vasanta-text-dark {
+    --bs-text-opacity: 1;
+    color: rgba(var(--bs-text-dark-rgb), var(--bs-text-opacity)) !important;
+}
+
+/* ======================================
+   Third-party Library Customizations
+   ====================================== */
+
+/* ApexCharts Dark Theme */
+[data-bs-theme="dark"] .apexcharts-xaxis .apexcharts-xaxis-texts-g text,
+[data-bs-theme="dark"] .apexcharts-xaxis .apexcharts-xaxis-title text,
+[data-bs-theme="dark"] .apexcharts-yaxis .apexcharts-yaxis-texts-g text,
+[data-bs-theme="dark"] .apexcharts-yaxis .apexcharts-yaxis-title text {
+    fill: #d5d5e2 !important;
+}

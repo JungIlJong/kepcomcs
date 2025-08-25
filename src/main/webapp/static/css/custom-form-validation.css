@@ -1,0 +1,44 @@
+/* Custom validation styles for div forms */
+.form-validation-enabled .input-group:has(.is-invalid),
+.form-validation-enabled .input-group:has(.is-valid) {
+  box-shadow: 0 0 0 var(--bs-border-width) var(--bs-form-validation-border-color);
+}
+
+.form-validation-enabled .input-group:has(.is-invalid) .input-group-text,
+.form-validation-enabled .input-group:has(.is-invalid) .input-group-text:focus,
+.form-validation-enabled .input-group:has(.is-invalid) .input-group-text:focus-within,
+.form-validation-enabled .input-group:has(.is-invalid) .form-control,
+.form-validation-enabled .input-group:has(.is-invalid) .form-control:focus,
+.form-validation-enabled .input-group:has(.is-invalid) .form-control:focus-within,
+.form-validation-enabled .input-group:has(.is-valid) .input-group-text,
+.form-validation-enabled .input-group:has(.is-valid) .input-group-text:focus,
+.form-validation-enabled .input-group:has(.is-valid) .input-group-text:focus-within,
+.form-validation-enabled .input-group:has(.is-valid) .form-control,
+.form-validation-enabled .input-group:has(.is-valid) .form-control:focus,
+.form-validation-enabled .input-group:has(.is-valid) .form-control:focus-within {
+  border-width: var(--bs-border-width);
+  border-color: var(--bs-form-validation-border-color);
+}
+
+.form-validation-enabled .input-group:has(.is-invalid)::before,
+.form-validation-enabled .input-group:has(.is-valid)::before {
+  box-shadow: var(--bs-form-validation-shadow);
+}
+
+/* Validation color variables */
+.form-validation-enabled .input-group:has(.is-invalid) {
+  --bs-form-validation-border-color: var(--bs-form-invalid-border-color);
+}
+
+.form-validation-enabled .input-group:has(.is-valid) {
+  --bs-form-validation-border-color: var(--bs-form-valid-border-color);
+}
+
+.form-validation-enabled .input-group:focus-within, 
+.form-validation-enabled .input-group:focus {
+  box-shadow: none !important;
+}
+.form-validation-enabled .input-group:focus-within::before, 
+.form-validation-enabled .input-group:focus::before {
+  box-shadow: none !important;
+}

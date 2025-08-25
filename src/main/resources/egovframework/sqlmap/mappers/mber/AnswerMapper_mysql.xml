@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.answer.mapper.AnswerMapper">
+
+    <insert id="insertAnswer" parameterType="mberAnswer">
+        INSERT INTO VST_ANSWER (
+            NTT_ID,
+            ANSWER_CN,
+            USE_AT,
+            WRTER_NM,
+            PASSWORD,
+            <if test="frstRegisterId != null">
+                FRST_REGISTER_ID,
+            </if>
+            FRST_REGIST_DT
+        ) VALUES (
+            #{nttId},
+            #{answerCn},
+            'Y',
+            #{wrterNm},
+            #{password},
+            <if test="frstRegisterId != null">
+                #{frstRegisterId},
+            </if>
+            NOW()
+        )
+    </insert>
+
+    <update id="updateAnswer" parameterType="mberAnswer">
+        UPDATE
+            VST_ANSWER
+        SET
+            ANSWER_CN = #{answerCn},
+            <if test="wrterNm != null and wrterNm != ''">
+            WRTER_NM = #{wrterNm},
+            </if>
+            LAST_UPDUSR_ID = #{lastUpdusrId},
+            LAST_UPDT_DT = NOW()
+        WHERE
+            ANSWER_ID = #{answerId}
+    </update>
+
+    <delete id="deleteAnswer" parameterType="string">
+
+    </delete>
+
+    <delete id="softDeleteAnswer" parameterType="string">
+        UPDATE
+            VST_ANSWER
+        SET
+            USE_AT = 'N'
+        WHERE ANSWER_ID = #{answerId}
+    </delete>
+
+    <select id="selectAnswerDetail" parameterType="string" resultType="egovMap">
+        SELECT
+            ANSWER_ID,
+            NTT_ID,
+            ANSWER_CN,
+            USE_AT,
+            WRTER_NM,
+            FRST_REGISTER_ID,
+            DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT
+        FROM VST_ANSWER
+        WHERE ANSWER_ID = #{answerId}
+    </select>
+
+    <select id="selectAnswerList" parameterType="map" resultType="egovMap">
+        SELECT
+            ANSWER_ID,
+            ANSWER_CN,
+            WRTER_NM,
+            NTT_ID,
+        CASE
+        WHEN FRST_REGISTER_ID IS NULL THEN NULL
+        <if test="uuid != null">
+            WHEN FRST_REGISTER_ID = #{uuid} THEN 'Y'
+        </if>
+        ELSE 'N'
+        END FRST_REGISTER_ID,
+        DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d %H:%i') FRST_REGIST_DT
+        FROM VST_ANSWER va
+        WHERE NTT_ID = #{nttId} AND USE_AT = 'Y' AND NOT EXISTS (
+            SELECT 1 FROM VST_REPORT vr WHERE vr.TARGET_TYPE = 'answer' AND vr.TARGET_ID = va.ANSWER_ID
+        )
+        ORDER BY FRST_REGIST_DT
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <select id="selectAnswerTotCnt" parameterType="map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM VST_ANSWER
+        WHERE NTT_ID = #{nttId} AND USE_AT = 'Y'
+    </select>
+
+    <select id="checkWriter" parameterType="map" resultType="boolean">
+        SELECT
+        CASE
+        WHEN FRST_REGISTER_ID IS NULL THEN FALSE
+        <if test="uuid != null">
+            WHEN FRST_REGISTER_ID = #{mbrId} THEN TRUE
+        </if>
+        ELSE FALSE
+        END FROM VST_ANSWER WHERE ANSWER_ID = #{answerId};
+    </select>
+
+    <select id="getPasswordById" parameterType="String" resultType="String">
+        SELECT PASSWORD FROM VST_ANSWER WHERE ANSWER_ID = #{id}
+    </select>
+
+</mapper>

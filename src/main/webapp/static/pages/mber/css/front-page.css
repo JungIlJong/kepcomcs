@@ -1,0 +1,221 @@
+/* ======================================
+   Layout & Section Spacing
+   ====================================== */
+
+.section-py {
+    padding-block: 6.25rem;
+    padding-inline: 0;
+}
+
+@media (max-width: 1199.98px) {
+    .section-py {
+        padding-block: 4rem;
+        padding-inline: 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .section-py {
+        padding-block: 3rem;
+        padding-inline: 0;
+    }
+}
+
+.first-section-pt {
+    padding-block-start: 11.28rem;
+}
+
+@media (max-width: 1199.98px) {
+    .first-section-pt {
+        padding-block-start: 7.5rem;
+    }
+}
+
+/* ======================================
+   Card Components
+   ====================================== */
+
+.card[class*=card-hover-border-] {
+    transition: all 0.2s ease-in-out;
+}
+
+/* ======================================
+   Image Components
+   ====================================== */
+
+.banner-bg-img {
+    position: absolute;
+    block-size: 100%;
+    inline-size: 100%;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    object-fit: cover;
+    object-position: left;
+}
+
+.section-title-img {
+    block-size: 100%;
+    inline-size: 120%;
+    inset-block-start: 10px;
+    inset-inline-start: -12%;
+}
+
+
+/* ======================================
+   Footer Components
+   ====================================== */
+
+.landing-footer {
+    --bs-footer-text: var(--bs-white);
+    --bs-footer-bottom-text: #d3d4dc;
+    --bs-footer-bottom-bg: #282c3e;
+    --bs-footer-top-bg: #241d31;
+}
+
+.landing-footer .footer-link,
+.landing-footer .footer-text {
+    color: var(--bs-footer-text);
+    opacity: 0.78;
+}
+
+.landing-footer .footer-title {
+    color: var(--bs-footer-text);
+    opacity: 0.92;
+}
+
+.landing-footer .footer-bottom-text {
+    color: var(--bs-footer-bottom-text);
+}
+
+.landing-footer .footer-bottom {
+    background-color: var(--bs-footer-bottom-bg);
+}
+
+.landing-footer .footer-link {
+    transition: all 0.2s ease-in-out;
+}
+
+.landing-footer .footer-link:hover {
+    opacity: 1;
+}
+
+.landing-footer .footer-top {
+    padding-block: 3.3rem 2.3rem;
+    border-top-left-radius: 3.75rem;
+    border-top-right-radius: 3.75rem;
+}
+
+@media (max-width: 767.98px) {
+    .landing-footer .footer-top {
+        padding-block: 3rem;
+        padding-inline: 0;
+    }
+}
+
+.landing-footer .footer-top .footer-bg {
+    object-position: center;
+}
+
+@media (min-width: 992px) {
+    .landing-footer .footer-logo-description {
+        max-inline-size: 385px;
+    }
+}
+
+/* Footer Form */
+.landing-footer .footer-form {
+    max-inline-size: 22.25rem;
+}
+
+.landing-footer .footer-form input {
+    background-color: transparent;
+    color: var(--bs-footer-text);
+}
+
+.landing-footer .footer-form input,
+.landing-footer .footer-form input:hover:not(:focus):not(:disabled) {
+    border-color: color-mix(in srgb, #e6e6f1 22%, #2b2c40);
+}
+
+.landing-footer .footer-form input:focus {
+    border-color: var(--bs-primary);
+    box-shadow: 0 0.125rem 0.25rem color-mix(in srgb, var(--bs-primary) 0.1, #2b2c40);
+}
+
+.landing-footer .footer-form input::placeholder {
+    color: rgba(var(--bs-white-rgb), 0.5);
+}
+
+.landing-footer .footer-form label {
+    color: #d5d5e2;
+}
+
+/* ======================================
+   Utility Components
+   ====================================== */
+
+/* Layout Utilities */
+.vasanta-equal-height > div {
+    min-height: 360px;
+}
+
+@media (max-width: 991.98px) {
+    .vasanta-equal-height > div {
+        min-height: auto;
+    }
+}
+
+.vasanta-indent {
+    padding-left: 0.75rem;
+}
+
+@media (min-width: 992px) {
+    .vasanta-indent {
+        padding-left: 1.25rem;
+    }
+}
+
+/* Icon Components */
+.icon-wrapper {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.logo-box {
+    background-color: #fff;
+    transition: box-shadow 0.3s ease;
+}
+
+.logo-box:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.vasanta-section-bar {
+    width: 48px;
+    height: 4px;
+    background: linear-gradient(90deg, #696CFF 0%, #A18CFE 100%);
+    border-radius: 999px;
+    display: inline-block;
+}
+
+/* ======================================
+   Carousel Components
+   ====================================== */
+
+.carousel-indicators [data-bs-target] {
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 4px;
+    opacity: 1;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-indicators .active {
+    background-color: #696cff;
+}

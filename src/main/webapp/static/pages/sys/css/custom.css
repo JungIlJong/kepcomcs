@@ -1,0 +1,28 @@
+/* 2025.04.15 개발팀 스타일 추가*/
+div.dt-container div.dt-search select {
+    margin-left: 0.5em;
+    display: inline-block;
+    width: 100%;
+    margin-inline: 0.5rem 0;
+}
+
+div.dt-container div.dt-search input {
+    width: 100%; !important;
+}
+
+tbody td {
+    word-break: break-word;
+}
+
+/*-- jstree --*/
+[data-bs-theme="dark"] .jstree-default .jstree-clicked {
+    background: #000000;
+    border: 2px solid #5f7d96;
+    border-radius: 3px;
+}
+
+[data-bs-theme="dark"] .jstree-default .jstree-hovered {
+    background: #111418;
+    border: 2px solid #5f6d78;
+    border-radius: 3px;
+}

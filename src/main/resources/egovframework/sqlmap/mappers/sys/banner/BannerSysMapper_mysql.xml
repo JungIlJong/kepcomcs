@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.daonplace.vasanta.domain.banner.mapper.BannerSysMapper">
+
+    <!-- 배너를 생성한다 -->
+    <insert id="insertBanner" parameterType="sysBanner" useGeneratedKeys="true" keyColumn="BANNER_ID" keyProperty="bannerId">
+        INSERT INTO VST_BANNER (
+        BANNER_NM,
+        REFLCT_AT,
+        <if test="url != null">
+        URL,
+        </if>
+        SORT_ORDR,
+        NTCE_BGNDE,
+        NTCE_ENDDE,
+        DC,
+        NEW_BRWS_AT,
+        BANNER_SE_CODE,
+        FRST_REGISTER_ID,
+        FRST_REGIST_DT
+        ) VALUES (
+            #{bannerNm},
+            #{reflctAt},
+            <if test="url != null">
+            #{url},
+            </if>
+            #{sortOrder},
+            #{ntceBgnde},
+            #{ntceEndde},
+            #{dc},
+            #{newBrwsAt},
+            #{bannerSeCode},
+            #{frstRegisterId},
+            now()
+        )
+    </insert>
+
+    <!-- 배너를 수정한다. -->
+    <update id="updateBanner" parameterType="sysBanner">
+        UPDATE
+            VST_BANNER
+        SET
+        <if test="bannerNm != null and bannerNm != ''">
+            BANNER_NM = #{bannerNm},
+        </if>
+        <if test="sortOrder != null and sortOrder != ''">
+            SORT_ORDR = #{sortOrder},
+        </if>
+        <if test="url != null">
+            URL = #{url},
+        </if>
+        <if test="reflctAt != null and reflctAt != ''">
+            REFLCT_AT = #{reflctAt},
+        </if>
+        <if test="bannerSeCode != null">
+            BANNER_SE_CODE = #{bannerSeCode},
+        </if>
+        <if test="dc != null">
+            DC = #{dc},
+        </if>
+        NEW_BRWS_AT = #{newBrwsAt},
+        NTCE_BGNDE = #{ntceBgnde},
+        NTCE_ENDDE = #{ntceEndde},
+        LAST_UPDUSR_ID = #{lastUpdusrId},
+        LAST_UPDT_DT = now()
+        WHERE BANNER_ID = #{bannerId}
+
+    </update>
+
+    <!-- 배너를 삭제한다. -->
+    <delete id="deleteBanner" parameterType="String">
+        DELETE FROM VST_BANNER WHERE BANNER_ID = #{bannerId}
+    </delete>
+
+    <!-- 배너 목록을 조회한다. -->
+    <select id="selectBannerList" parameterType="Map" resultType="egovMap">
+        SELECT
+            BANNER_ID,
+            BANNER_NM,
+            REFLCT_AT,
+            SORT_ORDR,
+            BANNER_SE_CODE,
+            DATE_FORMAT(NTCE_BGNDE, '%Y-%m-%d %H:%i') NTCE_BGNDE,
+            DATE_FORMAT(NTCE_ENDDE, '%Y-%m-%d %H:%i') NTCE_ENDDE,
+            FRST_REGISTER_ID,
+            DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT
+        FROM VST_BANNER
+        WHERE 1 = 1
+        <if test="minDate != null and minDate != '' and maxDate != null and maxDate != ''">
+            <![CDATA[AND(DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') >= #{minDate} AND DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') <= #{maxDate})]]>
+        </if>
+          <if test="reflctAt != null and reflctAt != ''">
+          <choose>
+              <when test="reflctAt == 'plus'">
+                  AND REFLCT_AT = 'Y'<![CDATA[ AND(DATE_FORMAT(NTCE_BGNDE, '%Y-%m-%d %H:%i') <= NOW() AND DATE_FORMAT(NTCE_ENDDE, '%Y-%m-%d %H:%i') > NOW())]]>
+              </when>
+              <when test="reflctAt == 'zero'">
+                  AND REFLCT_AT = 'Y'<![CDATA[ AND DATE_FORMAT(NTCE_ENDDE, '%Y-%m-%d %H:%i') <= NOW()]]>
+              </when>
+              <when test="reflctAt == 'min'">
+                  AND REFLCT_AT = 'N'
+              </when>
+          </choose>
+          </if>
+        <if test="bannerSeCode != null and bannerSeCode != ''">
+            AND BANNER_SE_CODE = #{bannerSeCode}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND (BANNER_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+        </if>
+        ORDER BY
+        <choose>
+            <when test="orderColumn != null and orderColumn != ''">
+                ${orderColumn}
+            </when>
+            <otherwise>
+                BANNER_ID
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="ascDesc != null and ascDesc != ''">
+                ${ascDesc}
+            </when>
+            <otherwise>
+                DESC
+            </otherwise>
+        </choose>
+        LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+    </select>
+
+    <!-- 배너의 총 갯수를 조회한다. -->
+    <select id="selectBannerListTotCnt" parameterType="Map" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM VST_BANNER
+        WHERE 1 = 1
+        <if test="minDate != null and minDate != '' and maxDate != null and maxDate != ''">
+            <![CDATA[AND(DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') >= #{minDate} AND DATE_FORMAT(FRST_REGIST_DT, '%Y-%m-%d') <= #{maxDate})]]>
+        </if>
+        <if test="reflctAt != null and reflctAt != ''">
+            <choose>
+                <when test="reflctAt == 'plus'">
+                    AND REFLCT_AT = 'Y'<![CDATA[ AND(DATE_FORMAT(NTCE_BGNDE, '%Y-%m-%d %H:%i') <= NOW() AND DATE_FORMAT(NTCE_ENDDE, '%Y-%m-%d %H:%i') > NOW())]]>
+                </when>
+                <when test="reflctAt == 'zero'">
+                    AND REFLCT_AT = 'Y'<![CDATA[ AND DATE_FORMAT(NTCE_ENDDE, '%Y-%m-%d %H:%i') <= NOW()]]>
+                </when>
+                <when test="reflctAt == 'min'">
+                    AND REFLCT_AT = 'N'
+                </when>
+            </choose>
+        </if>
+        <if test="bannerSeCode != null and bannerSeCode != ''">
+            AND BANNER_SE_CODE = #{bannerSeCode}
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            AND BANNER_NM LIKE CONCAT('%', #{searchKeyword} , '%')
+        </if>
+    </select>
+
+    <!-- 배너 상세 정보를 조회한다. -->
+    <select id="selectBannerDetail" parameterType="String" resultType="egovMap">
+        SELECT
+            A.BANNER_ID,
+            A.BANNER_NM,
+            A.REFLCT_AT,
+            A.SORT_ORDR,
+            A.BANNER_SE_CODE,
+            A.FRST_REGISTER_ID,
+            A.DC,
+            A.NEW_BRWS_AT,
+            A.URL,
+            DATE_FORMAT(A.NTCE_BGNDE, '%Y-%m-%d %H:%i') NTCE_BGNDE,
+            DATE_FORMAT(A.NTCE_ENDDE, '%Y-%m-%d %H:%i') NTCE_ENDDE,
+            DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT,
+            B.ORIGNL_FILE_NM WEB_BANNER_FILE_NM,
+            B.FILE_EXTSN WEB_BANNER_FILE_EXTSN,
+            B.ATCH_FILE_ID WEB_BANNER_FILE_ID,
+            C.ORIGNL_FILE_NM MOB_BANNER_FILE_NM,
+            C.FILE_EXTSN MOB_BANNER_FILE_EXTSN,
+            C.ATCH_FILE_ID MOB_BANNER_FILE_ID
+        FROM VST_BANNER A
+        LEFT OUTER JOIN VST_ATCHFILE B ON B.UPPER_ID = A.BANNER_ID
+        LEFT OUTER JOIN VST_ATCHFILE C ON C.UPPER_ID = A.BANNER_ID
+        WHERE A.BANNER_ID = #{bannerId} AND B.FILE_SE = 'WEB_BANNER' AND C.FILE_SE = 'MOB_BANNER'
+    </select>
+</mapper>
