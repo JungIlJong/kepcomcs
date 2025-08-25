@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="com.daonplace.vasanta.core.security.util.UserDetailsUtil" %>
+<%@ page import="com.kepco.app.core.security.util.UserDetailsUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%
     String name = UserDetailsUtil.getName();

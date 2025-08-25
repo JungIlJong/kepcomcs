@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages={"egovframework", "com.daonplace.vasanta"})
+@ComponentScan(basePackages={"egovframework", "com.kepco.app"})
 public class EgovBootApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(EgovBootApplication.class);

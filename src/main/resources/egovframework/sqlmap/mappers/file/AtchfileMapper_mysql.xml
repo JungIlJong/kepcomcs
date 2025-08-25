@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daonplace.vasanta.domain.atchfile.mapper.AtchfileMapper">
+<mapper namespace="com.kepco.app.domain.atchfile.mapper.AtchfileMapper">
 
     <!-- 부모ID의 파일 목록을 조회한다. -->
     <select id="selectAtchfileByUpperId" parameterType="String" resultType="atchfile">

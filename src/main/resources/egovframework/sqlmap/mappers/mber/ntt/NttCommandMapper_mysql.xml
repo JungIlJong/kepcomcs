@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daonplace.vasanta.domain.ntt.mapper.NttCommandMapper">
+<mapper namespace="com.kepco.app.domain.ntt.mapper.NttCommandMapper">
 
     <insert id="insertNtt" parameterType="mberNtt" useGeneratedKeys="true" keyColumn="NTT_ID" keyProperty="nttId">
         INSERT INTO VST_NTT (

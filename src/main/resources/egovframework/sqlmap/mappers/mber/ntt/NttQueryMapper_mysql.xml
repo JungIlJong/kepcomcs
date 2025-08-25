@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daonplace.vasanta.domain.ntt.mapper.NttQueryMapper">
+<mapper namespace="com.kepco.app.domain.ntt.mapper.NttQueryMapper">
 
     <resultMap id="detailMap"
-               type="com.daonplace.vasanta.domain.ntt.dto.SearchMberNtt$NttDetail">
+               type="com.kepco.app.domain.ntt.dto.SearchMberNtt$NttDetail">
         <id property="id" column="NTT_ID" />
         <result property="rdcnt" column="RDCNT" />
         <result property="nttSj" column="NTT_SJ" />
@@ -17,21 +17,21 @@
         <result property="password" column="PASSWORD" />
         <association
                 property="replyDetail"
-                javaType="com.daonplace.vasanta.domain.ntt.dto.SearchMberNtt$ReplyDetail">
+                javaType="com.kepco.app.domain.ntt.dto.SearchMberNtt$ReplyDetail">
             <id property="id" column="REPLY_NTT_ID" />
             <result property="nttSj" column="REPLY_NTT__SJ" />
             <result property="nttCn" column="REPLY_NTT_CN" />
             <result property="frstRegistDt" column="REPLY_FRST_REGIST_DT" />
             <result property="wrterNm" column="REPLY_WRTER_NM" />
             <collection property="files"
-                        ofType="com.daonplace.vasanta.domain.ntt.dto.SearchMberNtt$FileInfo">
+                        ofType="com.kepco.app.domain.ntt.dto.SearchMberNtt$FileInfo">
                 <id property="id" column="REPLY_ATCH_FILE_ID" />
                 <result property="name" column="REPLY_FILE_NM" />
             </collection>
         </association>
         <collection
                 property="files"
-                ofType="com.daonplace.vasanta.domain.ntt.dto.SearchMberNtt$FileInfo">
+                ofType="com.kepco.app.domain.ntt.dto.SearchMberNtt$FileInfo">
             <id property="id" column="ATCH_FILE_ID" />
             <result property="name" column="FILE_NM" />
         </collection>
@@ -39,8 +39,8 @@
 
     <select
             id="selectList"
-            parameterType="com.daonplace.vasanta.domain.ntt.dto.SearchMberNtt$Search"
-            resultType="com.daonplace.vasanta.domain.ntt.dto.SearchMberNtt$NttInfo">
+            parameterType="com.kepco.app.domain.ntt.dto.SearchMberNtt$Search"
+            resultType="com.kepco.app.domain.ntt.dto.SearchMberNtt$NttInfo">
         SELECT
             VN.NTT_ID ID,
             VN.NTT_SJ,
@@ -110,7 +110,7 @@
     </select>
 
     <select id="selectTotCnt"
-            parameterType="com.daonplace.vasanta.domain.ntt.dto.SearchMberNtt$Search"
+            parameterType="com.kepco.app.domain.ntt.dto.SearchMberNtt$Search"
             resultType="int">
         SELECT
             COUNT(*)
@@ -212,7 +212,7 @@
 
     <select id="selectPreAndNext"
             parameterType="map"
-            resultType="com.daonplace.vasanta.domain.ntt.dto.SearchMberNtt$PreNext">
+            resultType="com.kepco.app.domain.ntt.dto.SearchMberNtt$PreNext">
 
         SELECT
             (SELECT NTT_ID

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daonplace.vasanta.domain.authrt.mapper.AuthrtMapper">
+<mapper namespace="com.kepco.app.domain.authrt.mapper.AuthrtMapper">
 
 	<select id="selectAuthrtList" parameterType="HashMap" resultType="authrt">
 		SELECT AUTHRT_ID, AUTHRT_CD,  AUTHRT_NM, AUTHRT_EXPLN, FRST_RGTR_ID, FRST_REG_DT, LAST_MDFR_ID, LAST_MDFCN_DT

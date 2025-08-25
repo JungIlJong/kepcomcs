@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daonplace.vasanta.domain.cntnts.mapper.CntntsMapper">
+<mapper namespace="com.kepco.app.domain.cntnts.mapper.CntntsMapper">
 
     <!-- 콘텐츠 상세정보를 조회한다. -->
     <select id="selectContentDetail" parameterType="string" resultType="egovMap">

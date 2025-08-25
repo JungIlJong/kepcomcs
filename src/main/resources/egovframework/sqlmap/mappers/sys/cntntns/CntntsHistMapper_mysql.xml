@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daonplace.vasanta.domain.cntnts.mapper.CntntsHistSysMapper">
+<mapper namespace="com.kepco.app.domain.cntnts.mapper.CntntsHistSysMapper">
 
     <!-- 콘텐츠 이력을 생성한다. -->
     <insert id="insertCntntsHist" parameterType="cntntsHist">

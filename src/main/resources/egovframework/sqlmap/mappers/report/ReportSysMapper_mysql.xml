@@ -2,19 +2,19 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daonplace.vasanta.domain.report.mapper.ReportSysMapper">
+<mapper namespace="com.kepco.app.domain.report.mapper.ReportSysMapper">
 
-    <resultMap id="listMap" type="com.daonplace.vasanta.domain.report.dto.SearchReportResponse">
+    <resultMap id="listMap" type="com.kepco.app.domain.report.dto.SearchReportResponse">
         <id property="reportId" column="REPORT_ID" />
         <result property="targetType" column="TARGET_TYPE" />
         <result property="createdAt" column="CREATED_AT" />
 
-        <association property="target" javaType="com.daonplace.vasanta.domain.report.dto.SearchReportResponse$Target">
+        <association property="target" javaType="com.kepco.app.domain.report.dto.SearchReportResponse$Target">
             <id property="targetId" column="TARGET_ID" />
             <result property="targetName" column="TARGET_NAME" />
         </association>
 
-        <association property="reporter" javaType="com.daonplace.vasanta.domain.report.dto.SearchReportResponse$Reporter">
+        <association property="reporter" javaType="com.kepco.app.domain.report.dto.SearchReportResponse$Reporter">
             <id property="mbrId" column="MBR_ID" />
             <result property="mbrNm" column="MBR_NM" />
         </association>
@@ -22,7 +22,7 @@
 
     <select
             id="searchReportList"
-            parameterType="com.daonplace.vasanta.domain.report.dto.SearchReportRequest"
+            parameterType="com.kepco.app.domain.report.dto.SearchReportRequest"
             resultMap="listMap">
         SELECT
             r.REPORT_ID,
@@ -68,7 +68,7 @@
 
     <select
             id="searchReportTotCnt"
-            parameterType="com.daonplace.vasanta.domain.report.dto.SearchReportRequest"
+            parameterType="com.kepco.app.domain.report.dto.SearchReportRequest"
             resultType="int">
         SELECT
             COUNT(*)
@@ -100,7 +100,7 @@
     <select
         id="selectAnswerWithReport"
         parameterType="long"
-        resultType="com.daonplace.vasanta.domain.report.dto.AnswerReportDetailResponse">
+        resultType="com.kepco.app.domain.report.dto.AnswerReportDetailResponse">
         SELECT
             r.REPORT_ID,
             r.TARGET_TYPE,
@@ -124,7 +124,7 @@
 
     <select id="selectNttWithReport"
             parameterType="long"
-            resultType="com.daonplace.vasanta.domain.report.dto.NttReportDetailResponse">
+            resultType="com.kepco.app.domain.report.dto.NttReportDetailResponse">
         SELECT
             r.REPORT_ID,
             r.TARGET_TYPE,
@@ -148,7 +148,7 @@
 
     <select id="selectMbrWithReport"
             parameterType="long"
-            resultType="com.daonplace.vasanta.domain.report.dto.MbrReportDetailResponse">
+            resultType="com.kepco.app.domain.report.dto.MbrReportDetailResponse">
         SELECT
             r.REPORT_ID,
             r.TARGET_TYPE,
@@ -173,7 +173,7 @@
         DELETE FROM VST_REPORT WHERE REPORT_ID = #{reportId}
     </delete>
 
-    <delete id="resetReport" parameterType="com.daonplace.vasanta.domain.report.dto.ResetReportRequest">
+    <delete id="resetReport" parameterType="com.kepco.app.domain.report.dto.ResetReportRequest">
         DELETE FROM VST_REPORT WHERE TARGET_TYPE = #{targetType} AND TARGET_ID = #{targetId}
     </delete>
 </mapper>

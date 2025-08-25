@@ -45,7 +45,7 @@
                                         <!-- language switcher -->
                                         <!-- Code snippet display area -->
                                         <pre id="package-structure">
-com.daonplace.vasanta
+com.kepco.app
 ├── domain                          # 비즈니스 도메인별 패키지 구조
 │   └── sample                      # 샘플 도메인 (다른 도메인도 동일한 구조)
 │       ├── api                     # REST API 컨트롤러
@@ -89,7 +89,7 @@ src/main/resources/egovframework/sqlmap  # MyBatis SQL 매핑 파일 경로
                                     <div class="card-body">
                                         <div class="snippet-description mb-3">
                                             <ul>
-                                                <li>com.daonplace.vasanta.domain.sample.mapper에 Mapper 인터페이스 구현</li>
+                                                <li>com.kepco.app.domain.sample.mapper에 Mapper 인터페이스 구현</li>
                                                 <li>org.apache.ibatis.annotations.Mapper의 Mapper 어노테이션 필수</li>
                                                 <li>관리자용 경우 Sys를 중간에 추가</li>
                                             </ul>
@@ -264,7 +264,7 @@ public class SampleServiceImpl extends EgovAbstractServiceImpl implements Sample
                                     <!-- 설명 -->
                                     <div class="card-body">
                                         <div class="snippet-description mb-3">
-                                            최대한 import com.daonplace.vasanta.core.service.ComSearchService 인터페이스를 상속해주세요.
+                                            최대한 import com.kepco.app.core.service.ComSearchService 인터페이스를 상속해주세요.
                                         </div>
 
                                         <!-- 코드 스닛 -->
@@ -277,7 +277,7 @@ public class SampleServiceImpl extends EgovAbstractServiceImpl implements Sample
                                                 </button>
                                             </div>
                                             <pre><code class="language-java" id="snippet-code-example4">
-import com.daonplace.vasanta.core.service.ComSearchService;
+import com.kepco.app.core.service.ComSearchService;
 
 public interface SampleService extends ComSearchService {
 }</code></pre>
@@ -338,7 +338,7 @@ public class SampleApi {
                                         <div class="snippet-description mb-3">
                                             <ul>
                                                 <li class="text-danger">관리자의 경우에는 View 경로를 "/sys"를 prefix로 사용</li>
-                                                <li>View 코드의 패키지 경로는 반드시 <b>com.daonplace.vasanta.front</b> 에 생성</li>
+                                                <li>View 코드의 패키지 경로는 반드시 <b>com.kepco.app.front</b> 에 생성</li>
                                             </ul>
                                         </div>
 

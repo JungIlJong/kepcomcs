@@ -1,13 +1,13 @@
 package egovframework.web;
 
-import com.daonplace.vasanta.core.interceptor.MenuInterceptor;
-import com.daonplace.vasanta.core.interceptor.RootMenuInterceptor;
-import com.daonplace.vasanta.core.interceptor.SettingInterceptor;
-import com.daonplace.vasanta.core.interceptor.UserMenuInterceptor;
-import com.daonplace.vasanta.domain.bbs.service.BbsRoleService;
-import com.daonplace.vasanta.domain.bbs.service.BbsRoleSysService;
-import com.daonplace.vasanta.domain.menu.mapper.MenuSysMapper;
-import com.daonplace.vasanta.domain.setting.service.SettingSysService;
+import com.kepco.app.core.interceptor.MenuInterceptor;
+import com.kepco.app.core.interceptor.RootMenuInterceptor;
+import com.kepco.app.core.interceptor.SettingInterceptor;
+import com.kepco.app.core.interceptor.UserMenuInterceptor;
+import com.kepco.app.domain.bbs.service.BbsRoleService;
+import com.kepco.app.domain.bbs.service.BbsRoleSysService;
+import com.kepco.app.domain.menu.mapper.MenuSysMapper;
+import com.kepco.app.domain.setting.service.SettingSysService;
 import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import egovframework.cmmn.web.EgovBindingInitializer;
 import lombok.RequiredArgsConstructor;

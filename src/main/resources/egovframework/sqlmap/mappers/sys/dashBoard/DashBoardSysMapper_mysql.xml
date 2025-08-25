@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.daonplace.vasanta.domain.dashboard.mapper.DashBoardSysMapper">
+<mapper namespace="com.kepco.app.domain.dashboard.mapper.DashBoardSysMapper">
 
 	<select
 			id="selectWeeklyVisitorsByDate"
 			parameterType="String"
-			resultType="com.daonplace.vasanta.domain.dashboard.dto.WeeklyVisitorItem">
+			resultType="com.kepco.app.domain.dashboard.dto.WeeklyVisitorItem">
 		SELECT
 			DATE_FORMAT(d.target_date, '%d') AS date,
 			IFNULL(COUNT(vll.CNTN_DT), 0) AS visitCount
@@ -19,7 +19,7 @@
 
 	<select id="selectUserRankingsByDate"
 			parameterType="String"
-			resultType="com.daonplace.vasanta.domain.dashboard.dto.UserRankingItem">
+			resultType="com.kepco.app.domain.dashboard.dto.UserRankingItem">
 		SELECT
 			VM.MBR_ID mbrId,
 			VM.MBR_NM mbrNm,
@@ -43,7 +43,7 @@
 
 	<select id="selectBoardStatisticsItemsByDate"
 			parameterType="Map"
-			resultType="com.daonplace.vasanta.domain.dashboard.dto.BoardStatisticsItem$BoardResultItem">
+			resultType="com.kepco.app.domain.dashboard.dto.BoardStatisticsItem$BoardResultItem">
 		SELECT
 		VB.BBS_ID,
 		VB.BBS_NM,
@@ -60,7 +60,7 @@
 
 	<select id="selectApprovalDocumentsInputItems"
 			parameterType="String"
-			resultType="com.daonplace.vasanta.domain.dashboard.dto.ApprovalInputItem">
+			resultType="com.kepco.app.domain.dashboard.dto.ApprovalInputItem">
 		SELECT
 			ad.approval_title,
 			VM.MBR_NM,
@@ -77,7 +77,7 @@
 
 	<select id="selectUserCountByDate"
 			parameterType="String"
-			resultType="com.daonplace.vasanta.domain.dashboard.dto.UserCountItem">
+			resultType="com.kepco.app.domain.dashboard.dto.UserCountItem">
 		SELECT
 			COUNT(VM.MBR_ID) userCount,
 			#{date} DATE
