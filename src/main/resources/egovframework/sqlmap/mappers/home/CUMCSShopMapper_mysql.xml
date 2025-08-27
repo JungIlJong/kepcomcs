@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kepco.app.home.mapper.CUShopMapper">
+
+	
+	<!-- 영업 사업소  -->
+	<select id="getShopList" parameterType="HashMap" resultType="HashMap">
+		SELECT a.shop_no, a.shop_name, a.shop_tel, a.shop_keyword, a.region1, a.region2, a.addr, DATE_FORMAT(a.insert_dt, '%Y-%m-%d' ), a.insert_id, DATE_FORMAT(a.update_dt, '%Y-%m-%d' ), a.update_id, a.division
+		FROM tbl_shopinfo a
+		WHERE 1=1
+		AND division='1'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.shop_name like CONCAT('%', #{sSearch}, '%') 
+			  	or a.addr like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="region1 != null and region1 != ''">
+			  and a.region1 = #{region1}
+		</if>
+		<if test="region2 != null and region2 != ''">
+			  and a.region2 = #{region2}
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},a.shop_name asc
+		</if>
+		<!-- <if test="orderCol == null and orderCol == ''"> -->
+			order by a.sort_num,  a.shop_name asc
+		<!-- </if> -->
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getShopListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM tbl_shopinfo a
+		WHERE 1=1
+		AND division='1'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.shop_name like CONCAT('%', #{sSearch}, '%') 
+			  	or a.addr like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="region1 != null and region1 != ''">
+			  and a.region1 = #{region1}
+		</if>
+		<if test="region2 != null and region2 != ''">
+			  and a.region2 = #{region2}
+		</if>
+	</select>
+	
+	<select id="getRegion1" parameterType="HashMap" resultType="HashMap">
+		select region1
+		from tbl_shopinfo
+		where 1=1
+		AND division='1'
+		group by region1
+	</select>
+	
+	<select id="getRegion2" parameterType="HashMap" resultType="HashMap">
+		select region2
+		from tbl_shopinfo
+		where 1=1
+		and region1 = #{region1}
+		AND division='1'
+		group by region2
+	</select>
+	
+	<!-- 발전 사업소  -->
+	
+	<select id="getPowerList" parameterType="HashMap" resultType="HashMap">
+		SELECT a.shop_no, a.shop_name, a.shop_tel, a.shop_keyword, a.region1, a.region2, a.addr, DATE_FORMAT(a.insert_dt, '%Y-%m-%d' ), a.insert_id, DATE_FORMAT(a.update_dt, '%Y-%m-%d' ), a.update_id, a.division
+		FROM tbl_shopinfo a
+		WHERE 1=1
+		AND division='2'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.shop_name like CONCAT('%', #{sSearch}, '%') 
+			  	or a.addr like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="region1 != null and region1 != ''">
+			  and a.region1 = #{region1}
+		</if>
+		<if test="region2 != null and region2 != ''">
+			  and a.region2 = #{region2}
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},a.shop_name asc
+		</if>
+		<!-- <if test="orderCol == null and orderCol == ''"> -->
+			order by a.sort_num,  a.shop_name asc
+		<!-- </if> -->
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getPowerListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM tbl_shopinfo a
+		WHERE 1=1
+		AND division='2'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.shop_name like CONCAT('%', #{sSearch}, '%') 
+			  	or a.addr like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="region1 != null and region1 != ''">
+			  and a.region1 = #{region1}
+		</if>
+		<if test="region2 != null and region2 != ''">
+			  and a.region2 = #{region2}
+		</if>
+	</select>
+	
+	<select id="getPowerRegion1" parameterType="HashMap" resultType="HashMap">
+		select region1
+		from tbl_shopinfo
+		where 1=1
+		AND division='2'
+		group by region1
+	</select>
+	
+	<select id="getPowerRegion2" parameterType="HashMap" resultType="HashMap">
+		select region2
+		from tbl_shopinfo
+		where 1=1
+		and region1 = #{region1}
+		AND division='2'
+		group by region2
+	</select>
+	
+</mapper>

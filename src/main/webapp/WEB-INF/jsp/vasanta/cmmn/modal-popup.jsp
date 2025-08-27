@@ -1,4 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <script src="/static/vendor/sneat/libs/swiper/swiper.js"></script>
 <link rel="stylesheet" href="/static/vendor/sneat/libs/swiper/swiper.css" />
 
@@ -47,7 +46,7 @@
                 url,
                 atchFileId
             } = popup;
-
+console.log(popup);
             const imageUrl = '/file/' + atchFileId;
             const safePopupNm = (popupNm || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
             const hasUrl = url && url.trim() !== '';
@@ -118,7 +117,21 @@
 
         if (hidePopup !== 'Y') {
             console.log('?');
-            Ajax.get(setUrl('/api/mber/popups/active-list'), init, fail);
+//             Ajax.get(setUrl('/api/mber/popups/active-list'), init, fail);
+            $.ajax(
+        			{
+        				method : "get",
+        				url : '/api/mber/popups/stop',
+        				contentType: "application/json; charset=utf-8",
+        				async : false,
+        				success : function(data) {
+        					init();
+        				},
+        				error : function(e) {
+        					rvalue = { "result" : 0, "msg" : "관리자에게 문의바랍니다.", "data" : e.reponseText };
+        				}
+        			}
+        		);
         }
 
         let doNotShowToday = false;
@@ -129,7 +142,20 @@
 
         $('#fullscreenModal').on('hide.bs.modal', function () {
             if (doNotShowToday) {
-                Ajax.get(setUrl('/api/mber/popups/stop'), function () {}, fail);
+//                 Ajax.get(setUrl('/api/mber/popups/stop'), function () {}, fail);
+                $.ajax(
+            			{
+            				method : "get",
+            				url : '/api/mber/popups/stop',
+            				contentType: "application/json; charset=utf-8",
+            				async : false,
+            				success : function(data) {
+            				},
+            				error : function(e) {
+            					rvalue = { "result" : 0, "msg" : "관리자에게 문의바랍니다.", "data" : e.reponseText };
+            				}
+            			}
+            		);
             }
             document.activeElement.blur();
         });

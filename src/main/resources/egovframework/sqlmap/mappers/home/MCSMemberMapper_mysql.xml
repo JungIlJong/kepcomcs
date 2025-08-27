@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MCSMemberSql">
+
+	<select id="getMemberInfo" parameterType="HashMap" resultType="HashMap">
+		select 
+			member_id
+			,member_pwd
+			,member_name
+			,member_grade
+			,secret_key
+			,ifnull(pwd_faild_cnt, 0) pwd_faild_cnt
+			,last_login_dt
+			,insert_id
+			,insert_dt
+			,use_YN
+		from tbl_adminmember
+		where 1=1
+		and member_id = #{id}
+		and use_YN = 'Y'
+		and del_YN = 'N'
+	</select>
+	
+	<select id="getAuthorityMemberList" parameterType="HashMap" resultType="HashMap">
+		select 
+			categoryNo, menuURL, menuName 
+		from 
+			tbl_adminmenu a join tbl_authoritymenu b on a.am_no = b.am_no
+		where  at_no = #{at_no}
+		and a.del_YN = 'N'
+		ORDER BY orderNo ASC
+	</select>
+	
+	<select id="getMemberList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			member_id, 
+			member_name,
+			case 
+				when member_grade = "A" then "최고관리자" 
+				else "부관리자"
+			end member_grade, 
+			DATE_FORMAT(insert_dt,'%Y-%m-%d %H:%i') insert_dt,
+			use_YN,
+			ifnull(pwd_faild_cnt, 0) pwd_faild_cnt
+		FROM tbl_adminmember
+		where 1=1
+			and del_YN = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (member_id like CONCAT('%', #{sSearch}, '%') 
+			  	or member_name like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0}, insert_dt desc
+		</if>
+		<if test="orderCol == null and orderCol == ''">
+			order by insert_dt desc
+		</if>
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getMemberView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			member_id, 
+			member_name,
+			member_grade, 
+			use_YN
+		FROM tbl_adminmember
+		where 1=1
+        and del_YN = 'N'
+        and member_id = #{member_id}
+	</select>
+	
+	<select id="getMemberListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM tbl_adminmember
+		where 1=1
+			and del_YN = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (member_id like CONCAT('%', #{sSearch}, '%') 
+			  	or member_name like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+	</select>
+	
+	<select id="MemberLogin" parameterType="HashMap" resultType="HashMap">
+		select member_id, member_name, member_grade from tbl_adminmember
+		where 1=1
+		and member_id = #{member_id}
+		and member_id = #{member_pwd}
+		and use_YN = 'Y'
+		and del_YN = 'N'
+	</select>
+	
+	<insert id="insertMember" parameterType="HashMap">
+		INSERT INTO tbl_adminmember 
+		(
+			member_id, 
+			member_pwd, 
+			member_grade, 
+			member_name,
+			secret_key,
+			insert_id, 
+			insert_dt, 
+			use_YN
+		)
+		VALUES
+		(
+			#{member_id}, 
+			#{member_pwd}, 
+			#{member_grade},
+			#{member_name},
+			#{secret_key},
+			#{request_id}, 
+			now(), 
+			#{use_YN}
+		)
+	</insert>
+	
+	<update id="updateMember" parameterType="HashMap">
+		update tbl_adminmember set
+			member_pwd = #{member_pwd}, 
+			member_grade = #{member_grade}, 
+			member_name = #{member_name},
+			use_YN = #{use_YN}
+		where 1=1
+		and member_id = #{member_id}
+	</update>
+	
+	<update id="deleteMember" parameterType="HashMap">
+		update tbl_adminmember set
+			del_YN = 'Y'
+		where 1=1
+		and member_id = #{member_id}
+	</update>
+	
+	<update id="updateMemberwithoutpwd" parameterType="HashMap">
+		update tbl_adminmember set
+			member_grade = #{member_grade}, 
+			use_YN = #{use_YN},
+			member_name = #{member_name}
+		where 1=1
+		and member_id = #{member_id}
+	</update>
+	
+	<select id="memberIdCheck" parameterType="HashMap" resultType="Integer">
+		SELECT count(*) cnt
+		FROM tbl_adminmember
+		where 1=1
+		and del_YN = 'N'
+		and member_id = #{member_id} 
+	</select>
+	
+	<update id="memberPasswordFailed" parameterType="HashMap">
+		UPDATE tbl_adminmember
+		  set pwd_faild_cnt = ifnull(pwd_faild_cnt,0) + 1
+		where member_id = #{member_id}
+	</update>
+	
+	<update id="memberLoginSuccess" parameterType="HashMap">
+		UPDATE tbl_adminmember
+		  set pwd_faild_cnt = 0, last_login_dt = now()
+		where member_id = #{id} or member_id = #{member_id}
+	</update>
+	
+	<update id="memberUnlock" parameterType="HashMap">
+		UPDATE 
+			tbl_adminmember
+		set
+			pwd_faild_cnt = 0
+		where
+			member_id = #{member_id}
+	</update>
+	
+	<select id="getAdminTypeList" parameterType="HashMap" resultType="HashMap">
+		select 
+			at_no, typeName
+		from 
+			tbl_admintype
+		where
+			use_YN = 'Y'
+		and del_YN = 'N'
+	</select>
+	
+	
+	<select id="getaAminTypeList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			at_no, 
+			typeName,
+			DATE_FORMAT(insert_dt,'%Y-%m-%d %H:%i') insert_dt,
+			use_YN
+		FROM tbl_admintype
+		where 1=1
+			and del_YN = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (typeName like CONCAT('%', #{sSearch}, '%'))
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0}, insert_dt desc
+		</if>
+		<if test="orderCol == null and orderCol == ''">
+			order by insert_dt desc
+		</if>
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getAminTypeView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			at_no, 
+			typeName,
+			use_YN
+		FROM tbl_admintype
+		where 1=1
+		and del_YN = 'N'
+        and at_no = #{at_no}
+	</select>
+	
+	<select id="getAminTypeListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM tbl_admintype
+		where 1=1
+		and del_YN = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (typeName like CONCAT('%', #{sSearch}, '%'))
+		</if>
+	</select>
+	
+	<insert id="insertAminType" parameterType="HashMap">
+		INSERT INTO tbl_admintype 
+		(
+			typeName, 
+			insert_id, 
+			insert_dt, 
+			use_YN
+		)
+		VALUES
+		(
+			#{typeName}, 
+			#{request_id}, 
+			now(), 
+			#{use_YN}
+		)
+	</insert>
+	
+	<update id="updateAminType" parameterType="HashMap">
+		update tbl_admintype set
+			typeName = #{typeName}, 
+			use_YN = #{use_YN}
+		where 1=1
+		and at_no = #{at_no}
+	</update>
+	
+	<update id="deleteAdminType" parameterType="HashMap">
+		update tbl_admintype set
+			del_YN = 'Y'
+		where 1=1
+		and at_no = #{at_no}
+	</update>	
+	
+	<select id="typeNameCheck" parameterType="HashMap" resultType="Integer">
+		SELECT count(*) cnt
+		FROM tbl_admintype
+		where 1=1
+		and del_YN = 'N'
+		and typeName = #{typeName} 
+	</select>
+	
+	<select id="getaAminCategoryMenuList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			distinct case 
+				when categoryNo = 1 then '공지게시판'
+				when categoryNo = 2 then '문의게시판'
+				when categoryNo = 3 then '고객 신고'
+				else '사용자 관리'
+			end categoryName
+		FROM tbl_adminmenu
+		where 1=1
+		and use_YN = 'Y'
+		and del_YN = 'N'
+	</select>
+	
+	<select id="getaAminCategoryDetailMenuList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			menuName, 
+			a.am_no,
+			ifNull(atm_no, '') atm_no
+		FROM tbl_adminmenu a left join 
+			 tbl_authoritymenu b on a.am_no = b.am_no and at_no = #{at_no}
+		where 1=1
+		and a.use_YN = 'Y'
+		and a.del_YN = 'N'
+		and categoryNo = #{categoryNo}
+	</select>
+	
+	<insert id="insertAminAuthorityMenu" parameterType="HashMap">
+		INSERT INTO tbl_authoritymenu 
+		(
+			at_no,
+			am_no, 
+			insert_id, 
+			insert_dt
+		)
+		VALUES
+		(
+			#{at_no}, 
+			#{am_no},
+			#{request_id}, 
+			now()
+		)
+	</insert>
+	
+	<delete id="deleteAminAuthorityMenuByCategory" parameterType="HashMap">
+		DELETE FROM tbl_authoritymenu 
+		where 1=1
+		and at_no = #{at_no}
+		and am_no in (select am_no from tbl_adminmenu where categoryNo = #{categoryNo})
+	</delete>
+	
+	<!-- ADMIN MENU START-->
+	<select id="getaAminMenuList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			am_no, 
+			case 
+				when categoryNo = 1 then '공지게시판'
+				when categoryNo = 2 then '문의게시판'
+				when categoryNo = 3 then '고객 신고'
+				else '사용자 관리'
+			end categoryName,
+			menuName,
+			orderNo,
+			DATE_FORMAT(insert_dt,'%Y-%m-%d %H:%i') insert_dt,
+			use_YN
+		FROM tbl_adminmenu
+		where 1=1
+		and del_YN = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (typeName like CONCAT('%', #{sSearch}, '%'))
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0}, insert_dt desc
+		</if>
+		<if test="orderCol == null and orderCol == ''">
+			order by insert_dt desc
+		</if>
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getAminMenuView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			am_no, 
+			categoryNo,
+			menuName,
+			orderNo,
+			menuURL,
+			use_YN
+		FROM tbl_adminmenu
+		where 1=1
+		and del_YN = 'N'
+        and am_no = #{am_no}
+	</select>
+	
+	<select id="getAminMenuListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM tbl_adminmenu
+		where 1=1
+		and del_YN = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (menuName like CONCAT('%', #{sSearch}, '%'))
+		</if>
+	</select>
+	
+	<insert id="insertAminMenu" parameterType="HashMap">
+		INSERT INTO tbl_adminmenu 
+		(
+			categoryNo,
+			menuName,
+			orderNo, 
+			menuURL,
+			insert_id, 
+			insert_dt, 
+			use_YN
+		)
+		VALUES
+		(
+			#{categoryNo},
+			#{menuName}, 
+			#{orderNo}, 
+			#{menuURL},
+			#{request_id}, 
+			now(), 
+			#{use_YN}
+		)
+	</insert>
+	
+	<update id="updateAminMenu" parameterType="HashMap">
+		update tbl_adminmenu set
+			categoryNo = #{categoryNo},
+			menuName = #{menuName}, 
+			orderNo = #{orderNo},	
+			menuURL = #{menuURL},		
+			use_YN = #{use_YN}
+		where 1=1
+		and am_no = #{am_no}
+	</update>
+	
+	<update id="deleteAdminMenu" parameterType="HashMap">
+		update tbl_adminmenu set
+			del_YN = 'Y'
+		where 1=1
+		and am_no = #{am_no}
+	</update>
+	
+	<select id="menuNameCheck" parameterType="HashMap" resultType="Integer">
+		SELECT count(*) cnt
+		FROM tbl_adminmenu
+		where 1=1
+		and del_YN = 'N'
+		and menuName = #{menuName} 
+		and categoryNo = #{categoryNo}
+	</select>
+	
+	<insert id="insertAdminDataLog" parameterType="HashMap">
+		INSERT INTO tbl_adminmember_log 
+		(
+			member_id,
+			member_pwd,
+			member_name, 
+			member_grade,
+			insert_id, 
+			log_dt
+		)
+		VALUES
+		(
+			#{member_id},
+			#{member_pwd}, 
+			#{member_name}, 
+			#{member_grade},
+			#{request_id}, 
+			now()
+		)
+	</insert>
+	
+	<!-- ADMIN MENU END-->
+	
+</mapper>

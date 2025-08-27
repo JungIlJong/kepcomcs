@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MCSBoardSql">
+
+	<select id="getReportList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.rp_no, 
+			a.opinion_title, 
+			a.opinion_content, 
+			case 
+				when ifnull(a.status, '0') = '0' then "접수완료" 
+				when ifnull(a.status, '0') = '3' then "처리중"
+				else "처리완료"
+			end status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d %H:%i:%s') insert_dt,
+			a.author_name
+		FROM tbl_report a
+		where del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.opinion_title like CONCAT('%', #{sSearch}, '%') 
+			  	or a.opinion_content like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},a.insert_dt desc
+		</if>
+		<if test="orderCol == null and orderCol == ''">
+			order by a.insert_dt desc
+		</if>
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getReportListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM tbl_report a
+		where del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.opinion_title like CONCAT('%', #{sSearch}, '%') 
+			  	or a.opinion_content like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+	</select>
+	
+	<select id="getReportView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.rp_no, 
+			a.author_name, 
+			a.author_email,
+			a.author_hp,
+			a.opinion_title, 
+			a.opinion_content, 
+			case 
+				when ifnull(a.status, '0') = '0' then "접수완료" 
+				when ifnull(a.status, '0') = '3' then "처리중"
+				else "처리완료"
+			end status,
+			a.attached_file_name,
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d %H:%i:%s') insert_dt,
+			status_memo
+		FROM tbl_report a
+		where 1=1
+		  and rp_no = #{rp_no}
+	</select>
+	
+	<update id="ReportUpdate" parameterType="HashMap">
+		update tbl_report set status= #{status}, status_memo = #{status_memo}
+		where 1=1
+		  and rp_no = #{rp_no}
+	</update>
+	
+	<update id="ReportDelete" parameterType="HashMap">
+		UPDATE tbl_report
+		   SET del_yn = 'Y'
+		 WHERE rp_no = #{rp_no}
+	</update>
+
+	<select id="getOpinionList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.co_no, 
+			a.opinion_title, 
+			a.opinion_content, 
+			case 
+				when ifnull(a.status, '1') = '1' then "접수완료" 
+				when ifnull(a.status, '1') = '0' then "대기중"
+				when ifnull(a.status, '1') = '3' then "처리중"
+				else "처리완료"
+			end status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d %H:%i:%s') insert_dt,
+			a.customer_name
+		FROM tbl_cusopi a
+		where del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.opinion_title like CONCAT('%', #{sSearch}, '%') 
+			  	or a.opinion_content like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},a.insert_dt desc
+		</if>
+		<if test="orderCol == null and orderCol == ''">
+			order by a.insert_dt desc
+		</if>
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getOpinionListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM tbl_cusopi a
+		where del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.opinion_title like CONCAT('%', #{sSearch}, '%') 
+			  	or a.opinion_content like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+	</select>
+	
+	<select id="getOpinionView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.co_no, 
+			a.opinion_title, 
+			a.opinion_content, 
+			case 
+				when ifnull(a.status, "1") = 1 then "접수완료" 
+				when ifnull(a.status, "1") = 0 then "대기중"
+				when ifnull(a.status, "1") = 3 then "처리중"
+				else "처리완료"
+			end status,
+			a.attached_file_name,
+			a.customer_email,
+			a.customer_hp,
+			a.customer_cp_name,
+			a.inquery_area,
+			a.customer_address1, a.customer_address2, a.customer_address3,
+			a.feedback_yn,
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d %H:%i:%s') insert_dt, 
+			status_memo
+		FROM tbl_cusopi a
+		where 1=1
+		  and co_no = #{co_no}
+	</select>
+	
+	<update id="OpinionUpdate" parameterType="HashMap">
+		update tbl_cusopi set status= #{status}, status_memo = #{status_memo}
+		where 1=1
+		  and co_no = #{co_no}
+	</update>
+	
+	<update id="OpinionDelete" parameterType="HashMap">
+		UPDATE tbl_cusopi
+		   SET del_yn = 'Y' 
+		WHERE co_no = #{co_no}
+	</update>
+
+	<select id="getBoardList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.board_no, 
+			a.board_title, 
+			a.board_content, 
+			a.board_status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d %H:%i:%s') insert_dt,
+			a.insert_id, 
+			DATE_FORMAT(a.update_dt,'%Y-%m-%d %H:%i:%s') update_dt,
+			a.update_id,
+			a.use_YN,
+			a.board_type,
+			a.post_top_yn,
+			ifnull(a.link_url,'') link_url
+		FROM board a
+		where del_yn = 'N'
+		  and board_type = #{board_type}
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.board_title like CONCAT('%', #{sSearch}, '%') 
+			  	or a.board_content like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},a.insert_dt desc
+		</if>
+		<if test="orderCol == null and orderCol == ''">
+			order by a.insert_dt desc
+		</if>
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	
+	
+	<select id="getBoardListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM board a
+		where del_yn = 'N'
+		  and board_type = #{board_type}
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.board_title like CONCAT('%', #{sSearch}, '%') 
+			  	or a.board_content like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+	</select>
+	
+	
+	<insert id="setBoard" parameterType="HashMap">
+		INSERT INTO board 
+		(
+			board_title, 
+			board_content, 
+			board_status, 
+			insert_dt, 
+			insert_id, 
+			board_type
+		)
+		VALUES
+		(
+			#{board_title}, 
+			#{board_content}, 
+			#{board_status}, 
+			now(), 
+			#{request_id}, 
+			#{board_type}
+		)
+		ON DUPLICATE KEY UPDATE
+		board_title = #{board_title},
+		board_content = #{board_content},
+		board_status = #{board_status}
+	</insert>
+	
+	<insert id="setBoardFile" parameterType="HashMap"  useGeneratedKeys="true" keyProperty="board_no">
+		INSERT INTO board (
+		                   board_title,
+		                   board_content,
+		                   board_status,
+		                   insert_dt,
+		                   insert_id,
+		                   board_type,
+		                   main_img_file_name,
+		                   list_img_file_name,
+		                   detail_img_file_name,
+		                   file_name,
+		                   use_yn,
+		                   post_top_yn,
+		                   board_pwd,
+		                   post_start_dt,
+		                   post_end_dt,
+		                   link_url,
+		                   youtube_url,
+		                   name,
+		                   phone,
+		                   email
+		) VALUES (
+		          #{notice_title},
+		          #{notice_content},
+		          #{notice_status},
+		          now(),
+		          #{insert_id},
+		          #{board_type},
+		          #{main_img_file},
+		          #{list_img_file},
+		          #{detail_img_file},
+		          #{attached_file},
+		          #{use_yn},
+		          #{post_top_yn},
+		          #{board_pwd},
+		          #{post_start_dt, jdbcType=TIMESTAMP},
+		          #{post_end_dt, jdbcType=TIMESTAMP},
+		          #{link_url},
+		          #{youtube_url},
+		          #{name},
+		          #{phone},
+		          #{email}
+		) ON DUPLICATE KEY UPDATE
+		    board_title = #{notice_title},
+		    board_content = #{notice_content},
+		    board_status = #{notice_status},
+		    link_url = #{link_url}
+	</insert>
+	
+	<insert id="setBoardFileList" parameterType="HashMap">
+		INSERT INTO tbl_board_files (board_no, file_name, insert_dt)
+		VALUES (#{board_no}, #{attached_file}, NOW())
+	</insert>
+	
+	<delete id="delBoardFileList" parameterType="HashMap">
+		DELETE FROM tbl_board_files
+		WHERE board_files_no = #{board_files_no}
+	</delete>
+	
+	<select id="getBoardFileList" parameterType="HashMap" resultType="HashMap">
+		SELECT board_files_no, file_name
+		FROM tbl_board_files
+		WHERE board_no = #{board_no}
+	</select>
+	
+	<select id="getBoardView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.board_no, 
+			a.board_title, 
+			a.board_content, 
+			a.reply_content,
+			a.board_status,
+			a.use_YN,
+			a.main_img_file_name,
+			a.list_img_file_name,
+			a.detail_img_file_name,
+			a.file_name,
+			a.post_top_yn,
+			a.youtube_url,
+			DATE_FORMAT( a.post_start_dt, '%Y-%m-%d' ) post_start_dt,
+			DATE_FORMAT( a.post_end_dt, '%Y-%m-%d' ) post_end_dt,
+			ifnull(a.link_url,'') link_url,
+			ifnull(a.name,'') name,
+			ifnull(a.email,'') email,
+			ifnull(a.phone,'') phone,
+			b.board_name,
+			b.file_attach_yn,
+			b.url_yn,
+			b.detail_img_yn,
+			b.youtube_yn,
+			b.period_yn
+		FROM board a
+		LEFT JOIN tbl_board_type b ON a.board_type = b.board_type
+		where 1=1
+		  and a.board_type = #{board_type}
+		  and a.board_no = #{board_no}
+	</select>
+	
+	<update id="BoardfileUpdate" parameterType="HashMap">
+		update board set
+		  	board_title = #{notice_title}, 
+			board_content = #{notice_content}, 
+			reply_content = #{reply_content},			
+			board_status = #{notice_status}, 
+			update_dt = now(), 
+			insert_id = #{insert_id}, 
+			<if test="main_img_file != null and main_img_file != '' ">
+			main_img_file_name = #{main_img_file},
+			</if>
+			<if test="list_img_file != null and list_img_file != '' ">
+			list_img_file_name = #{list_img_file},
+			</if>
+			<if test="detail_img_file != null and detail_img_file != '' ">
+			detail_img_file_name = #{detail_img_file},
+			</if>
+			<if test="attached_file != null and attached_file != '' ">
+			file_name = #{attached_file},
+			</if>
+			use_yn = #{use_yn},
+			post_top_yn = #{post_top_yn},
+			post_start_dt = #{post_start_dt, jdbcType=TIMESTAMP},
+			post_end_dt = #{post_end_dt, jdbcType=TIMESTAMP},
+			link_url = #{link_url},
+			youtube_url = #{youtube_url},
+			name = #{name},
+			phone = #{phone}
+		where 1=1
+		  and board_type = #{board_type}
+		  and board_no = #{board_no}
+	</update>
+	
+	<update id="BoardDelete" parameterType="HashMap">
+		UPDATE board
+		   SET del_yn = 'Y'
+		 WHERE board_no = #{board_no}
+	</update>
+	
+	<update id="BoardfileNameReset" parameterType="HashMap">
+		update board set
+		  <if test="main_img_file_request != null and main_img_file_request != '' ">
+		 main_img_file_name = ''
+		 </if>
+		  <if test="list_img_file_request != null and list_img_file_request != '' ">
+		 list_img_file_name = ''
+		 </if>
+		  <if test="detail_img_file_request != null and detail_img_file_request != '' ">
+		 detail_img_file_name = #{file_list_str}
+		 </if>
+		  <if test="attached_file_request != null and attached_file_request != '' ">
+		 file_name = ''
+		 </if>
+		where 1=1
+		  and board_type = #{board_type}
+		  and board_no = #{board_no}
+	</update>
+	
+	
+	<select id="getConscienceList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.cn_no,  
+			a.cn_content, 
+			case 
+				when ifnull(a.status, '0') = '0' then "접수완료" 
+				when ifnull(a.status, '0') = '3' then "처리중"
+				else "처리완료"
+			end status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d %H:%i:%s') insert_dt,
+			a.cn_name
+		FROM tbl_conscience a
+		where del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and a.cn_content like CONCAT('%', #{sSearch}, '%')
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},a.insert_dt desc
+		</if>
+		<if test="orderCol == null and orderCol == ''">
+			order by a.insert_dt desc
+		</if>
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getConscienceListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(*)
+		FROM tbl_conscience a
+		where del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and  a.cn_content like CONCAT('%', #{sSearch}, '%')
+		</if>
+	</select>
+	
+	<select id="getConscienceView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.cn_no,
+			a.cn_division, 
+			a.cn_name, 
+			a.cn_enum,
+			a.cn_hp, 
+			a.cn_content, 
+			case 
+				when ifnull(a.status, '0') = '0' then "접수완료" 
+				when ifnull(a.status, '0') = '3' then "처리중"
+				else "처리완료"
+			end status,
+			a.attached_file_name,
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d %H:%i:%s') insert_dt,
+			status_memo
+		FROM tbl_conscience a
+		where 1=1
+		  and cn_no = #{cn_no}
+	</select>
+	
+	<update id="ConscienceUpdate" parameterType="HashMap">
+		UPDATE tbl_conscience 
+		   SET status= #{status}, 
+		   	   status_memo = #{status_memo}
+		 WHERE 1=1
+		   AND cn_no = #{cn_no}
+	</update>
+	
+	<update id="ConscienceDelete" parameterType="HashMap">
+		UPDATE tbl_conscience
+		   SET del_yn = 'Y'
+		 WHERE cn_no = #{cn_no}
+	</update>
+
+	<select id="getAdminMenuList" resultType="String">
+		SELECT menuName
+		FROM tbl_adminmenu
+		WHERE 1 = 1
+	</select>
+	
+</mapper>

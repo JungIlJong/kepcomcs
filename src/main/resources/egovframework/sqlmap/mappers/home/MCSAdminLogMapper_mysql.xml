@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MCSAdminLogSql">
+
+	<insert id="insertAdminDataLog" parameterType="HashMap">
+		INSERT INTO tbl_adminmember_log 
+		(
+			member_id,
+			member_pwd,
+			member_name, 
+			member_grade,
+			insert_id, 
+			log_dt
+		)
+		VALUES
+		(
+			#{member_id},
+			#{member_pwd}, 
+			#{member_name}, 
+			#{member_grade},
+			#{request_id}, 
+			now()
+		)
+	</insert>
+	
+	<insert id="insertMenuViewLog" parameterType="HashMap">
+		INSERT INTO tbl_view_log 
+		(
+			menu_name,
+			view_type,
+			memo, 
+			insert_id,
+			log_dt
+		)
+		VALUES
+		(
+			#{menu_name},
+			#{view_type}, 
+			#{memo}, 
+			#{request_id}, 
+			now()
+		)
+	</insert>
+	<!-- ADMIN MENU END-->
+	
+</mapper>

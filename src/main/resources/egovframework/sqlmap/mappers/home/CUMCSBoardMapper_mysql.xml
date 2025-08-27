@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kepco.app.home.mapper.CUBoardMapper">
+
+	<select id="getBoardList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.board_no, 
+			a.board_title, 
+			a.board_content, 
+			a.board_status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d') insert_dt,
+			a.insert_id, 
+			DATE_FORMAT(a.update_dt,'%Y-%m-%d') update_dt,
+			a.update_id,
+			ifnull(a.file_name, '') file_name,
+			ifnull(max(b.file_name),'') file_name2
+		FROM board a  left outer join tbl_board_files b on a.board_no = b.board_no
+		where 1 = 1
+		  and board_type = #{board_type}
+		  and use_yn = 'Y'
+		  and del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.board_title like CONCAT('%', #{sSearch}, '%') 
+			  	or a.board_content like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		group by a.board_no
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},a.insert_dt desc
+		</if>
+		<!-- <if test="orderCol == null and orderCol == ''"> -->
+			order by a.insert_dt desc
+		<!-- </if> -->
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+
+	<!-- 카드 게시판 목록 조회 -->
+	<select id="getBoardCardList" parameterType="HashMap" resultType="HashMap">
+		SELECT a.board_no,
+		       a.board_title,
+		       a.board_content,
+		       a.board_status,
+		       DATE_FORMAT(a.insert_dt,'%Y-%m-%d') insert_dt,
+		       a.insert_id,
+		       DATE_FORMAT(a.update_dt,'%Y-%m-%d') update_dt,
+		       a.update_id,
+		       DATE_FORMAT(a.post_start_dt,'%Y-%m-%d') post_start_dt,
+		       DATE_FORMAT(a.post_end_dt,'%Y-%m-%d') post_end_dt,
+		       CASE
+		           WHEN now() &gt; a.post_start_dt and now() &lt; a.post_end_dt THEN '채용중'
+		           WHEN now() &lt; a.post_start_dt THEN '채용전'
+		           WHEN now() &gt; a.post_end_dt THEN '채용마감'
+		           END AS recruit_status,
+		    main_img_file_name,
+		    detail_img_file_name,
+		    IFNULL(a.link_url, '') link_url
+		FROM board a
+		WHERE board_type = #{board_type}
+		  AND use_yn = 'Y'
+		  AND del_yn = 'N'
+		<if test="sSearch != null and sSearch != ''">
+			AND (a.board_title LIKE CONCAT('%', #{sSearch}, '%')
+			OR a.board_content LIKE CONCAT('%', #{sSearch}, '%')
+			)
+		</if>
+		ORDER BY a.insert_dt DESC
+		<if test='board_type != null and board_type != "" and (board_type.equals("2") or board_type.equals("18"))'>
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getBoardListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(c.board_no)
+		FROM (
+		SELECT a.board_no
+		FROM board a  LEFT OUTER JOIN tbl_board_files b ON a.board_no = b.board_no
+		WHERE board_type = #{board_type}
+		AND use_yn = 'Y'
+		AND del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+		   AND (a.board_title LIKE CONCAT('%', #{sSearch}, '%')
+			  	OR a.board_content LIKE CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		GROUP BY a.board_no ) c
+	</select>
+	
+	<select id="getBoardView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.board_no, 
+			a.board_title, 
+			a.board_content, 
+			a.reply_content,
+			a.board_status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d') insert_dt,
+			a.insert_id, 
+			DATE_FORMAT(a.update_dt,'%Y-%m-%d') update_dt,
+			a.update_id,
+			a.name,
+			a.link_url,
+			a.phone,
+			a.main_img_file_name
+		FROM board a
+		where 1=1
+		  and board_type = #{board_type}
+		  and board_no = #{board_no}
+		  and board_pwd = #{board_pwd}
+		  and use_yn = 'Y'
+		  and del_yn = 'N'
+	</select>
+	
+	<select id="getNewsView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.board_no, 
+			a.board_title, 
+			a.board_content, 
+			a.reply_content,
+			a.board_status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d') insert_dt,
+			a.insert_id, 
+			DATE_FORMAT(a.update_dt,'%Y-%m-%d') update_dt,
+			a.update_id,
+			a.main_img_file_name,
+			a.detail_img_file_name,
+			ifnull(a.file_name, '') file_name,
+			a.name,
+			a.phone,
+			a.link_url,
+			a.youtube_url
+		FROM board a
+		where 1=1
+		  and board_type = #{board_type}
+		  and board_no = #{board_no}
+		  and use_yn = 'Y'
+		  and del_yn = 'N'
+	</select>	
+
+	<select id="getNewsNextPrev" parameterType="HashMap" resultType="HashMap">
+  	(SELECT board_type, board_no, board_title, 'next' view_type FROM board where 
+  	board_type = #{board_type} and use_yn = 'Y' and del_yn = 'N' and board_no &gt; #{board_no} order by board_no limit 1)
+  	UNION ALL
+  	(SELECT board_type, board_no, board_title, 'prev' view_type FROM board where
+  	board_type = #{board_type} and use_yn = 'Y' and del_yn = 'N' and board_no &lt; #{board_no} order by board_no desc limit 1)
+
+		  
+	</select>	
+	
+	<select id="chkBoardPassword" parameterType="HashMap" resultType="Integer">
+		SELECT 
+			count(*)
+		FROM board a
+		where 1=1
+		and del_yn = 'N'
+		  and board_type = #{board_type}
+		  and board_no = #{board_no}
+		  and board_pwd = #{board_pwd}
+	</select>
+	
+	<insert id="setBoard" parameterType="HashMap">
+		INSERT INTO board 
+		(
+			board_title, 
+			board_content, 
+			board_status, 
+			insert_dt, 
+			insert_id, 
+			board_type
+		)
+		VALUES
+		(
+			#{board_title}, 
+			#{board_content}, 
+			#{board_status}, 
+			now(), 
+			#{request_id}, 
+			#{board_type}
+		)
+		ON DUPLICATE KEY UPDATE
+		board_title = #{board_title},
+		board_content = #{board_content},
+		board_status = #{board_status}
+	</insert>
+	
+	<insert id="setBoardFile" parameterType="HashMap">
+		INSERT INTO board 
+		(
+			<if test="board_type == 22">
+				name,
+				email,
+				phone,
+			</if>
+			<if test="board_type == 20">
+				name,
+				phone,
+				link_url,
+				main_img_file_name,
+			</if>
+			board_title, 
+			board_content, 
+			board_status, 
+			insert_dt, 
+			insert_id, 
+			board_type,
+			file_name,
+			use_yn,
+			board_pwd
+		)
+		VALUES
+		(
+			<if test="board_type == 22">
+				#{name},
+				#{email},
+				#{phone},
+			</if>
+			<if test="board_type == 20">
+				#{name},
+				#{phone},
+				#{link_url},
+				#{main_img_file_name},
+			</if>
+			#{board_title}, 
+			#{board_content}, 
+			0, 
+			now(), 
+			#{board_author}, 
+			#{board_type},
+			#{file_name},
+			'Y',
+			#{board_pwd}
+
+		)
+		ON DUPLICATE KEY UPDATE
+		board_title = #{board_title},
+		board_content = #{board_content},
+		board_status = #{board_status}
+	</insert>
+	
+	<insert id="setBoardFileUpdate" parameterType="HashMap">
+		UPDATE board SET 
+			board_title = #{board_title}, 
+			board_content = #{board_content}, 
+			update_dt = now(), 
+			insert_id = #{board_author}, 
+			file_name = #{file_name},
+			<if test="main_img_file_name != NULL">
+				main_img_file_name = #{main_img_file_name},
+			</if>
+			board_pwd = #{board_pwd},
+			name = #{name},
+			link_url = #{link_url},
+			phone = #{phone}
+		WHERE 1=1
+			and board_type = #{board_type}
+			and board_no = #{board_no}
+	</insert>
+	
+	<select id="getProhibitiveWordList" resultType="HashMap">
+		SELECT 
+			word
+		FROM tbl_prohibitiveword
+		where 1=1
+		  and use_yn = 'Y'
+	</select>
+	
+	<insert id="insertOpinion" parameterType="HashMap">
+		INSERT INTO tbl_cusopi 
+		(
+		    customer_name,
+		    customer_email,
+		    customer_hp,
+		    customer_cp_name,
+		    inquery_area,
+		    customer_address1,
+		    customer_address2,
+		    customer_address3,
+		    opinion_title,
+		    opinion_content,
+		    feedback_yn,
+		    attached_file_name,
+		    privacy_aggrement_yn,
+		    insert_dt
+		)
+		VALUES
+		(
+		    #{customer_name},
+		    #{customer_email},
+		    #{customer_hp},
+		    #{customer_cp_name},
+		    #{inquery_area},
+		    #{customer_address1},
+		    #{customer_address2},
+		    #{customer_address3},
+		    #{opinion_title},
+		    #{opinion_content},
+		    #{feedback_yn},
+		    #{attached_file_name},
+		    #{privacy_aggrement_yn},
+			now()
+		)
+		ON DUPLICATE KEY UPDATE
+		customer_name = #{customer_name},
+		opinion_title = #{opinion_title},
+		opinion_content = #{opinion_content}
+	</insert>
+	
+	<insert id="insertReport" parameterType="HashMap">
+		INSERT INTO tbl_report
+		(
+		    author_name,
+		    author_email,
+		    author_hp,
+		    opinion_title_head,
+		    opinion_title,
+		    opinion_content,
+		    attached_file_name,
+		    insert_dt,
+		    status
+		)
+		VALUES
+		(
+		    #{author_name},
+		    #{author_email},
+		    #{author_hp},
+		    #{opinion_title_head},
+		    #{opinion_title},
+		    #{opinion_content},
+		    #{attached_file_name},
+			now(),
+			"0"
+		)
+		ON DUPLICATE KEY UPDATE
+		author_name = #{author_name},
+		opinion_title = #{opinion_title},
+		opinion_content = #{opinion_content}
+	</insert>
+	
+	<select id="getBoardFileList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			board_files_no,
+			file_name
+		FROM 
+			tbl_board_files
+		WHERE
+			board_no = #{board_no}
+	</select>
+	
+	
+	<select id="getSearchAllBoardList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.board_no, 
+			a.board_title 'title', 
+			a.board_content 'value', 
+			a.board_status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d') insert_dt,
+			a.insert_id, 
+			DATE_FORMAT(a.update_dt,'%Y-%m-%d') update_dt,
+			a.update_id,
+			a.file_name,
+			ifnull(max(b.file_name),'') file_name2,
+			board_type
+		FROM board a  left outer join tbl_board_files b on a.board_no = b.board_no
+		where 1=1
+		  and use_yn = 'Y'
+		  and del_yn = 'N'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.board_title like CONCAT('%', #{sSearch}, '%') 
+			  	or a.board_content like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		order by a.insert_dt desc
+
+	</select>
+	
+	<insert id="insertConscience" parameterType="HashMap">
+		INSERT INTO tbl_conscience 
+		(
+		    cn_name,
+		    cn_division,
+		    cn_hp,
+		    cn_enum,
+		    cn_content,
+		    attached_file_name,
+		    insert_dt,
+		    agreeYn
+		)
+		VALUES
+		(
+		    #{cn_name},
+		    #{cn_division},
+		    #{cn_hp},
+		    #{cn_enum},
+		    #{cn_content},
+		    #{attached_file_name},
+			now(),
+			#{agreeYn}
+		)
+		ON DUPLICATE KEY UPDATE
+		cn_name = #{cn_name},
+		cn_content = #{cn_content}
+	</insert>
+	
+	
+</mapper>

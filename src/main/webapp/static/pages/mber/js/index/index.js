@@ -1,12 +1,29 @@
 $(() => {
-    Ajax.get('/api/banners', renderBanner, () => console.log);
-    Ajax.get('/api/mber/bbs/1', (result) => renderNtt(result, 'boardBody1', '/mber/bscbrd/bscbrd01/bbs/1/detail?id='), () => console.log);
-    Ajax.get('/api/mber/bbs/2', (result) => renderNtt(result, 'boardBody2', '/mber/bscbrd/bscbrd02/bbs/2/detail?id='), () => console.log);
-    Ajax.get('/api/mber/bbs/3', (result) => renderNtt(result, 'boardBody3', '/mber/glrbrd/glrbrd01/bbs/3/detail?id='), () => console.log);
-    Ajax.get('/api/mber/bbs/4', (result) => renderNtt(result, 'boardBody4', '/mber/qnabrd/qnabrd01/bbs/4/detail?id='), () => console.log);
-    Ajax.get('/api/mber/bbs/5', (result) => renderNtt(result, 'boardBody5', '/mber/qnabrd/faq01/bbs/5/detail?id='), () => console.log);
-    Ajax.get('/api/mber/bbs/10', (result) => renderNtt(result, 'boardBody6', '/mber/contpg/bbstyest/bbs/10/detail?id='), () => console.log);
+    gAjax('/api/banners', renderBanner, () => console.log);
+    gAjax('/api/mber/bbs/1', (result) => renderNtt(result, 'boardBody1', '/mber/bscbrd/bscbrd01/bbs/1/detail?id='), () => console.log);
+    gAjax('/api/mber/bbs/2', (result) => renderNtt(result, 'boardBody2', '/mber/bscbrd/bscbrd02/bbs/2/detail?id='), () => console.log);
+    gAjax('/api/mber/bbs/3', (result) => renderNtt(result, 'boardBody3', '/mber/glrbrd/glrbrd01/bbs/3/detail?id='), () => console.log);
+    gAjax('/api/mber/bbs/4', (result) => renderNtt(result, 'boardBody4', '/mber/qnabrd/qnabrd01/bbs/4/detail?id='), () => console.log);
+    gAjax('/api/mber/bbs/5', (result) => renderNtt(result, 'boardBody5', '/mber/qnabrd/faq01/bbs/5/detail?id='), () => console.log);
+    gAjax('/api/mber/bbs/10', (result) => renderNtt(result, 'boardBody6', '/mber/contpg/bbstyest/bbs/10/detail?id='), () => console.log);
 })
+
+const gAjax = function(url, callback, fail) {
+	$.ajax(
+		{
+			method : "get",
+			url : url,
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+				if (typeof callback === "function") {
+			        callback(data);
+			    }
+			},
+			error : function(e) {
+				console.log("관리자에게 문의바랍니다.");
+			}
+		});
+};
 
 const renderBanner = (result) => {
     const $bannerList = $('#bannerList');

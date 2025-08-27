@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardTypeSql">
+
+	<select id="countBoardTypeByBoardName" parameterType="String" resultType="int">
+		SELECT COUNT(*) cnt
+		FROM tbl_board_type
+		WHERE board_name = #{boardName}
+	</select>
+
+	<insert id="insertBoardType" parameterType="HashMap">
+		INSERT INTO tbl_board_type (board_name, board_desc, file_attach_yn, use_yn, detail_img_yn, url_yn, youtube_yn, period_yn, created_dt)
+		VALUES (#{boardName}, #{boardDesc}, #{fileAttachYn}, #{useYn}, #{detailImgYn}, #{urlYn}, #{youtubeYn}, #{periodYn}, NOW())
+	</insert>
+
+	<select id="selectBoardTypeList" parameterType="HashMap" resultType="HashMap">
+		SELECT board_type,
+		       board_name,
+		       board_desc,
+			   DATE_FORMAT(created_dt, '%Y-%m-%d %H:%i:%s') AS created_dt,
+		       use_yn
+		FROM tbl_board_type
+		WHERE 1 = 1
+		AND del_yn != 'Y'
+		<if test="sSearch != null and sSearch != ''">
+			AND (board_name LIKE CONCAT('%', #{sSearch}, '%') OR board_desc like CONCAT('%', #{sSearch}, '%'))
+		</if>
+		ORDER BY board_type DESC
+		LIMIT ${iDisplayStart}, ${iDisplayLength}
+	</select>
+
+	<select id="selectBoardTypeListCount" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) cnt
+		FROM tbl_board_type
+		WHERE 1 = 1
+		  AND del_yn != 'Y'
+		<if test="sSearch != null and sSearch != ''">
+			and (board_name like CONCAT('%', #{sSearch}, '%')
+			or board_desc like CONCAT('%', #{sSearch}, '%')
+			)
+		</if>
+	</select>
+
+	<select id="selectBoardTypeDetail" parameterType="int" resultType="HashMap">
+		SELECT board_type,
+			   board_name,
+			   board_desc,
+			   DATE_FORMAT(created_dt, '%Y-%m-%d %H:%i:%s') AS created_dt,
+			   use_yn,
+			   file_attach_yn,
+			   detail_img_yn,
+			   url_yn,
+			   youtube_yn,
+			   period_yn
+		FROM tbl_board_type
+		WHERE board_type = #{boardType}
+	</select>
+
+	<update id="deleteBoardType" parameterType="int">
+		UPDATE tbl_board_type
+		SET del_yn = 'Y'
+		WHERE board_type = #{boardType}
+	</update>
+
+	<update id="updateBoardType" parameterType="HashMap">
+		UPDATE tbl_board_type
+		SET board_desc = #{boardDesc},
+		    use_yn = #{useYn},
+			file_attach_yn = #{fileAttachYn},
+			detail_img_yn = #{detailImgYn},
+			url_yn = #{urlYn},
+			youtube_yn = #{youtubeYn},
+			period_yn = #{period_yn},
+			updated_dt = NOW()
+		WHERE board_type = #{boardType}
+	</update>
+	
+</mapper>

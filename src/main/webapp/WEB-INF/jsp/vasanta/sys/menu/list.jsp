@@ -353,7 +353,7 @@
                                                 </label>
                                                 <div class="input-group input-group-merge has-validation">
                                                     <input class="form-control" type="text" id="id" name="formValidationMenuId"
-                                                           maxlength="10" placeholder="영어 소문자와 숫자로 구성된 아이디를 입력하세요.">
+                                                           maxlength="15" placeholder="영어 소문자와 숫자로 구성된 아이디를 입력하세요.">
                                                     <button type="button" id="btnDuplicateMenuId"
                                                             class="btn btn-secondary"><spring:message
                                                             code="button.duplicate"/></button>
@@ -372,7 +372,7 @@
                                                 </label>
                                                 <div class="has-validation">
                                                     <input class="form-control" type="text" name="formValidationMenuNm" id="menuNm"
-                                                           maxlength="10" placeholder="메뉴명을 입력하세요.">
+                                                           maxlength="20" placeholder="메뉴명을 입력하세요.">
                                                 </div>
                                                 <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                             </div>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CommonSql">
+	<insert id="setSession" parameterType="HashMap"  useGeneratedKeys="true" keyProperty="session_no" keyColumn="session_no">
+		INSERT INTO tbl_member_session
+		(
+			session_token, 
+			member_id, 
+			browser_fingerprint, 
+			time_token, 
+			client_ip, 
+			insert_dt, 
+			update_dt, 
+			expire_dt
+		)
+		VALUES
+		(
+			#{token}, 
+			#{id}, 
+			#{mur}, 
+			#{time_token}, 
+			#{client_ip}, 
+			now(), 
+			now(), 
+			DATE_ADD(NOW(), INTERVAL 30 MINUTE)
+		)
+		ON DUPLICATE KEY UPDATE
+		update_dt = now(),
+		time_token = #{time_token},
+	    expire_dt = DATE_ADD(NOW(), INTERVAL 30 MINUTE),
+	    update_ip = #{client_ip},
+		session_no=last_insert_id(session_no)		
+		<selectKey resultType="Integer" order="AFTER" keyProperty="session_no">
+			SELECT LAST_INSERT_ID() as session_no
+		</selectKey>
+	</insert>
+	
+	
+	<select id="getSession" parameterType="HashMap" resultType="HashMap">
+		select 
+			a.session_no, 
+			a.session_token 'token', 
+			a.member_id,
+			b.member_name,
+			b.member_grade,
+			b.use_yn,
+			a.browser_fingerprint 'mur', 
+			a.time_token, 
+			ifnull(a.update_ip,a.client_ip) client_ip,
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d %H:%i:%s') insert_dt,
+			DATE_FORMAT(a.update_dt,'%Y-%m-%d %H:%i:%s') update_dt,
+			DATE_FORMAT(a.expire_dt,'%Y-%m-%d %H:%i:%s') expire_dt
+		from tbl_member_session a
+		join tbl_adminmember b on a.member_id = b.member_id
+		where 1=1
+<!-- 		  and a.session_token = #{token}  -->
+		  and a.session_token = 'f260c726735786c464ab95d528b35a09c47b48a3e6d8626138cbbb47aa2078a0c427a72090366b7a37a9986d5b1531595b0baab94a7309c77ec5d879ddd02de5' 
+<!-- 		  and a.browser_fingerprint = #{mur} -->
+		  and a.browser_fingerprint = 'ad8f864b565e7ef3a42702585e586b96'
+		  and a.expire_dt > now()
+	</select>
+	
+</mapper>

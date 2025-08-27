@@ -24,7 +24,7 @@ window.initFvMenu = function () {
                                 return {valid: false, message: msg.menuIdRequired};
                             }
 
-                            if (value.length < 4 || value.length > 10) {
+                            if (value.length < 4 || value.length > 15) {
                                 return {
                                     valid: false,
                                     message: msg.menuIdLength
@@ -35,7 +35,7 @@ window.initFvMenu = function () {
                                 return {valid: false, message: msg.menuIdStartWithLowercase};
                             }
 
-                            if (!/^[a-z][a-z0-9]{3,9}$/.test(value)) {
+                            if (!/^[a-z][a-z0-9]{3,15}$/.test(value)) {
                                 return {valid: false, message: msg.menuIdInvalid};
                             }
 
@@ -63,16 +63,16 @@ window.initFvMenu = function () {
                                 return {valid: false, message: msg.menuNmRequired};
                             }
 
-                            if (value.length < 1 || value.length > 10) {
+                            if (value.length < 1 || value.length > 20) {
                                 return {
                                     valid: false,
                                     message: msg.menuNmLength
                                 };
                             }
 
-                            if (!/^[가-힣a-zA-Z0-9\s]{1,10}$/.test(value)) {
+                            /*if (!/^[가-힣a-zA-Z0-9\s]{1,10}$/.test(value)) {
                                 return {valid: false, message: msg.menuNmInvalid};
-                            }
+                            }*/
 
                             return true;
                         }
