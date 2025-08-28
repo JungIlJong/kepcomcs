@@ -25,7 +25,7 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 </head>
 <body id="mcsPage">
-  <div id="header"></div>
+  <div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>
   <!-- main -->
   <main class="business-main">
     <div class="page-tit">
@@ -150,7 +150,7 @@
   </div>
 
   <script>
-    $("#header").load("/resources/landing/include/header.html");
+    
     $("#footer").load("/resources/landing/include/footer.html");
 
     //timer

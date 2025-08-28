@@ -226,7 +226,7 @@
   </div>  
 
   <script>
-    $("#header").load("/resources/landing/include/header.html");
+    
     $("#footer").load("/resources/landing/include/footer.html");
   </script>
 

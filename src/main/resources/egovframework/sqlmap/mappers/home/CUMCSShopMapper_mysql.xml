@@ -6,7 +6,7 @@
 	<!-- 영업 사업소  -->
 	<select id="getShopList" parameterType="HashMap" resultType="HashMap">
 		SELECT a.shop_no, a.shop_name, a.shop_tel, a.shop_keyword, a.region1, a.region2, a.addr, DATE_FORMAT(a.insert_dt, '%Y-%m-%d' ), a.insert_id, DATE_FORMAT(a.update_dt, '%Y-%m-%d' ), a.update_id, a.division
-		FROM tbl_shopinfo a
+		FROM VST_SHOPINFO a
 		WHERE 1=1
 		AND division='1'
 	   <if test="sSearch != null and sSearch != ''">
@@ -33,7 +33,7 @@
 	
 	<select id="getShopListCount" parameterType="HashMap" resultType="Integer">
 		SELECT count(*)
-		FROM tbl_shopinfo a
+		FROM VST_SHOPINFO a
 		WHERE 1=1
 		AND division='1'
 	   <if test="sSearch != null and sSearch != ''">
@@ -51,7 +51,7 @@
 	
 	<select id="getRegion1" parameterType="HashMap" resultType="HashMap">
 		select region1
-		from tbl_shopinfo
+		from VST_SHOPINFO
 		where 1=1
 		AND division='1'
 		group by region1
@@ -59,7 +59,7 @@
 	
 	<select id="getRegion2" parameterType="HashMap" resultType="HashMap">
 		select region2
-		from tbl_shopinfo
+		from VST_SHOPINFO
 		where 1=1
 		and region1 = #{region1}
 		AND division='1'
@@ -70,7 +70,7 @@
 	
 	<select id="getPowerList" parameterType="HashMap" resultType="HashMap">
 		SELECT a.shop_no, a.shop_name, a.shop_tel, a.shop_keyword, a.region1, a.region2, a.addr, DATE_FORMAT(a.insert_dt, '%Y-%m-%d' ), a.insert_id, DATE_FORMAT(a.update_dt, '%Y-%m-%d' ), a.update_id, a.division
-		FROM tbl_shopinfo a
+		FROM VST_SHOPINFO a
 		WHERE 1=1
 		AND division='2'
 	   <if test="sSearch != null and sSearch != ''">
@@ -97,7 +97,7 @@
 	
 	<select id="getPowerListCount" parameterType="HashMap" resultType="Integer">
 		SELECT count(*)
-		FROM tbl_shopinfo a
+		FROM VST_SHOPINFO a
 		WHERE 1=1
 		AND division='2'
 	   <if test="sSearch != null and sSearch != ''">
@@ -115,7 +115,7 @@
 	
 	<select id="getPowerRegion1" parameterType="HashMap" resultType="HashMap">
 		select region1
-		from tbl_shopinfo
+		from VST_SHOPINFO
 		where 1=1
 		AND division='2'
 		group by region1
@@ -123,7 +123,7 @@
 	
 	<select id="getPowerRegion2" parameterType="HashMap" resultType="HashMap">
 		select region2
-		from tbl_shopinfo
+		from VST_SHOPINFO
 		where 1=1
 		and region1 = #{region1}
 		AND division='2'

@@ -100,7 +100,7 @@ public class EgovWebMvcConfiguration implements WebMvcConfigurer {
 				.excludePathPatterns("/sys/login", "/sys/logout", "/api/sys/login")
 				.excludePathPatterns("/actuator/**", "/swagger-ui/**");
 		
-		registry.addInterceptor(rootMenuInterceptor()).addPathPatterns("/index");
+		registry.addInterceptor(rootMenuInterceptor()).addPathPatterns("/index", "/pop/search/all/**");
 
 		registry.addInterceptor(userMenuInterceptor())
 				.addPathPatterns("/mber/**")

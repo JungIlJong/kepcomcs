@@ -98,7 +98,7 @@
 	</script>
 </head>
 <body id="mcsPage">
-  <div id="header"></div>
+  <div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>
   <!-- main -->
   <main class="esg-main esg-layout">
     <ul class="location esg-loca">
@@ -179,7 +179,7 @@
   </div>
 
   <script>
-    $("#header").load("/resources/landing/include/header.html");
+    
     $("#footer").load("/resources/landing/include/footer.html");
   </script>
 

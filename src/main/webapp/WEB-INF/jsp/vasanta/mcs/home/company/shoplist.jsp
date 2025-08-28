@@ -613,7 +613,7 @@
 	</script>
 </head>
 <body id="mcsPage">
-	<div id="header"></div>
+	<div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>
 	<!-- main -->
 	<main class="company-main">
 		<div class="page-tit">
@@ -636,10 +636,10 @@
 		      <div class="bid-tab-wrap">
 		        <ul class="recruit-tab">
 		          <li class="selected">
-		            <a href="/company/shoplist">영업 사업소 안내</a>
+		            <a href="/mber/company/shoplist">영업 사업소 안내</a>
 		          </li>
 		          <li>
-		            <a href="/company/powerlist">발전 사업소 안내</a>
+		            <a href="/mber/company/powerlist">발전 사업소 안내</a>
 		          </li>
 		        </ul>
 		      </div>
@@ -736,7 +736,7 @@
 	</div>
 
 	<script>
-    $("#header").load("/resources/landing/include/header.html");
+    
     $("#footer").load("/resources/landing/include/footer.html");
 
     //timer

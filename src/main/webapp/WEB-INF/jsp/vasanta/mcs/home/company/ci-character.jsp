@@ -31,7 +31,7 @@
   </style>
 </head>
 <body id="mcsPage">
-  <div id="header"></div>
+  <div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>
   <!-- main -->
   <main class="company-main">
     <div class="page-tit">
@@ -54,10 +54,10 @@
       <div class="bid-tab-wrap">
         <ul class="recruit-tab">
           <li>
-            <a href="/company/ci">로고</a>
+            <a href="/mber/company/ci">로고</a>
           </li>
           <li class="selected">
-            <a href="/company/ci-character">청렴캐릭터</a>
+            <a href="/mber/company/ci-character">청렴캐릭터</a>
           </li>
         </ul>
       </div>
@@ -232,7 +232,7 @@
   </div> 
 <iframe id="my_iframe" style="display:none;"></iframe>
   <script>
-    $("#header").load("/resources/landing/include/header.html");
+    
     $("#footer").load("/resources/landing/include/footer.html");
 
     function Download(url) {

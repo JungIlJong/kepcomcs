@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -413,7 +414,7 @@
 </head>
 <body id="mcsMain">
 <div id="header">
-	<%@ include file="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp" %>
+	<jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/>
 </div>
 <!--  새로운 팝업존 -->
 <%--<div id="main_popup">--%>
@@ -859,28 +860,28 @@
 				<div class="svc_box">
 					<p class="tit">고객소통</p>
 					<ul>
-						<li><a href="/customer/opinion-agree">고객의 소리</a></li>
-						<li><a href="/customer/cooperation-list">신사업 및 협력사업 문의·제안</a></li>
-						<li><a href="/customer/integrity-agree">청렴·부패 신고</a></li>
-						<li><a href="/customer/news-list">전력에너지 뉴스</a></li>
+						<li><a href="/mber/customer/opinion-agree">고객의 소리</a></li>
+						<li><a href="/mber/customer/cooperation-list">신사업 및 협력사업 문의·제안</a></li>
+						<li><a href="/mber/customer/integrity-agree">청렴·부패 신고</a></li>
+						<li><a href="/mber/customer/news-list">전력에너지 뉴스</a></li>
 					</ul>
 				</div>
 				<div class="svc_box">
 					<p class="tit">ESG 경영</p>
 					<ul>
-						<li><a href="/esg/safety/safety-introduction">안전경영</a></li>
-						<li><a href="/esg/ethic/ethic-introduction">윤리경영</a></li>
-						<li><a href="/esg/hmr/hm-introduction">인권경영</a></li>
-						<li><a href="/esg/carbon-neutral/neutral-introduction">탄소중립</a></li>
-						<li><a href="/esg/social/social-activity">사회적가치</a></li>
+						<li><a href="/mber/esg/safety/safety-introduction">안전경영</a></li>
+						<li><a href="/mber/esg/ethic/ethic-introduction">윤리경영</a></li>
+						<li><a href="/mber/esg/hmr/hm-introduction">인권경영</a></li>
+						<li><a href="/mber/esg/carbon-neutral/neutral-introduction">탄소중립</a></li>
+						<li><a href="/mber/esg/social/social-activity">사회적가치</a></li>
 					</ul>
 				</div>
 				<div class="svc_boxs">
 					<div class="svc_box">
 						<p class="tit">열린경영</p>
 						<ul>
-							<li><a href="/open-manage/bid-info">입찰정보</a></li>
-							<li><a href="/open-manage/talented-person">채용정보</a></li>
+							<li><a href="/mber/open-manage/bid-info">입찰정보</a></li>
+							<li><a href="/mber/open-manage/talented-person">채용정보</a></li>
 						</ul>
 					</div>
 					<div class="svc_box tel">

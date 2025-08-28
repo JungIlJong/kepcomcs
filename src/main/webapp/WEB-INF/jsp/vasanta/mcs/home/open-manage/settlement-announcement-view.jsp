@@ -203,7 +203,7 @@
 	</script>
 </head>
 <body id="mcsPage">
-  <div id="header"></div>
+  <div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>
   <!-- main -->
   <main class="customer-main">
     <div class="page-tit">
@@ -284,7 +284,7 @@
 
   <script>
 
-  $("#header").load("/resources/landing/include/header.html");
+  
   $("#footer").load("/resources/landing/include/footer.html");
 
     //manage tab

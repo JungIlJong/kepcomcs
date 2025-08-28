@@ -28,7 +28,7 @@
 </head>
 <body id="mcsPage" class="esg-intro-body ethic-intro-body">
   
-  <div id="header"></div>
+  <div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>
   <!-- main -->
   <main class="esg-main carbon-intro">
     <div class="intro-tit-wrap hmr-bg">
@@ -171,7 +171,7 @@
   </div>
 
   <script>
-  $("#header").load("/resources/landing/include/header.html");
+  
   $("#footer").load("/resources/landing/include/footer.html");
   </script>
 
