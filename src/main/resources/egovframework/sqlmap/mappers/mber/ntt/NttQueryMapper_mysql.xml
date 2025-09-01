@@ -179,38 +179,55 @@
             VN.NTT_ID,
             VN.NTT_SJ,
             VN.NTT_CN,
-            VN.FRST_REGIST_DT,
+            CAST(DATE_FORMAT(VN.FRST_REGIST_DT, '%Y-%m-%d') AS CHAR) AS FRST_REGIST_DT,
             VN.WRTER_NM,
             (VN.RDCNT + 1) RDCNT,
-            VN.PASSWORD,
-            IF(VN.SECRET_AT = 'Y', TRUE, FALSE)       AS SECRET,
             IF(VN.NOTICE_AT = 'Y', TRUE, FALSE)       AS NOTICE,
             IF(VN.FRST_REGISTER_ID IS NULL, TRUE, FALSE) ANONYMOUS_WRITER,
-            <choose>
-                <when test="mbrId == null">
-                    FALSE MINE,
-                </when>
-                <otherwise>
-                    IF(VN.FRST_REGISTER_ID = #{mbrId}, TRUE, FALSE) AS MINE,
-                </otherwise>
-            </choose>
             VA.ATCH_FILE_ID,
-            CONCAT(VA.ORIGNL_FILE_NM, '.' , VA.FILE_EXTSN) FILE_NM,
-            REPLY.NTT_ID REPLY_NTT_ID,
-            REPLY.NTT_SJ REPLY_NTT__SJ,
-            REPLY.NTT_CN REPLY_NTT_CN,
-            REPLY.FRST_REGIST_DT REPLY_FRST_REGIST_DT,
-            REPLY.WRTER_NM REPLY_WRTER_NM,
-            VA2.ATCH_FILE_ID REPLY_ATCH_FILE_ID,
-            CONCAT(VA2.ORIGNL_FILE_NM, '.' , VA2.FILE_EXTSN) REPLY_FILE_NM
+            CONCAT(VA.ORIGNL_FILE_NM, '.' , VA.FILE_EXTSN) AS main_img_file_name
         FROM VST_NTT VN
         LEFT OUTER JOIN VST_ATCHFILE VA ON VN.NTT_ID = VA.UPPER_ID
-        LEFT OUTER JOIN VST_NTT REPLY ON VN.NTT_ID = REPLY.PARNTSCTT_ID
-        LEFT OUTER JOIN VST_ATCHFILE VA2 ON REPLY.NTT_ID = VA2.UPPER_ID
         WHERE VN.NTT_ID = #{nttId} AND VN.USE_AT = 'Y'
     </select>
 
     <select id="selectPreAndNext"
+            parameterType="map"
+            resultType="com.kepco.app.domain.ntt.dto.SearchMberNtt$PreNext">
+     	<![CDATA[       
+            (
+			  SELECT 
+			      NTT_ID, NTT_SJ, 'prev' AS VIEW_TYPE
+			  FROM (
+			    SELECT 
+			        NTT_ID, NTT_SJ
+			    FROM VST_NTT
+			    WHERE BBS_ID = #{bbsId}
+			      AND USE_AT = 'Y'
+			      AND NTT_ID < #{nttId}
+			    ORDER BY NTT_ID DESC
+			    LIMIT 1
+			  ) t1
+			)
+			UNION ALL
+			(
+			  SELECT 
+			      NTT_ID, NTT_SJ, 'next' AS VIEW_TYPE
+			  FROM (
+			    SELECT 
+			        NTT_ID, NTT_SJ
+			    FROM VST_NTT
+			    WHERE BBS_ID = #{bbsId}
+			      AND USE_AT = 'Y'
+			      AND NTT_ID > #{nttId}
+			    ORDER BY NTT_ID ASC
+			    LIMIT 1
+			  ) t2
+			)
+		]]>		            
+    </select>
+    
+    <select id="selectPreAndNext_origin"
             parameterType="map"
             resultType="com.kepco.app.domain.ntt.dto.SearchMberNtt$PreNext">
 

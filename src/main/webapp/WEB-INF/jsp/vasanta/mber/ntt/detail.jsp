@@ -1,85 +1,185 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/jsp/vasanta/cmmn/taglib.jsp" %>
-<html lang="ko" data-theme="light" dir="ltr" data-bs-theme="light" data-skin="bordered"
-      data-template="horizontal-menu-template" data-assets-path="/vendor/sneat/">
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-    <%@ include file="/WEB-INF/jsp/vasanta/mber/include/head.jsp" %>
-    <title>Vasanta - <c:out value="${bbs.bbsNm}" /></title>
-    <link rel="stylesheet" href="/static/vendor/sneat/css/core.css" />
-    <link rel="stylesheet" href="/static/vendor/sneat/libs/pickr/pickr-themes.css" />
-    <link rel="stylesheet" href="/static/vendor/sneat/libs/perfect-scrollbar/perfect-scrollbar.css" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
+  <meta name="format-detection" content="telephone=no"/> 
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="한전MCS 주식회사">
+  <meta property="og:description" content="전력량계 검침업무, 전기요금 청구서 송달업무, 전기요금 체납관리업무, 고객서비스 영업현장업무 전 과정에 걸친 검침토털 서비스 제공 전문기업">
+  <meta property="og:image" content="http://www.kepcomcs.co.kr/images/main/logo.png">
+  <meta property="og:url" content="http://kepcomcs.co.kr">
+  <title>한전MCS 주식회사</title>
+  <meta name="description" content="전력량계 검침업무, 전기요금 청구서 송달업무, 전기요금 체납관리업무, 고객서비스 영업현장업무 전 과정에 걸친 검침토털 서비스 제공 전문기업">
+  <meta name="keywords" content="한전MCS 한전mcs, 한전엠씨에스, KEPCOMCS, kepcomcs">
+  <link rel="stylesheet" href="/resources/landing/css/common.css">
+  <link rel="stylesheet" href="/resources/landing/css/board.css">
+  <link rel="stylesheet" href="/resources/landing/css/datatables.min.css">
+  <link rel="stylesheet" href="/resources/landing/css/responsive.dataTables.min.css">
+  <link rel="stylesheet" href="/resources/landing/css/select.dataTables.min.css">
+  <link rel="shortcut icon" href="/resources/landing/images/main/mcs.png">
+  <script src="/resources/js/jquery-3.7.1.min.js"></script>
+  <script src="/resources/landing/js/pages.js"></script>
+  <script src="/resources/landing/js/ScrollTrigger.min.js"></script>
+  <script src="/resources/landing/js/datatables.min.js"></script>
+  <script src="/resources/landing/js/dataTables.responsive.min.js"></script>
+  <script src="/resources/landing/js/select.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
+	<script type="text/javascript">
+	
+		var board_type = "${bbsId}";
+		var board_no = <%=request.getParameter("id") %>;
+		$(document).ready(function () {
+			setMainTable();
+			setNextPrev();
+		})
+		
+		function setMainTable() {
+			$.ajax({
+				headers: { 
+				        'Accept': 'application/json',
+				        'Content-Type': 'application/json' 
+				},
+			    url:"/api/mber/bbs/"+board_type+"/detail?nttId="+board_no, // 요청 할 주소
+			    async:true,// false 일 경우 동기 요청으로 변경
+			    type:'GET', // GET, PUT
+			    dataType:'json',// xml, json, script, html
+			    success:function(data) {
+					request = data;
+					$('#news-view-title').text(data.nttSj);
+					$('#news-insert-dt').text(data.frstRegistDt);
+
+					$('#news-view-desc').html(decodeHtml(data.nttCn).replace(/\n/g, '<br/>'));
+
+				},// 요청 완료 시
+			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
+			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+			});
+		}
+
+		function decodeHtml(html) {
+			  return $('<textarea/>').html(html).text();
+		}
+		
+		function setNextPrev() {
+			$.ajax({
+				headers: { 
+				        'Accept': 'application/json',
+				        'Content-Type': 'application/json' 
+				},
+				url:"/api/mber/bbs/"+board_type+"/side?nttId="+board_no,
+			    async:true,// false 일 경우 동기 요청으로 변경
+			    type:'GET', // GET, PUT
+			    dataType:'json',// xml, json, script, html
+			    success:function(data) {
+			    	console.log(data);
+					$("#prev_post_href").prop("disabled", true);
+					$("#next_post_href").prop("disabled", true);
+					for (i=0; i < data.length; i++){
+						if(data[i].viewType == "prev"){
+							$('#prev_post').text(data[i].nttSj);
+							$("#prev_post_href").attr("href",  "detail?id=" + data[i].nttId);
+						}else{
+							$('#next_post').text(data[i].nttSj);
+							$("#next_post_href").attr("href", "detail?id=" + data[i].nttId);
+						}
+					}
+				},// 요청 완료 시
+			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
+			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+			});
+
+
+		}
+	</script>
 </head>
-<body>
-
-<!-- Layout wrapper -->
-<div class="layout-wrapper layout-navbar-full layout-horizontal layout-without-menu">
-    <div class="layout-container">
-        <!-- Navbar -->
-        <%@ include file="/WEB-INF/jsp/vasanta/mber/include/sneat-nav.jsp" %>
-        <!-- / Navbar -->
-
-        <!-- Layout container -->
-        <div class="layout-page">
-            <!-- Content wrapper -->
-            <div class="content-wrapper">
-                <!-- Menu -->
-                <%@ include file="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp" %>
-                <!-- / Menu -->
-
-                <%-- 페이지 타이틀 영역(S) --%>
-                <%@ include file="/WEB-INF/jsp/vasanta/mber/include/sub-title.jsp" %>
-                <%-- 페이지 타이틀 영역(E) --%>
-
-                <!-- Content -->
-                <div class="container-xxl container-p-y">
-                    <div class="row">
-                        <%--서브페이지 사이드 메뉴 영역(S)--%>
-                        <%@ include file="/WEB-INF/jsp/vasanta/mber/include/sub-menu.jsp" %>
-                        <%--서브페이지 사이드 메뉴 영역(E)--%>
-                        <div class="col-lg-10 col-md-9 col-12">
-                        <div class="card">
-                        <input id="bbsId" type="hidden" value="<c:out value="${bbs.bbsId}" />">
-                        <c:choose>
-                            <c:when test="${access.secretAt.equals('Y') && access.frstRegisterId == null}">
-                                <!-- 비회원의 비밀글 -->
-                                <%@ include file="/WEB-INF/jsp/vasanta/mber/ntt/qna/password.jsp" %>
-                            </c:when>
-                            <c:when test="${access.secretAt.equals('Y') && !access.author}">
-                                <!-- 회원의 비밀글이며 권한이 없을 경우 -->
-                                <%@ include file="/WEB-INF/jsp/vasanta/mber/ntt/qna/unauthorized.jsp" %>
-                            </c:when>
-                            <c:otherwise>
-                                <!-- 일반 QNA 혹은 회원의 게시글이며 권한이 있는 경우-->
-                                <%@ include file="/WEB-INF/jsp/vasanta/mber/ntt/common/default-post.jsp" %>
-                            </c:otherwise>
-                        </c:choose>
-                        <c:if test="${bbs.secretUseAt.equals('Y') || bbs.answerAt == 'Y'}">
-                            <!-- 비밀글 답변 -->
-                            <%@ include file="./common/answer.jsp" %>
-                        </c:if>
-                        <div class="card-footer border-top p-0 pb-6 pt-3 sideBox">
-                            <div id="sideBox" class="list-group" style="border-radius: 0;">
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    </div>
-                </div>
-                <!-- / Content -->
-
-                <!-- Footer -->
-                <%@ include file="/WEB-INF/jsp/vasanta/mber/include/sneat-footer.jsp" %>
-                <!-- / Footer -->
-
-                <div class="content-backdrop fade"></div>
-            </div>
-            <!-- / Content wrapper -->
-        </div>
-        <!-- /Layout container -->
+<body id="mcsPage">
+  <div class="cursor"></div>
+  <div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>
+  <!-- main -->
+  <main class="customer-main">
+    <div class="page-tit">
+      <div class="page-tit-wrap">
+        <h1>전력 에너지 뉴스</h1>
+        <p>전력과 관련된 뉴스를 전달합니다.</p>
+      </div>
+      <ul class="rocation">
+        <li>
+          <a href="/">Home</a>
+        </li>
+        <li>
+          <a href="/customer/opinion">고객소통</a>
+        </li>
+        <li>전력 에너지 뉴스</li>
+      </ul>
     </div>
-</div>
+    <div class="contents" id="newBusinessWrite"> 
+      <div class="conts-ani" data-trigger>
+        <ul class="news-view-box">
+          <li class="news-view-title">
+            <p id="news-view-title"></p>
+          </li>
+          <li class="news-view-info">
+            <div>
+             <!-- <span>View count</span>
+              <span>00</span> -->
+            </div>
+            <div>
+              <span class="news-view-stit">작성일</span>
+              <span class="news-view-date" id="news-insert-dt">2021.10.10</span>
+            </div>
+          </li>
+          <li>
+            <div class="news-view-photo">
+            </div>
+            <div class="news-view-desc" id="news-view-desc">
+            </div>
+            <div class="addfile-row" id="div_filelist">
+                <p id="filelist">
+                    <a id="file-download-url">
+                        <span id="file-name">filename0000_01.pdf</span>
+                    </a>
+                </p>
+            </div>
+          </li>
+        </ul>
+        <div class="btn-row btn-row-right">
+          <a href="/customer/news-list">
+            <button class="btn-list">목록</button>
+          </a>
+        </div>
+        <div class="additional">
+          <div>
+            <a href="#"  id="prev_post_href">
+              <p>이전글</p>
+              <p id="prev_post">이전 글이 없습니다.</p>
+            </a>
+          </div>
+          <div>
+            <a href="#" id="next_post_href">
+              <p>다음글</p>
+              <p  id="next_post">다음 글이 없습니다.</p>
+            </a>
+          </div>
+        </div>  
+      </div>
+    </div>
+  </main>
+  <!-- //main -->
+  <div id="footer"></div>
+  <div class="btn-top">
+    TOP
+    <p class="top-line"></p>
+  </div>
 
-<!-- Overlay -->
-<div class="layout-overlay layout-menu-toggle"></div>
+  <script>
+    //include
+    
+    $("#footer").load("/resources/landing/include/footer.html");
+
+  </script>
+
 </body>
 </html>

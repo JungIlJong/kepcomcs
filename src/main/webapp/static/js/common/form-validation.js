@@ -1077,7 +1077,7 @@ window.initFvBbs = function () {
                                     message: msg.fileAtchCoRequired
                                 };
                             }
-                            if (parseInt(value) > 5) {
+                            if (parseInt(value) > 10) {
                                 return {
                                     valid: false,
                                     message: msg.fileAtchCoMax

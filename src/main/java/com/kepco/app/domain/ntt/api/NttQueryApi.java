@@ -38,7 +38,7 @@ public class NttQueryApi {
     }
 
     @GetMapping("/side")
-    public ResponseEntity selectPreAndNext(@RequestParam Long nttId) {
-        return CommonResponse.success(nttQueryService.selectPreAndNext(nttId));
+    public ResponseEntity selectPreAndNext(@RequestParam Long nttId, @PathVariable Long bbsId) {
+        return CommonResponse.success(nttQueryService.selectPreAndNext(nttId, bbsId));
     }
 }

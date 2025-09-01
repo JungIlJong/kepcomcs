@@ -154,7 +154,7 @@
             bbsTyCodeRequired: '게시판 유형을 선택해주세요.',
 
             fileAtchCoRequired: '첨부파일 갯수를 선택해주세요.',
-            fileAtchCoMax: '첨부파일은 최대 5개까지 허용합니다.',
+            fileAtchCoMax: '첨부파일은 최대 10개까지 허용합니다.',
 
             fileAtchSizeRequired: '첨부파일 용량은 필수 입력값입니다.',
             fileAtchSizeRange: '첨부파일 용량은 0 이상 50 이하로 입력해주세요.',

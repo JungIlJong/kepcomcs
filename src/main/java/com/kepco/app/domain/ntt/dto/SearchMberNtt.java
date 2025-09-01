@@ -66,12 +66,9 @@ public class SearchMberNtt {
 
     @Getter
     public static class PreNext {
-        private Long prevId;
-        private String prevSj;
-        private String prevSecret;
-        private Long nextId;
-        private String nextSj;
-        private String nextSecret;
+        private Long nttId;
+        private String nttSj;
+        private String viewType;
     }
 
     @Getter

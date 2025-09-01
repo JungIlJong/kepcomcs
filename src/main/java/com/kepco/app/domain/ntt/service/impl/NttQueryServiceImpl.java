@@ -1,24 +1,24 @@
 package com.kepco.app.domain.ntt.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.egovframe.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kepco.app.core.exception.GlobalRestException;
-import com.kepco.app.core.security.util.UserDetailsUtil;
 import com.kepco.app.core.util.SearchUtil;
 import com.kepco.app.domain.ntt.dto.SearchMberNtt;
 import com.kepco.app.domain.ntt.mapper.NttQueryMapper;
 import com.kepco.app.domain.ntt.service.NttQueryService;
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,9 +40,9 @@ public class NttQueryServiceImpl extends EgovAbstractServiceImpl implements NttQ
     @Override
     @Transactional
     public SearchMberNtt.NttDetail selectNonSecretDetail(Long nttId) {
-        SearchMberNtt.NttDetail detail = nttQueryMapper.selectDetail(nttId, UserDetailsUtil.getMbrId());
-        isSecretAndAnonymous(detail);
-        isSecretMine(detail);
+        SearchMberNtt.NttDetail detail = nttQueryMapper.selectDetail(nttId);
+//        isSecretAndAnonymous(detail);
+//        isSecretMine(detail);
         nttQueryMapper.updateViewCount(nttId);
         return detail;
     }
@@ -50,14 +50,15 @@ public class NttQueryServiceImpl extends EgovAbstractServiceImpl implements NttQ
     @Override
     @Transactional
     public SearchMberNtt.NttDetail selectSecretDetail(Long nttId, String password) {
-        SearchMberNtt.NttDetail detail = nttQueryMapper.selectDetail(nttId, UserDetailsUtil.getMbrId());
-        checkPassword(detail, password);
-        return detail;
+//        SearchMberNtt.NttDetail detail = nttQueryMapper.selectDetail(nttId, UserDetailsUtil.getMbrId());
+//        checkPassword(detail, password);
+//        return detail;
+    	return null;
     }
 
     @Override
-    public SearchMberNtt.PreNext selectPreAndNext(Long id) {
-        return nttQueryMapper.selectPreAndNext(id, UserDetailsUtil.isAuthenticated() ? Long.parseLong(UserDetailsUtil.getMbrId()) : 0);
+    public List<SearchMberNtt.PreNext>selectPreAndNext(Long id, Long bbsId) {
+        return nttQueryMapper.selectPreAndNext(id, bbsId);
     }
 
     // 비회원의 비밀글 확인

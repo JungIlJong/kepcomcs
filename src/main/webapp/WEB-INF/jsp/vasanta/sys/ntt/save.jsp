@@ -157,7 +157,7 @@
                                                             <div class="flex-c gap-2">
                                                                 <div class="has-validation w-100">
                                                                     <input class="form-control" type="text" name="nttSj"
-                                                                           id="nttSj" placeholder="예시제목1">
+                                                                           id="nttSj" placeholder="예시제목">
                                                                 </div>
                                                                 <div class="flex-c gap-1 text-nowrap" id="noticeSet">
                                                                     <input class="form-check-input" type="checkbox"

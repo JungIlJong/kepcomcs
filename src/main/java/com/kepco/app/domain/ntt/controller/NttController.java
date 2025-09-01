@@ -51,7 +51,8 @@ public class NttController {
      * @return 목록 페이지
      */
     @GetMapping("/list")
-    public String list() {
+    public String list(@PathVariable("bbsId") Long bbsId, Model model) {
+    	model.addAttribute("bbsId", bbsId);
         return "mber/ntt/list";
     }
 

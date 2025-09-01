@@ -1,5 +1,6 @@
 package com.kepco.app.domain.ntt.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.kepco.app.domain.ntt.dto.SearchMberNtt;
@@ -11,6 +12,6 @@ public interface NttQueryService {
 
     SearchMberNtt.NttDetail selectSecretDetail(Long nttId, String password);
 
-    SearchMberNtt.PreNext selectPreAndNext(Long id);
+    List<SearchMberNtt.PreNext> selectPreAndNext(Long id, Long bbsId);
 
 }

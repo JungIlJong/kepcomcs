@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kepco.app.home.mapper.CUBoardMapper">
 
-	<select id="getBoardList" parameterType="HashMap" resultType="HashMap">
+	<select id="getBoardList_origin" parameterType="HashMap" resultType="HashMap">
 		SELECT 
 			a.board_no, 
 			a.board_title, 
@@ -17,7 +17,7 @@
 		FROM board a  left outer join tbl_board_files b on a.board_no = b.board_no
 		where 1 = 1
 		  and board_type = #{board_type}
-		  and use_yn = 'Y'
+		  and USE_AT = 'Y'
 		  and del_yn = 'N'
 	   <if test="sSearch != null and sSearch != ''">
 			  and (a.board_title like CONCAT('%', #{sSearch}, '%') 
@@ -30,6 +30,42 @@
 		</if>
 		<!-- <if test="orderCol == null and orderCol == ''"> -->
 			order by a.insert_dt desc
+		<!-- </if> -->
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+	</select>
+	
+	<select id="getBoardList" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			A.NTT_ID AS board_no, 
+			A.BBS_ID,
+			EXISTS(SELECT 1 FROM VST_NTT D WHERE D.PARNTSCTT_ID = A.NTT_ID) PARNTSCTT_ID,
+			A.NTT_SJ AS board_title, 
+			A.RDCNT,
+            A.SECRET_AT,
+            A.NOTICE_AT,
+			A.NTT_CN AS board_content, 
+			A.NTT_STTS AS board_status, 
+			DATE_FORMAT(A.FRST_REGIST_DT,'%Y-%m-%d') insert_dt,
+			A.FRST_REGISTER_ID AS insert_id, 
+			DATE_FORMAT(A.LAST_UPDT_DT,'%Y-%m-%d') update_dt,
+			A.LAST_UPDUSR_ID AS update_id,
+			IFNULL(B.ORIGNL_FILE_NM, '') file_name
+		FROM VST_NTT A  LEFT OUTER JOIN VST_ATCHFILE B ON A.NTT_ID = B.UPPER_ID AND B.FILE_SE = 'ntt'
+		WHERE 1 = 1
+		  AND A.BBS_ID = #{board_type}
+		  AND A.USE_AT = 'Y'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (A.NTT_SJ like CONCAT('%', #{sSearch}, '%') 
+			  	or A.NTT_CN like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},A.FRST_REGIST_DT desc
+		</if>
+		<!-- <if test="orderCol == null and orderCol == ''"> -->
+			order by A.FRST_REGIST_DT DESC
 		<!-- </if> -->
 		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
 			limit ${iDisplayStart}, ${iDisplayLength}
@@ -58,7 +94,7 @@
 		    IFNULL(a.link_url, '') link_url
 		FROM board a
 		WHERE board_type = #{board_type}
-		  AND use_yn = 'Y'
+		  AND USE_AT = 'Y'
 		  AND del_yn = 'N'
 		<if test="sSearch != null and sSearch != ''">
 			AND (a.board_title LIKE CONCAT('%', #{sSearch}, '%')
@@ -72,22 +108,21 @@
 	</select>
 	
 	<select id="getBoardListCount" parameterType="HashMap" resultType="Integer">
-		SELECT count(c.board_no)
+		SELECT count(C.NTT_ID)
 		FROM (
-		SELECT a.board_no
-		FROM board a  LEFT OUTER JOIN tbl_board_files b ON a.board_no = b.board_no
-		WHERE board_type = #{board_type}
-		AND use_yn = 'Y'
-		AND del_yn = 'N'
+		SELECT A.NTT_ID
+		FROM VST_NTT A  LEFT OUTER JOIN VST_ATCHFILE B ON A.NTT_ID = B.UPPER_ID AND B.FILE_SE = 'ntt'
+		WHERE A.BBS_ID = #{board_type}
+		  AND A.USE_AT = 'Y'
 	   <if test="sSearch != null and sSearch != ''">
-		   AND (a.board_title LIKE CONCAT('%', #{sSearch}, '%')
-			  	OR a.board_content LIKE CONCAT('%', #{sSearch}, '%')
+		   and (A.NTT_SJ like CONCAT('%', #{sSearch}, '%') 
+			  	or A.NTT_CN like CONCAT('%', #{sSearch}, '%')
 			  )
 		</if>
-		GROUP BY a.board_no ) c
+		GROUP BY A.NTT_ID ) C
 	</select>
 	
-	<select id="getBoardView" parameterType="HashMap" resultType="HashMap">
+	<select id="getBoardView_origin" parameterType="HashMap" resultType="HashMap">
 		SELECT 
 			a.board_no, 
 			a.board_title, 
@@ -107,7 +142,30 @@
 		  and board_type = #{board_type}
 		  and board_no = #{board_no}
 		  and board_pwd = #{board_pwd}
-		  and use_yn = 'Y'
+		  and USE_AT = 'Y'
+		  and del_yn = 'N'
+	</select>
+
+	<select id="getBoardView" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.NTT_ID, 
+			a.NTT_SJ, 
+			a.NTT_CN, 
+			a.board_status, 
+			DATE_FORMAT(a.insert_dt,'%Y-%m-%d') insert_dt,
+			a.insert_id, 
+			DATE_FORMAT(a.update_dt,'%Y-%m-%d') update_dt,
+			a.update_id,
+			a.name,
+			a.link_url,
+			a.phone,
+			a.main_img_file_name
+		FROM board a
+		where 1=1
+		  and board_type = #{board_type}
+		  and board_no = #{board_no}
+		  and board_pwd = #{board_pwd}
+		  and USE_AT = 'Y'
 		  and del_yn = 'N'
 	</select>
 	
@@ -133,16 +191,16 @@
 		where 1=1
 		  and board_type = #{board_type}
 		  and board_no = #{board_no}
-		  and use_yn = 'Y'
+		  and USE_AT = 'Y'
 		  and del_yn = 'N'
 	</select>	
 
 	<select id="getNewsNextPrev" parameterType="HashMap" resultType="HashMap">
   	(SELECT board_type, board_no, board_title, 'next' view_type FROM board where 
-  	board_type = #{board_type} and use_yn = 'Y' and del_yn = 'N' and board_no &gt; #{board_no} order by board_no limit 1)
+  	board_type = #{board_type} and USE_AT = 'Y' and del_yn = 'N' and board_no &gt; #{board_no} order by board_no limit 1)
   	UNION ALL
   	(SELECT board_type, board_no, board_title, 'prev' view_type FROM board where
-  	board_type = #{board_type} and use_yn = 'Y' and del_yn = 'N' and board_no &lt; #{board_no} order by board_no desc limit 1)
+  	board_type = #{board_type} and USE_AT = 'Y' and del_yn = 'N' and board_no &lt; #{board_no} order by board_no desc limit 1)
 
 		  
 	</select>	
@@ -204,7 +262,7 @@
 			insert_id, 
 			board_type,
 			file_name,
-			use_yn,
+			USE_AT,
 			board_pwd
 		)
 		VALUES
@@ -261,7 +319,7 @@
 			word
 		FROM tbl_prohibitiveword
 		where 1=1
-		  and use_yn = 'Y'
+		  and USE_AT = 'Y'
 	</select>
 	
 	<insert id="insertOpinion" parameterType="HashMap">
@@ -362,7 +420,7 @@
 			board_type
 		FROM board a  left outer join tbl_board_files b on a.board_no = b.board_no
 		where 1=1
-		  and use_yn = 'Y'
+		  and USE_AT = 'Y'
 		  and del_yn = 'N'
 	   <if test="sSearch != null and sSearch != ''">
 			  and (a.board_title like CONCAT('%', #{sSearch}, '%') 
