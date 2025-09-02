@@ -63,7 +63,6 @@
             $(`#bbsTyCode > option[value='${"${bbs.bbsTyCode}"}']`).attr("selected", "true");
 
             bbs.useAt === 'Y' ? $('#useY').prop('checked', true) : $('#useN').prop('checked', true)
-            bbs.answerAt === 'Y' ? $('#answerY').prop('checked', true) : $('#answerN').prop('checked', true)
 
             $('#fileAtchCo').val(bbs.fileAtchCo);
             $(`#fileAtchCo > option[value='${"${bbs.fileAtchCo}"}']`).attr("selected", "true");
@@ -77,7 +76,6 @@
                 const listChecked = roles[i].authorList.includes('LIST') ? 'checked' : '';
                 const detailChecked = roles[i].authorList.includes('DETAIL') ? 'checked' : '';
                 const writeChecked = roles[i].authorList.includes('SAVE') ? 'checked' : '';
-                const answerChecked = roles[i].authorList.includes('ANSWER') ? 'checked' : '';
 
                 const isMaster = roles[i].authrtId === 1 ? 'disabled' : '';
                 let node = `<tr name="role" data-id="<c:out value='${"${roles[i].authrtId}"}' />" >
@@ -90,9 +88,6 @@
                                             </td>
                                             <td class=" txt" style="justify-content: center;">
                                                 <input type="checkbox" class="form-check-input" name="<c:out value='${"${roles[i].authrtId}"}' />" value="SAVE, UPDATE" data-auth="3" <c:out value='${"${isMaster}"}' /> <c:out value="${'${writeChecked}'}"/>>
-                                            </td>
-                                            <td class=" txt" style="justify-content: center;">
-                                                <input type="checkbox" class="form-check-input" name="<c:out value='${"${roles[i].authrtId}"}' />"  value="ANSWER" data-auth="3" <c:out value="${'${isMaster}'}"/> <c:out value="${'${answerChecked}'}"/>>
                                             </td>
                                         </tr>`;
                 roleTable.insertAdjacentHTML('beforeend', node);
@@ -186,23 +181,6 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>댓글 사용여부</th>
-                                                    <td>
-                                                        <div class="d-flex justify-content-start" id="answerAt">
-                                                            <div class="mb-0 me-4 me-lg-12">
-                                                                <input class="form-check-input" type="radio" name="answerAt"
-                                                                       id="answerY" value="Y" checked>
-                                                                <label class="form-check-label" for="answerY"><spring:message
-                                                                        code="bbs.answerAt.y"/></label>
-                                                            </div>
-                                                            <div class="mb-0 me-4 me-lg-12">
-                                                                <input class="form-check-input" type="radio" name="answerAt"
-                                                                       id="answerN" value="N" checked>
-                                                                <label class="form-check-label" for="answerN"><spring:message
-                                                                        code="bbs.answerAt.n"/></label>
-                                                            </div>
-                                                        </div>
-                                                    </td>
                                                     <th>사용여부</th>
                                                     <td>
                                                         <div class="d-flex justify-content-start" id="useAt">
@@ -233,6 +211,11 @@
                                                                     <option value="3">3</option>
                                                                     <option value="4">4</option>
                                                                     <option value="5">5</option>
+                                                                    <option value="6">6</option>
+                                                                    <option value="7">7</option>
+                                                                    <option value="8">8</option>
+                                                                    <option value="9">9</option>
+                                                                    <option value="10">10</option>
                                                                 </select>
                                                             </div>
                                                             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
@@ -267,13 +250,6 @@
                                                     <th>권한설정</th>
                                                     <td colspan="3">
                                                         <table class="table in-table" id="roleTable">
-                                                        <colgroup>
-                                                            <col width="20%">
-                                                            <col width="20%">
-                                                            <col width="20%">
-                                                            <col width="20%">
-                                                            <col width="20%">
-                                                        </colgroup>
                                                         <thead>
                                                         <tr >
                                                             <th rowspan="2" style="border-right: 1px solid var(--bs-gray-200);vertical-align: middle;"><spring:message code="bbs.role.se"/></th>
@@ -287,8 +263,6 @@
                                                             <th ><spring:message
                                                                     code="bbs.role.detail"/></th>
                                                             <th ><spring:message code="bbs.role.ntt"/></th>
-                                                            <th ><spring:message
-                                                                    code="bbs.role.answer"/></th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>

@@ -57,12 +57,6 @@ public class InsertSysBbs {
     private int fileAtchCo;
 
     /**
-     * 댓글여부
-     */
-    @NotBlank(message = "{bbs.answerAt.notblank}")
-    private String answerAt;
-
-    /**
      * 허용확장자
      */
     @NotBlank(message = "{bbs.permExtsn.size}")

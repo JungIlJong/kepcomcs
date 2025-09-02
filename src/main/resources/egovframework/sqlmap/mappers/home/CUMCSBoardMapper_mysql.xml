@@ -2,6 +2,41 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kepco.app.home.mapper.CUBoardMapper">
 
+	<resultMap id="detailMap"
+               type="com.kepco.app.domain.ntt.dto.SearchMberNtt$NttDetail">
+        <id property="id" column="NTT_ID" />
+        <result property="rdcnt" column="RDCNT" />
+        <result property="nttSj" column="NTT_SJ" />
+        <result property="nttCn" column="NTT_CN" />
+        <result property="frstRegistDt" column="FRST_REGIST_DT" />
+        <result property="wrterNm" column="WRTER_NM" />
+        <result property="secret" column="SECRET" />
+        <result property="notice" column="NOTICE" />
+        <result property="mine" column="MINE" />
+        <result property="anonymousWriter" column="ANONYMOUS_WRITER" />
+        <result property="password" column="PASSWORD" />
+        <association
+                property="replyDetail"
+                javaType="com.kepco.app.domain.ntt.dto.SearchMberNtt$ReplyDetail">
+            <id property="id" column="REPLY_NTT_ID" />
+            <result property="nttSj" column="REPLY_NTT__SJ" />
+            <result property="nttCn" column="REPLY_NTT_CN" />
+            <result property="frstRegistDt" column="REPLY_FRST_REGIST_DT" />
+            <result property="wrterNm" column="REPLY_WRTER_NM" />
+            <collection property="files"
+                        ofType="com.kepco.app.domain.ntt.dto.SearchMberNtt$FileInfo">
+                <id property="id" column="REPLY_ATCH_FILE_ID" />
+                <result property="name" column="REPLY_FILE_NM" />
+            </collection>
+        </association>
+        <collection
+                property="files"
+                ofType="com.kepco.app.domain.ntt.dto.SearchMberNtt$FileInfo">
+            <id property="atchFileId" column="ATCH_FILE_ID" />
+            <result property="orignlFileNm" column="ORIGNL_FILE_NM" />
+        </collection>
+    </resultMap>
+    
 	<select id="getBoardList_origin" parameterType="HashMap" resultType="HashMap">
 		SELECT 
 			a.board_no, 
@@ -52,7 +87,7 @@
 			DATE_FORMAT(A.LAST_UPDT_DT,'%Y-%m-%d') update_dt,
 			A.LAST_UPDUSR_ID AS update_id,
 			IFNULL(B.ORIGNL_FILE_NM, '') file_name
-		FROM VST_NTT A  LEFT OUTER JOIN VST_ATCHFILE B ON A.NTT_ID = B.UPPER_ID AND B.FILE_SE = 'ntt'
+		FROM VST_NTT A  LEFT OUTER JOIN VST_ATCHFILE B ON A.NTT_ID = B.UPPER_ID AND B.FILE_SE = 'thumb'
 		WHERE 1 = 1
 		  AND A.BBS_ID = #{board_type}
 		  AND A.USE_AT = 'Y'
@@ -62,10 +97,10 @@
 			  )
 		</if>
 		<if test="orderCol != null and orderCol != ''">
-			order by ${orderCol} ${sSortDir_0},A.FRST_REGIST_DT desc
+			order by ${orderCol} ${sSortDir_0},A.NTT_ID desc
 		</if>
 		<!-- <if test="orderCol == null and orderCol == ''"> -->
-			order by A.FRST_REGIST_DT DESC
+			order by A.NTT_ID desc
 		<!-- </if> -->
 		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
 			limit ${iDisplayStart}, ${iDisplayLength}
@@ -146,27 +181,21 @@
 		  and del_yn = 'N'
 	</select>
 
-	<select id="getBoardView" parameterType="HashMap" resultType="HashMap">
-		SELECT 
-			a.NTT_ID, 
-			a.NTT_SJ, 
-			a.NTT_CN, 
-			a.board_status, 
-			DATE_FORMAT(a.insert_dt,'%Y-%m-%d') insert_dt,
-			a.insert_id, 
-			DATE_FORMAT(a.update_dt,'%Y-%m-%d') update_dt,
-			a.update_id,
-			a.name,
-			a.link_url,
-			a.phone,
-			a.main_img_file_name
-		FROM board a
-		where 1=1
-		  and board_type = #{board_type}
-		  and board_no = #{board_no}
-		  and board_pwd = #{board_pwd}
-		  and USE_AT = 'Y'
-		  and del_yn = 'N'
+	<select id="getBoardView" parameterType="HashMap" resultMap="detailMap">
+		SELECT
+            VN.NTT_ID,
+            VN.NTT_SJ,
+            VN.NTT_CN,
+            CAST(DATE_FORMAT(VN.FRST_REGIST_DT, '%Y-%m-%d') AS CHAR) AS FRST_REGIST_DT,
+            VN.WRTER_NM,
+            (VN.RDCNT + 1) RDCNT,
+            IF(VN.NOTICE_AT = 'Y', TRUE, FALSE)       AS NOTICE,
+            IF(VN.FRST_REGISTER_ID IS NULL, TRUE, FALSE) ANONYMOUS_WRITER,
+            VA.ATCH_FILE_ID,
+            CONCAT(VA.ORIGNL_FILE_NM, '.' , VA.FILE_EXTSN) AS ORIGNL_FILE_NM
+        FROM VST_NTT VN
+        LEFT OUTER JOIN VST_ATCHFILE VA ON VN.NTT_ID = VA.UPPER_ID
+        WHERE VN.NTT_ID = #{nttId} AND VN.USE_AT = 'Y'
 	</select>
 	
 	<select id="getNewsView" parameterType="HashMap" resultType="HashMap">

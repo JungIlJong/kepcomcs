@@ -54,44 +54,6 @@
         FROM VST_NTT VN
         LEFT OUTER JOIN VST_NTT REPLY ON VN.NTT_ID = REPLY.PARNTSCTT_ID
         WHERE VN.BBS_ID = #{bbsId} AND VN.PARNTSCTT_ID IS NULL AND VN.USE_AT = 'Y'
-        <![CDATA[
-        AND (
-            SELECT COUNT(*) FROM VST_REPORT VR
-            WHERE VR.TARGET_TYPE = 'ntt' AND VR.TARGET_ID = VN.NTT_ID
-        ) <= 3
-        ]]>
-        <if test="frstRgstId != null and frstRgstId > 0">
-            AND NOT EXISTS (
-            SELECT 1 FROM VST_BLOCK VB
-            WHERE VB.TARGET_TYPE = 'ntt'
-            AND VB.TARGET_ID = VN.NTT_ID
-            AND VB.BLOCKER_ID = #{frstRgstId}
-            )
-        </if>
-        <if test="frstRgstId != null and frstRgstId > 0">
-            AND NOT EXISTS (
-            SELECT 1 FROM VST_BLOCK VB2
-            WHERE VB2.TARGET_TYPE = 'mbr'
-            AND VB2.TARGET_ID = VN.FRST_REGISTER_ID
-            AND VB2.BLOCKER_ID = #{frstRgstId}
-            )
-        </if>
-        <if test="frstRgstId != null and frstRgstId > 0">
-            AND NOT EXISTS (
-            SELECT 1 FROM VST_REPORT VR2
-            WHERE VR2.TARGET_TYPE = 'mbr'
-            AND VR2.TARGET_ID = VN.FRST_REGISTER_ID
-            AND VR2.REPORTER_ID = #{frstRgstId}
-            )
-        </if>
-        <if test="frstRgstId != null and frstRgstId > 0">
-            AND NOT EXISTS (
-                SELECT 1 FROM VST_REPORT VR2
-                WHERE VR2.TARGET_TYPE = 'ntt'
-                  AND VR2.TARGET_ID = VN.NTT_ID
-                  AND VR2.REPORTER_ID = #{frstRgstId}
-            )
-        </if>
         <if test="searchKeyword != null and searchKeyword != ''">
             <choose>
                 <when test="searchCondition != null and searchCondition == 'title'">
@@ -185,7 +147,7 @@
             IF(VN.NOTICE_AT = 'Y', TRUE, FALSE)       AS NOTICE,
             IF(VN.FRST_REGISTER_ID IS NULL, TRUE, FALSE) ANONYMOUS_WRITER,
             VA.ATCH_FILE_ID,
-            CONCAT(VA.ORIGNL_FILE_NM, '.' , VA.FILE_EXTSN) AS main_img_file_name
+            CONCAT(VA.ORIGNL_FILE_NM, '.' , VA.FILE_EXTSN) AS ORIGNL_FILE_NM
         FROM VST_NTT VN
         LEFT OUTER JOIN VST_ATCHFILE VA ON VN.NTT_ID = VA.UPPER_ID
         WHERE VN.NTT_ID = #{nttId} AND VN.USE_AT = 'Y'

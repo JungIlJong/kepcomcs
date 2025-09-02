@@ -60,8 +60,8 @@ public class SearchMberNtt {
 
     @Getter
     public static class FileInfo {
-        private Long id;
-        private String name;
+        private Long atchFileId;
+        private String orignlFileNm;
     }
 
     @Getter

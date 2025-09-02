@@ -3,6 +3,8 @@ package com.kepco.app.home.service;
 import java.util.HashMap;
 import java.util.List;
 
+import com.kepco.app.domain.ntt.dto.SearchMberNtt;
+
 public interface CUBoardService {
 
 	List<HashMap<String, Object>> getBoardList(HashMap<String, Object> body);
@@ -16,7 +18,7 @@ public interface CUBoardService {
 	//File Upload 게시판
 	HashMap<String, Object> setBoardFile(HashMap<String, Object> param);
 	
-	List<HashMap<String, Object>> getBoardView(HashMap<String, Object> body);
+	SearchMberNtt.NttDetail getBoardView(Long nttId);
 	List<HashMap<String, Object>> getNewsView(HashMap<String, Object> body);
 	
 	List<HashMap<String, Object>> getNewsViewNextPrev(HashMap<String, Object> body);

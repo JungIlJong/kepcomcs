@@ -37,7 +37,6 @@
         }
 
         let init = function (roles) {
-            console.log(roles);
             const roleTable = document.querySelector('#roleTable > tbody');
             for (let i = 0; i < roles.length; i++) {
 
@@ -53,9 +52,6 @@
                                             </td>
                                             <td class=" txt" style="justify-content: center;">
                                                 <input type="checkbox" class="form-check-input" name="<c:out value='${"${roles[i].authrtId}"}' />" value="SAVE, UPDATE" data-auth="3" <c:out value='${"${isMaster}"}' /> <c:out value='${"${checked}"}' />>
-                                            </td>
-                                            <td class=" txt" style="justify-content: center;">
-                                                <input type="checkbox" class="form-check-input" name="<c:out value='${"${roles[i].authrtId}"}' />"  value="ANSWER" data-auth="3" <c:out value="${'${isMaster}'}"/> <c:out value='${"${checked}"}' />>
                                             </td>
                                         </tr>`
                 roleTable.insertAdjacentHTML('beforeend', node);
@@ -148,25 +144,6 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>댓글 사용여부</th>
-                                                    <td>
-                                                        <div class="d-flex justify-content-start" id="answerAt">
-                                                            <div class="mb-0 me-4 me-lg-12">
-                                                                <input class="form-check-input" type="radio" name="answerAt"
-                                                                       id="answerY" value="Y" checked>
-                                                                <label class="form-check-label" for="answerY"><spring:message
-                                                                        code="bbs.answerAt.y"/></label>
-                                                            </div>
-                                                            <div class="mb-0 me-4 me-lg-12">
-                                                                <input class="form-check-input" type="radio" name="answerAt"
-                                                                       id="answerN" value="N">
-                                                                <label class="form-check-label" for="answerN"><spring:message
-                                                                        code="bbs.answerAt.n"/></label>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
                                                     <th>첨부파일 개수<span class="text-danger ms-1">*</span></th>
                                                     <td>
                                                         <div class="form-control-validation">
@@ -217,13 +194,6 @@
                                                     <th>권한설정</th>
                                                     <td colspan="3">
                                                         <table class="table in-table" id="roleTable">
-                                                        <colgroup>
-                                                            <col width="20%">
-                                                            <col width="20%">
-                                                            <col width="20%">
-                                                            <col width="20%">
-                                                            <col width="20%">
-                                                        </colgroup>
                                                         <thead>
                                                         <tr>
                                                             <th  rowspan="2" style="border-right: 1px solid var(--bs-gray-200);vertical-align: middle;"><spring:message code="bbs.role.se"/></th>
@@ -237,8 +207,6 @@
                                                             <th ><spring:message
                                                                     code="bbs.role.detail"/></th>
                                                             <th ><spring:message code="bbs.role.ntt"/></th>
-                                                            <th ><spring:message
-                                                                    code="bbs.role.answer"/></th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>

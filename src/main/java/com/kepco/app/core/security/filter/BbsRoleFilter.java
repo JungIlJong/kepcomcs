@@ -30,19 +30,21 @@ public class BbsRoleFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
-        Pattern pattern = Pattern.compile(path);
-        Matcher matcher = pattern.matcher(requestURI);
-        if (!matcher.find()) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "NOT_FOUND");
-            log.error("NOT FOUND BBS PATH: {}", requestURI);
-            return;
-        } else {
-            String result = bbsRoleService.checkRole(matcher.group(1), BbsRole.valueOf(matcher.group(2).toUpperCase()));
-            if (result == null || result.equalsIgnoreCase("N")) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "NOT ALLOW BBS TO MBER");
-                log.error("NOT ALLOW PATH({}) TO USER({})", requestURI, UserDetailsUtil.getMbrId());
-                return;
-            }
+        if (requestURI.startsWith("/sys")) {
+	        Pattern pattern = Pattern.compile(path);
+	        Matcher matcher = pattern.matcher(requestURI);
+	        if (!matcher.find()) {
+	            response.sendError(HttpServletResponse.SC_NOT_FOUND, "NOT_FOUND");
+	            log.error("NOT FOUND BBS PATH: {}", requestURI);
+	            return;
+	        } else {
+	            String result = bbsRoleService.checkRole(matcher.group(1), BbsRole.valueOf(matcher.group(2).toUpperCase()));
+	            if (result == null || result.equalsIgnoreCase("N")) {
+	                response.sendError(HttpServletResponse.SC_FORBIDDEN, "NOT ALLOW BBS TO MBER");
+	                log.error("NOT ALLOW PATH({}) TO USER({})", requestURI, UserDetailsUtil.getMbrId());
+	                return;
+	            }
+	        }
         }
         filterChain.doFilter(request, response);
     }

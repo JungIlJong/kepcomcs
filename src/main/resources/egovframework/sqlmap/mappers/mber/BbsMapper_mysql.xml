@@ -14,19 +14,8 @@
             A.ANSWER_AT,
             A.USE_AT,
             A.REPLY_AT,
-            replace(A.PERM_EXTSN, ' ', '') PERM_EXTSN,
-            VBA.AUTHOR_LIST
+            replace(A.PERM_EXTSN, ' ', '') PERM_EXTSN
         FROM VST_BBS A
-        LEFT OUTER JOIN VST_BBS_AUTHRT VBA ON VBA.BBS_ID = A.BBS_ID
-        LEFT OUTER JOIN VST_AUTHRT VA ON VBA.AUTHRT_ID = VA.AUTHRT_ID
         WHERE A.BBS_ID = #{bbsId} AND A.USE_AT = 'Y'
-        <choose>
-            <when test="login == false">
-                AND VA.AUTHRT_CD = 'ROLE_ANONYMOUS'
-            </when>
-            <otherwise>
-                AND VA.AUTHRT_CD = 'ROLE_USER'
-            </otherwise>
-        </choose>
     </select>
 </mapper>

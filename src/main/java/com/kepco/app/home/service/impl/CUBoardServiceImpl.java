@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kepco.app.domain.ntt.dto.SearchMberNtt;
 import com.kepco.app.home.mapper.CUBoardMapper;
 import com.kepco.app.home.service.CUBoardService;
 
@@ -151,9 +152,9 @@ public class CUBoardServiceImpl implements CUBoardService {
 		return result;
 	}
 	
-	public List<HashMap<String, Object>> getBoardView(HashMap<String, Object> body) {
+	public SearchMberNtt.NttDetail getBoardView(Long nttId) {
 		// TODO Auto-generated method stub
-		return boardMapper.getBoardView(body);
+		return boardMapper.getBoardView(nttId);
 	}
 	
 	public List<HashMap<String, Object>> getNewsView(HashMap<String, Object> body) {

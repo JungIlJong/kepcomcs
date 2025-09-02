@@ -52,14 +52,28 @@ public class NttController {
      */
     @GetMapping("/list")
     public String list(@PathVariable("bbsId") Long bbsId, Model model) {
+    	SearchBbs bbs = bbsService.selectBbsDetail(bbsId);
+    	String type = bbs.getBbsTyCode();
+    	String url = "mber/ntt/default/list";
+    	switch (type) {
+    		case "BBS_DEFAULT":
+    			url = "mber/ntt/default/list";
+    			break;
+    		case "BBS_ALBUM":
+    			url = "mber/ntt/album/list";
+    			break;
+    		case "BBS_QNA":
+    			url = "mber/ntt/qna/list";
+    			break;
+    	}	
     	model.addAttribute("bbsId", bbsId);
-        return "mber/ntt/list";
+        return url;
     }
 
     @GetMapping("/detail")
     public String detail(Model model, @RequestParam Long id) {
-        model.addAttribute("access", nttAccessManager.getAccessInfo(id));
-        model.addAttribute("mbrId", UserDetailsUtil.getMbrId());
+//        model.addAttribute("access", nttAccessManager.getAccessInfo(id));
+//        model.addAttribute("mbrId", UserDetailsUtil.getMbrId());
         return "mber/ntt/detail";
     }
 

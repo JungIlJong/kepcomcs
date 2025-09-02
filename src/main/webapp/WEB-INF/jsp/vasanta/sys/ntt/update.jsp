@@ -154,9 +154,6 @@
                                         <button type="button" class="btn btn-secondary" id="btnList"><spring:message
                                                 code="button.list"/></button>
                                         <div>
-                                            <button type="button" class="btn btn-dark me-2" id="btnResetReport">신고내역
-                                                초기화
-                                            </button>
                                             <button type="button" class="btn btn-dark me-2" id="btnDelete"><spring:message
                                                     code="button.delete"/></button>
                                             <button type="button" class="btn btn-primary" id="btnUpdate"><spring:message
@@ -165,26 +162,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="card mt-6">
-                                <div class="card-header">
-                                    <h5 class="mb-0"><spring:message code="answer"/> <spring:message
-                                            code="manage"/></h5>
-                                </div>
-                                <div class="row">
-                                    <div class="card-datatable">
-                                        <div class="justify-content-between dt-layout-table">
-                                            <div class="justify-content-between align-items-center dt-layout-full table">
-                                                <table class="datatables-answers table border-top dataTable dtr-column"
-                                                       id="DataTables_Table_0"
-                                                       aria-describedby="DataTables_Table_0_info">
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -334,17 +311,6 @@
                 // 기존 파일 삭제 버튼은 이벤트 위임으로 처리됨
             }
 
-            let reportIds = data.reportIds;
-            if (reportIds !== '') {
-                document.getElementById('btnResetReport').classList.remove('disabled');
-            } else {
-                document.getElementById('btnResetReport').classList.add('disabled');
-            }
-
-            let dt_answer = new DataTable('.datatables-answers');
-            // Refilter the table
-            dt_answer.draw();
-
             let atchFiles = document.querySelectorAll('input[name="atchFile"]');
             for (let j = 0; j < atchFiles.length; j++) {
                 atchFiles[j].addEventListener('click', function () {
@@ -352,57 +318,6 @@
                     window.open('/file/download?fileId=' + fileId);
                 });
             }
-        }
-
-        let successResetReport = function (data) {
-            customAlert({
-                title: '<spring:message code="common.system.info"/>',
-                content: '신고 내역이 초기화되었습니다.',
-                showCancel: false,
-                onConfirm: function () {
-                    document.getElementById('btnResetReport').classList.add('disabled');
-                }
-            });
-        }
-
-        // 댓글 Success 메서드
-        function setAnswerList(data) {
-            let paginationInfo = data.paginationInfo;
-            document.getElementById('totCnt').textContent = paginationInfo.totalRecordCount;
-            renderPagination(paginationInfo, document.getElementById('pagination'));
-
-            let tableBody = document.getElementById('table-body');
-
-            removeAllChild(tableBody);
-            data.data.forEach(function (element, index) {
-                if (index >= paginationInfo.pageSize) return false;
-                let node = `<tr>
-                                <td class="tblBodyItem num">${paginationInfo.totalRecordCount - ((paginationInfo.currentPageNo - 1) * paginationInfo.pageSize) - index}</td>
-                                <td class="tblBodyItem tit">${element.answerCn}</td>
-                                <td class="tblBodyItem num">${element.wrterNm}</td>
-                                <td class="tblBodyItem num">${element.frstRegistDt}</td>
-                                <td class="tblBodyItem fix200">
-                                    <div class="buttonArea center">`
-                if (element.useAt === 'Y') {
-                    node += `<a name="updateAnswerButton" href="#!" data-id="${element.answerId}" data-stts="${element.useAt}" class="btn sml line"><img src="/sys/assets/icon/content/smlbtn_view_on.svg" alt="">노출</a>`
-                } else {
-                    node += `<a name="updateAnswerButton" href="#!" data-id="${element.answerId}" class="btn sml line"><img src="/sys/assets/icon/content/smlbtn_view_off.svg" alt="">미노출</a>`
-                }
-                node += `<a name="deleteAnswerButton" href="#!" data-id="${element.answerId}" class="btn sml dark"><img src="/sys/assets/icon/content/smlbtn_delete.svg" alt="">삭제</a>
-                                    </div>
-                                </td>
-                          </tr>`;
-                tableBody.insertAdjacentHTML('beforeend', node);
-
-                let fileDeleteButtons = document.querySelectorAll('button[name="fileDeleteButton"]');
-                for (let i = 0; i < fileDeleteButtons.length; i++) {
-                    fileDeleteButtons[i].addEventListener('click', function () {
-                        let id = this.getAttribute('data-id');
-                        let divToRemove = document.querySelector('div[name="' + id + '"]');
-                        divToRemove.parentNode.removeChild(divToRemove);
-                    });
-                }
-            });
         }
 
         let fail = function (xhr, status, error) {
@@ -447,22 +362,6 @@
             });
         });
 
-        <%-- 신고 초기화 버튼 클릭 시 이벤트 --%>
-        document.getElementById('btnResetReport').addEventListener('click', function () {
-            customAlert({
-                title: '<spring:message code="common.system.info"/>',
-                content: '신고내역을 초기화하시겠습니까?',
-                showCancel: true,
-                onConfirm: function () {
-                    const nttId = document.getElementById('nttId').value;
-                    const data = {
-                        nttId: nttId
-                    }
-                    Ajax.post('/api/sys/ntt/updateReport', successResetReport, fail, {data: JSON.stringify(data)});
-                }
-            });
-        });
-
         <%-- 삭제 버튼 클릭 시 이벤트 --%>
         document.getElementById('btnDelete').addEventListener('click', function () {
             customAlert({
@@ -478,14 +377,6 @@
                 }
             });
         });
-
-        function searchAnswer(pageIndex) {
-            let data = bindingData(document.getElementById('frmSearch'));
-            data["pageIndex"] = pageIndex;
-            data["nttId"] = document.getElementById('nttId').value;
-            console.log(data);
-            Ajax.get(dataToQueryString('/api/sys/answer/list', data), setAnswerList, fail);
-        }
 
         $('#btnUpdate').on('click', function () {
             fvNttInstance.validate().then(function (status) {
@@ -557,51 +448,6 @@
             content: '<spring:message code="fail.common.msg" />',
             showCancel: false,
             onConfirm: function () {
-            }
-        });
-    }
-
-    function updateAnswerButton(id) {
-        let message = '해당 댓글을 노출하시겠습니까?';
-        if ($(id).data('stts') === 'Y')
-            message = '해당 댓글을 차단하시겠습니까?';
-
-        customAlert({
-            title: '<spring:message code="common.system.info"/>',
-            content: message,
-            showCancel: true,
-            onConfirm: function () {
-                let data = {answerId: $(id).data('id')}
-                Ajax.post('/api/sys/answer/update', function () {
-                    customAlert({
-                        title: '<spring:message code="common.system.info"/>',
-                        content: '수정되었습니다.',
-                        showCancel: false,
-                        onConfirm: function () {
-                            location.reload()
-                        }
-                    });
-                }, fail, {data: JSON.stringify(data)})
-            }
-        });
-    }
-
-    function deleteAnswerButton(id) {
-        customAlert({
-            title: '<spring:message code="common.system.info"/>',
-            content: '<spring:message code="confirm.common.delete" />',
-            showCancel: true,
-            onConfirm: function () {
-                Ajax.post('/api/sys/answer/delete?answerId=' + $(id).data('id'), function () {
-                    customAlert({
-                        title: '<spring:message code="common.system.info"/>',
-                        content: '삭제되었습니다.',
-                        showCancel: false,
-                        onConfirm: function () {
-                            location.reload()
-                        }
-                    });
-                }, fail)
             }
         });
     }

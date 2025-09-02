@@ -192,6 +192,9 @@
                                                                        name="files" placeholder="파일을 선택하세요"
                                                                        title="파일을 선택하세요" multiple>
                                                             </div>
+                                                            <div id="fileList">
+                                                                <%-- 첨부파일 목록이 여기에 동적으로 표시됩니다 --%>
+                                                            </div>
                                                             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                                         </div>
                                                     </td>
@@ -225,6 +228,8 @@
 <%@ include file="/WEB-INF/jsp/vasanta/cmmn/form-validation.jsp" %>
 
 <script>
+	let selectedFiles = new DataTransfer(); // 선택된 파일들을 관리하는 객체
+
     $(function () {
         if (location.href.includes('ntt')) {
             document.getElementById('bbsIdDiv').style.removeProperty('display');
@@ -237,6 +242,33 @@
         }
 
         initFvNtt();
+        
+     // 파일 삭제 버튼 이벤트 위임 (전역 설정)
+        $(document).on('click', '.file-delete-btn', function() {
+            const tempId = $(this).data('id');
+            const fileName = $(this).closest('.file-item').find('.file-name-display').text();
+
+            if (tempId && tempId.toString().startsWith('temp_')) {
+                // 새로 선택한 파일 제거
+                $('[data-temp-id="' + tempId + '"]').remove();
+                
+                // DataTransfer에서 해당 파일 제거
+                const dt = new DataTransfer();
+                const files = $('#files')[0].files;
+                
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].name !== fileName) {
+                        dt.items.add(files[i]);
+                    }
+                }
+                
+                // 파일 입력 업데이트
+                $('#files')[0].files = dt.files;
+            } else {
+                // 기존 파일 삭제 처리
+                fileDeleteButton(this);
+            }
+        });
 
         <%-- 게시판 변경 시 이벤트 --%>
         document.getElementById('bbsId').addEventListener('change', function () {
@@ -302,6 +334,96 @@
             return $(imgTags[0]).attr('src');
         }
     })
+	
+    function fileDeleteButton(e) {
+        let fileId = $(e).data('id');
+        let file = `<input type="hidden" name="removeFileList" value="` + fileId + `" >`
+        document.getElementById('frm').insertAdjacentHTML('beforeend', file);
+        // 파일 프리뷰와 파일명을 포함한 전체 컨테이너 삭제
+        $('#' + fileId).closest('.file-item').remove();
+    }
+
+    // 파일 크기를 사람이 읽기 쉬운 형태로 변환하는 함수
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function imgTag() {
+        const html = quill.root.innerHTML;
+        const imgTags = $(html).find('img');
+
+        if (imgTags.length === 0) {
+            return undefined;
+        }
+
+        return $(imgTags[0]).attr('src');
+    }
+
+    // 파일 선택 시 프리뷰 표시
+    $('#files').on('change', function() {
+        const newFiles = this.files;
+        if (newFiles.length === 0) return;
+       
+        // 기존 fileElem이 없으면 생성
+        if ($('#fileElem').length === 0) {
+            $('#fileList').append('<div class="d-flex flex-wrap gap-3 mt-3 mb-4" id="fileElem"></div>');
+        }
+
+        // 새로 선택된 파일들을 기존 파일 목록에 추가
+        for (let i = 0; i < newFiles.length; i++) {
+            selectedFiles.items.add(newFiles[i]);
+        }
+        
+        // 파일 입력에 전체 파일 목록 설정
+        this.files = selectedFiles.files;
+
+        // 새로 추가된 파일들만 프리뷰 생성
+        for (let i = 0; i < newFiles.length; i++) {
+            const file = newFiles[i];
+            const fileName = file.name;
+            
+            // 중복 파일 체크
+            if ($('.file-name-display').filter(function() { return $(this).text() === fileName; }).length > 0) {
+                continue;
+            }
+            
+            const fileExt = fileName.split('.').pop().toLowerCase();
+            const isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileExt);
+            const tempId = 'temp_' + Date.now() + '_' + i;
+
+            let previewHtml = '<div class="d-flex flex-column align-items-center file-item" data-temp-id="' + tempId + '">';
+            previewHtml += '<div class="file-preview" id="' + tempId + '">';
+
+            if (isImage) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#' + tempId).html(
+                        '<img src="' + e.target.result + '" alt="' + fileName + '">' +
+                        '<button type="button" data-id="' + tempId + '" class="btn btn-xs btn-secondary file-delete-btn">' +
+                        '<i class="icon-base bx bx-x"></i></button>'
+                    );
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewHtml += '<div class="d-flex flex-column align-items-center justify-content-center h-100 bg-light">';
+                previewHtml += '<i class="bx bx-file fs-1 text-muted mb-2"></i>';
+                previewHtml += '<span class="small text-muted text-uppercase">' + fileExt + '</span>';
+                previewHtml += '</div>';
+                previewHtml += '<button type="button" data-id="' + tempId + '" class="btn btn-xs btn-secondary file-delete-btn">';
+                previewHtml += '<i class="icon-base bx bx-x"></i></button>';
+            }
+
+            previewHtml += '</div>';
+            previewHtml += '<div class="file-name-display text-center mt-2" title="' + fileName + '">' + fileName + '</div>';
+            previewHtml += '</div>';
+
+            $('#fileElem').append(previewHtml);
+        }
+    });
 </script>
 </body>
 </html>

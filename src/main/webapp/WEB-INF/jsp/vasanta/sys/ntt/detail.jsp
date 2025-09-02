@@ -37,51 +37,6 @@
             }
         }
 
-        function searchAnswer(pageIndex) {
-            let data = bindingData(document.getElementById('frmSearch'));
-            data["pageIndex"] = pageIndex;
-            data["nttId"] = $('#nttId').val();
-            Ajax.get(dataToQueryString('/api/sys/answer/list', data), searchAnswerSuccess, fail);
-        }
-
-        let searchAnswerSuccess = function (data) {
-
-            let paginationInfo = data.paginationInfo;
-            document.getElementById('totCnt').textContent = paginationInfo.totalRecordCount;
-            renderPagination(paginationInfo, document.getElementById('pagination'));
-
-            let tableBody = document.getElementById('table-body');
-
-            removeAllChild(tableBody);
-            data.data.forEach(function (element, index) {
-                if (index >= paginationInfo.pageSize) return false;
-                let node = `<tr>
-                                <td class="tblBodyItem num">${'${paginationInfo.totalRecordCount - ((paginationInfo.currentPageNo - 1) * paginationInfo.pageSize) - index}'}</td>
-                                <td class="tblBodyItem tit">${'${element.answerCn}'}</td>
-                                <td class="tblBodyItem num">${'${element.wrterNm}'}</td>
-                                <td class="tblBodyItem num">${'${element.frstRegistDt}'}</td>`;
-                tableBody.insertAdjacentHTML('beforeend', node);
-            });
-            $('a[name="updateAnswerButton"]').on('click', function() {
-                let message = '해당 댓글을 노출하시겠습니까?';
-                if($(this).data('stts') === 'Y')
-                    message = '해당 댓글을 차단하시겠습니까?';
-                if(!confirm(message)) {
-                    return;
-                }
-                let data = {answerId: $(this).data('id')}
-                Ajax.post('/api/sys/answer/update', function() {location.reload()}, fail, {data: JSON.stringify(data)})
-            })
-
-            $('a[name="deleteAnswerButton"]').on('click', function() {
-                let message = '<spring:message code="confirm.common.delete"/>';
-                if(!confirm(message)) {
-                    return;
-                }
-                Ajax.post('/api/sys/answer/delete?answerId=' + $(this).data('id'), function() {location.reload()}, fail)
-            })
-        }
-
         let fail = function (xhr, status, error) {
             customAlert({
                 title: '<spring:message code="common.system.info"/>',
@@ -131,36 +86,6 @@
                             <div class="buttonArea">
                                 <button type="button" id="btnList" class="btn dark"><spring:message code="button.list"/></button>
                             </div>
-                        <div class="row">
-                            <div class="col m12 conTop">
-                                <div class="conTit">
-                                    <h3 class=""><spring:message code="answer.manage" /></h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-top">
-                            <div class="boardCount">
-                                <spring:message code="table.total.start" /> <span id="totCnt"></span><spring:message code="table.total.end" />
-                            </div>
-                        </div>
-                        <div class="table-area">
-                            <table class="tbl board">
-                                <thead class="tblHeader">
-                                <tr>
-                                    <th class="tblHeaderItem num"><spring:message code="table.header.number" /></th>
-                                    <th class="tblHeaderItem tit"><spring:message code="cn" /></th>
-                                    <th class="tblHeaderItem item01"><spring:message code="writer" /></th>
-                                    <th class="tblHeaderItem date"><spring:message code="regDt" /></th>
-                                </tr>
-                                </thead>
-                                <tbody id="table-body">
-                                </tbody>
-                            </table>
-                            <div class="pagination-area">
-                                <ul id="pagination" class="pagination">
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
+import com.kepco.app.domain.ntt.dto.SearchMberNtt.NttDetail;
+
 @Mapper("CUBoardMapper")
 public interface CUBoardMapper {
 	List<HashMap<String, Object>> getBoardList(Map<String, Object> map);
@@ -15,7 +17,7 @@ public interface CUBoardMapper {
 	int setBoard(Map<String, Object> map);
 	int setBoardFile(Map<String, Object> map);
 	int setBoardFileUpdate(Map<String, Object> map);
-	List<HashMap<String, Object>> getBoardView(Map<String, Object> map);
+	NttDetail getBoardView(Long nttId);
 	List<HashMap<String, Object>> getNewsView(Map<String, Object> map);
 	List<HashMap<String, Object>> getNewsNextPrev(Map<String, Object> map);
 	int chkBoardPassword(Map<String, Object> map);

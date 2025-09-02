@@ -10,7 +10,6 @@
         <result column="FILE_ATCH_SIZE" property="fileAtchSize" />
         <result column="FILE_ATCH_CO" property="fileAtchCo" />
         <result column="SECRET_USE_AT" property="secretUseAt" />
-        <result column="ANSWER_AT" property="answerAt" />
         <result column="USE_AT" property="useAt" />
         <result column="REPLY_AT" property="replyAt" />
         <result column="PERM_EXTSN" property="permExtsn" />
@@ -28,7 +27,6 @@
             FILE_ATCH_SIZE,
             FILE_ATCH_CO,
             SECRET_USE_AT,
-            ANSWER_AT,
             USE_AT,
             REPLY_AT,
             PERM_EXTSN,
@@ -47,7 +45,6 @@
                       'N',
                   </otherwise>
             </choose>
-            #{answerAt},
             'Y',
         <choose>
             <when test="bbsTyCode == 'BBS_QNA'">
@@ -82,7 +79,6 @@
                 SECRET_USE_AT = 'N',
             </otherwise>
         </choose>
-            ANSWER_AT = #{answerAt},
             <if test="useAt != null">
             USE_AT = #{useAt},
             </if>
@@ -172,7 +168,6 @@
             A.FILE_ATCH_SIZE,
             A.FILE_ATCH_CO,
             A.SECRET_USE_AT,
-            A.ANSWER_AT,
             A.USE_AT,
             A.REPLY_AT,
             REPLACE(PERM_EXTSN, ' ', '') PERM_EXTSN,
@@ -194,7 +189,6 @@
             A.FILE_ATCH_SIZE,
             A.FILE_ATCH_CO,
             A.SECRET_USE_AT,
-            A.ANSWER_AT,
             A.USE_AT,
             A.REPLY_AT,
             REPLACE(PERM_EXTSN, ' ', '') PERM_EXTSN,

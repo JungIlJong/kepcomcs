@@ -28,17 +28,21 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kepco.app.common.CommonResponse;
+import com.kepco.app.domain.ntt.dto.SearchMberNtt;
 import com.kepco.app.home.service.CUBoardService;
 import com.kepco.app.home.service.CUShopService;
 
@@ -113,75 +117,6 @@ public class RestFulApi {
         return rdata.toString();
     }
 
-    /**
-     * 카드 게시판 목록 조회
-     *
-     * @param board_type
-     * @param param
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/get/board/cardlist/{board_type}", produces = "application/json; charset=utf8", method = RequestMethod.POST)
-    @ResponseBody
-    public String getBoardCardList(@PathVariable(value = "board_type") String board_type, @RequestBody HashMap<String, Object> param) throws Exception {
-        HashMap<String, Object> body = new HashMap<>();
-
-        System.out.println(param.get("iDisplayStart"));
-        System.out.println(param.get("iDisplayLength"));
-        body.put("board_type", board_type);
-        body.put("iDisplayStart", param.get("iDisplayStart"));
-        body.put("iDisplayLength", param.get("iDisplayLength"));
-        body.put("sSearch", param.get("sSearch"));
-
-        List<HashMap<String, Object>> rList = BoardService.getBoardCardList(body);
-
-        JSONObject rdata = new JSONObject();
-        if (rList.size() > 0) {
-            rdata.put("result", "1");
-            rdata.put("msg", "1");
-            rdata.put("hashdata", new ArrayList());
-            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
-        } else {
-            rdata.put("result", "0");
-            rdata.put("msg", "0");
-            rdata.put("hashdata", new ArrayList());
-            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
-        }
-
-        return rdata.toString();
-    }
-
-    /**
-     * 카드 게시판 목록 개수 조회
-     *
-     * @param board_type
-     * @param param
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/get/board/cardlistCount/{board_type}", produces = "application/json; charset=utf8", method = RequestMethod.POST)
-    @ResponseBody
-    public String getBoardCardListCount(@PathVariable(value = "board_type") String board_type,
-                                        @RequestBody HashMap<String, Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        Map params = request.getParameterMap();
-
-        Boolean valid = true;
-        String col = "";
-
-        body.put("board_type", board_type);
-        body.put("sSearch", param.get("sSearch"));
-        Integer totalrecord = BoardService.getBoardListCount(body);
-
-        JSONObject rdata = new JSONObject();
-        rdata.put("result", "1");
-        rdata.put("msg", "1");
-        rdata.put("recordsTotal", totalrecord);
-
-        return rdata.toString();
-    }
 
     @RequestMapping(value = "/set/board", produces = "application/json; charset=utf8", method = RequestMethod.POST)
     @ResponseBody
@@ -315,86 +250,11 @@ public class RestFulApi {
         return result;
     }
 
-    @RequestMapping(value = "/get/board/view", produces = "application/json; charset=utf8", method = RequestMethod.POST)
+    @RequestMapping(value = "/get/board/view", produces = "application/json; charset=utf8", method = RequestMethod.GET)
     @ResponseBody
-    public String getBoardView(@RequestBody HashMap<String, Object> param,
-                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ResponseEntity getBoardView(@RequestParam Long nttId) throws Exception {
 
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("board_type", param.get("board_type"));
-        body.put("board_no", param.get("board_no"));
-        body.put("board_pwd", param.get("board_pwd"));
-        List<HashMap<String, Object>> rList = BoardService.getBoardView(body);
-
-        JSONObject rdata = new JSONObject();
-        if (rList.size() > 0) {
-            rdata.put("result", "1");
-            rdata.put("msg", "1");
-
-            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
-
-        } else {
-            rdata.put("result", "0");
-            rdata.put("msg", "0");
-            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
-        }
-
-        return rdata.toString();
-    }
-
-    @RequestMapping(value = "/get/news/view", produces = "application/json; charset=utf8", method = RequestMethod.POST)
-    @ResponseBody
-    public String getNewsView(@RequestBody HashMap<String, Object> param,
-                              HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("board_type", param.get("board_type"));
-        body.put("board_no", param.get("board_no"));
-
-        List<HashMap<String, Object>> rList = BoardService.getNewsView(body);
-        List<HashMap<String, Object>> fileList = BoardService.getBoardFileList(body);
-
-        JSONObject rdata = new JSONObject();
-        if (rList.size() > 0) {
-            rdata.put("result", "1");
-            rdata.put("msg", "1");
-
-            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
-            rdata.put("fileList", new JSONArray(new ObjectMapper().writeValueAsString(fileList)));
-        } else {
-            rdata.put("result", "0");
-            rdata.put("msg", "0");
-            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
-        }
-
-        return rdata.toString();
-    }
-
-    @RequestMapping(value = "/get/news/nextprev", produces = "application/json; charset=utf8", method = RequestMethod.POST)
-    @ResponseBody
-    public String getNewsViewNextPrev(@RequestBody HashMap<String, Object> param,
-                                      HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        HashMap<String, Object> body = new HashMap<String, Object>();
-        body.put("board_type", param.get("board_type"));
-        body.put("board_no", param.get("board_no"));
-
-        List<HashMap<String, Object>> rList = BoardService.getNewsViewNextPrev(body);
-
-        JSONObject rdata = new JSONObject();
-        if (rList.size() > 0) {
-            rdata.put("result", "1");
-            rdata.put("msg", "1");
-
-            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
-
-        } else {
-            rdata.put("result", "0");
-            rdata.put("msg", "0");
-            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
-        }
-
-        return rdata.toString();
+    	return CommonResponse.success(BoardService.getBoardView(nttId));
     }
 
     @RequestMapping(value = "/get/board/chkBoardPwd/", produces = "application/json; charset=utf8", method = RequestMethod.POST)
