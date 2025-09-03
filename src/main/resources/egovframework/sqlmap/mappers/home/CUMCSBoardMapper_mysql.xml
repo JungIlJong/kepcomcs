@@ -15,6 +15,7 @@
         <result property="mine" column="MINE" />
         <result property="anonymousWriter" column="ANONYMOUS_WRITER" />
         <result property="password" column="PASSWORD" />
+        <result property="bbsNm" column="BBS_NM" />
         <association
                 property="replyDetail"
                 javaType="com.kepco.app.domain.ntt.dto.SearchMberNtt$ReplyDetail">
@@ -192,7 +193,8 @@
             IF(VN.NOTICE_AT = 'Y', TRUE, FALSE)       AS NOTICE,
             IF(VN.FRST_REGISTER_ID IS NULL, TRUE, FALSE) ANONYMOUS_WRITER,
             VA.ATCH_FILE_ID,
-            CONCAT(VA.ORIGNL_FILE_NM, '.' , VA.FILE_EXTSN) AS ORIGNL_FILE_NM
+            CONCAT(VA.ORIGNL_FILE_NM, '.' , VA.FILE_EXTSN) AS ORIGNL_FILE_NM,
+            (SELECT T.BBS_NM FROM VST_BBS T WHERE T.BBS_ID = VN.BBS_ID) AS BBS_NM
         FROM VST_NTT VN
         LEFT OUTER JOIN VST_ATCHFILE VA ON VN.NTT_ID = VA.UPPER_ID
         WHERE VN.NTT_ID = #{nttId} AND VN.USE_AT = 'Y'

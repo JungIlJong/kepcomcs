@@ -29,7 +29,7 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
 	
-		var board_type = "15";
+		var board_type = "34";
 		$(function() {
 			setMainTable();
 		})
@@ -83,7 +83,7 @@
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
 	
-													return "<a href='/esg/social/weak-view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
+													return "<a href='/mber/esg/social/weak-view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 												}
 											},
 											{
@@ -177,16 +177,16 @@
       </div>
       <ul class="bid-tab social-tab">
         <li>
-          <a href="/esg/social/ssis-list">한국사회보장정보원</a>
+          <a href="/mber/esg/social/ssis-list">한국사회보장정보원</a>
         </li>
         <li>
-          <a href="/esg/social/energy-list">한국에너지공단</a>
+          <a href="/mber/esg/social/energy-list">한국에너지공단</a>
         </li>
         <li>
-          <a href="/esg/social/safety-list">고객만족도활동</a>
+          <a href="/mber/esg/social/safety-list">고객만족도활동</a>
         </li>
         <li class="selected">
-          <a href="/esg/social/weak-list">취약계층발굴</a>
+          <a href="/mber/esg/social/weak-list">취약계층발굴</a>
         </li>
       </ul>
       <div class="social-list">

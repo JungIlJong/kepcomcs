@@ -38,6 +38,7 @@ public class SearchMberNtt {
         private String nttCn;
         private String wrterNm;
         private String frstRegistDt;
+        private String bbsNm;
         private boolean secret;
         private boolean notice;
         private boolean mine;

@@ -38,30 +38,30 @@ public class UserMenuInterceptor implements HandlerInterceptor {
 
         List<Menu> menuList = menuSysMapper.selectMenuList("MBER");
 
-        if (requestURI.equals(INDEX_URL)) {
+//        if (requestURI.equals(INDEX_URL)) {
+//            request.setAttribute("menuList", menuList);
+//            return true;
+//        }
+//
+//        for (Menu menu : menuList) {
+//            String url = menu.getUrl();
+//            if (StringUtils.hasText(url) && !url.equals(DIR)) {
+//                url = url.substring(0, url.lastIndexOf("/"));
+//            }
+//
+//            if (url.equals(subRequestURI)) {
+//                result = true;
+//                break;
+//            }
+//        }
+
+//        if (result) {
             request.setAttribute("menuList", menuList);
             return true;
-        }
-
-        for (Menu menu : menuList) {
-            String url = menu.getUrl();
-            if (StringUtils.hasText(url) && !url.equals(DIR)) {
-                url = url.substring(0, url.lastIndexOf("/"));
-            }
-
-            if (url.equals(subRequestURI)) {
-                result = true;
-                break;
-            }
-        }
-
-        if (result) {
-            request.setAttribute("menuList", menuList);
-            return result;
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            return result;
-        }
+//        } else {
+//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+//            return result;
+//        }
     }
 
     @Override

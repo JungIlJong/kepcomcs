@@ -194,15 +194,12 @@
                 
                 // DataTransfer에서 해당 파일 제거
                 const dt = new DataTransfer();
-                const files = $('#files')[0].files;
-                
-                for (let i = 0; i < files.length; i++) {
-                    if (files[i].name !== fileName) {
-                        dt.items.add(files[i]);
-                    }
-                }
-                
-                // 파일 입력 업데이트
+                Array.from(selectedFiles.files).forEach(f => {
+                    const isTarget = (f.name === fileName)
+                    if (!isTarget) dt.items.add(f);
+                  });
+
+                  selectedFiles = dt;
                 $('#files')[0].files = dt.files;
             } else {
                 // 기존 파일 삭제 처리
@@ -250,7 +247,6 @@
 
             // 콘텐츠 내용 설정
             if (data.nttCn) {
-                console.log('Setting content:', data.nttCn);
 
                 // Quill이 초기화될 때까지 대기
                 const setQuillContent = function() {

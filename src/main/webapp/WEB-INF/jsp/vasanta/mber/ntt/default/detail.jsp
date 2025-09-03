@@ -66,14 +66,6 @@
 					        node += '<span>' + data.files[i].orignlFileNm + '</span></a></p>'
 					    }
 					    $('#div_filelist').html(node);
-					
-// 					    // 파일 다운로드 기능 - 공통 처리
-// 					    $('.file-download-link').on('click', function() {
-// 					        const fileId = $(this).closest('.file-preview').attr('id');
-// 					        window.open('/file/download?fileId=' + fileId);
-// 					    });
-					
-					    // 기존 파일 삭제 버튼은 이벤트 위임으로 처리됨
 					}
 				},// 요청 완료 시
 			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
@@ -157,8 +149,7 @@
             </div>
             <div class="news-view-desc" id="news-view-desc">
             </div>
-            <div class="addfile-row" id="div_filelist">
-            </div>
+            <div class="addfile-row" id="div_filelist"></div>
           </li>
         </ul>
         <div class="btn-row btn-row-right">

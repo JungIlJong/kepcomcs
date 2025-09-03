@@ -35,8 +35,8 @@
         <h1>사회공헌활동</h1>
         <p>한전MCS 국민 사회공헌활동을 소개합니다.</p>
         <br>
-        <p>&#183;&nbsp;<a href="/esg/social/ssis-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">사회공헌 활동소식</a></p>
-        <p>&#183;&nbsp;<a href="/esg/social/mou-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">MOU체결</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/social/ssis-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">사회공헌 활동소식</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esgsafety/social/socialinquiry/bbs/15/list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">MOU체결</a></p>
         <p>&#183;&nbsp;<a href="#" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">LOVE FUND</a></p>
         <p>&#183;&nbsp;<a href="/esg/social/socialinquiry-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">사회공헌문의&#183;제안</a></p>
       </div>          
