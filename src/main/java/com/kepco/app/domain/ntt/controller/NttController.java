@@ -65,6 +65,9 @@ public class NttController {
     		case "BBS_QNA":
     			url = "mber/ntt/qna/list";
     			break;
+    		case "BBS_DOWNLOAD":
+    			url = "mber/ntt/download/list";
+    			break;
     	}	
     	model.addAttribute("bbsId", bbsId);
         return url;

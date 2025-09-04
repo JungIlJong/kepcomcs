@@ -28,7 +28,7 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
 	
-		var board_type = "4";
+		var board_type = "1315";
 		$(function() {
 			setMainTable();
 		})
@@ -86,15 +86,12 @@
 												}
 											},
 											{
-												"data" : "file_name",
+												"data" : "atch_file_id",
 												"sWidth" : '10%',
 												"render" : function(data, type, row, meta) {
-
 													var return_val = "";
-													if (row.file_name != ""  && row.file_name != "undefined" && row.file_name != null){
-														return_val = "<a href='/api/file/fileDown?file_name="+encodeURI(row.file_name)+"' class='down_data' download></a>";
-													}else if (row.file_name2 != ""  && row.file_name2 != "undefined" && row.file_name2 != null){
-														return_val = "<a href='/api/file/fileDown?file_name="+encodeURI(row.file_name2)+"' class='down_data' download></a>";
+													if (row.atch_file_id != ""  && row.atch_file_id != "undefined" && row.file_name != null){
+														return_val = "<a href='/file/download?fileId=" + data + "' class='down_data' download></a>";
 													}else{
 														return_val = "";
 													}
@@ -187,16 +184,16 @@
       <div class="bid-tab-wrap">
         <ul class="bid-tab">
           <li>
-            <a href="/open-manage/bid-info">입찰안내</a>
+            <a href="/mber/open-manage/bid-info">입찰안내</a>
           </li>
           <li>
             <a href="https://www.g2b.go.kr/pt/menu/selectSubFrame.do?framesrc=https://www.g2b.go.kr:8340/search.do?category=TGONG&kwd=%C7%D1%C0%FC%BF%A5%BE%BE%BF%A1%BD%BA" target="_blank">입찰공고</a>
           </li>
           <li>
-            <a href="/open-manage/bid-list">자료실</a>
+            <a href="/mber/open-manage/bid-list">자료실</a>
           </li>
           <li class="selected">
-            <a href="/open-manage/contract-list">수의계약현황</a>
+            <a href="/mber/open-manage/contract-list">수의계약현황</a>
           </li>
         </ul>   
       </div> 

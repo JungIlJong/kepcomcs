@@ -70,12 +70,6 @@
 					    }
 					    $('#div_filelist').html(node);
 					
-// 					    // 파일 다운로드 기능 - 공통 처리
-// 					    $('.file-download-link').on('click', function() {
-// 					        const fileId = $(this).closest('.file-preview').attr('id');
-// 					        window.open('/file/download?fileId=' + fileId);
-// 					    });
-					
 					    // 기존 파일 삭제 버튼은 이벤트 위임으로 처리됨
 					}
 				},// 요청 완료 시

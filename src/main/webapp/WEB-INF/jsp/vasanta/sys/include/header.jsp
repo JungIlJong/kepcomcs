@@ -8,7 +8,7 @@
 <c:set var="locale" value="<%=locale%>"/>
 <header id="header">
     <h1>
-        <a href="/sys/dashboard/dashBoard">
+        <a href="/sys/system/menu/mngrmenu/list">
             <span>VASANTA CMS V2.0</span>
         </a>
 

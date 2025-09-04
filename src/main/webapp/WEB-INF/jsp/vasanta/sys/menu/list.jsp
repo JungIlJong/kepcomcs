@@ -21,6 +21,7 @@
                 let menuId = item.menuId;
                 let id = isEmpty(item.id) ? '' : item.id;
                 let menuNm = item.menuNm;
+                let menuSj = item.menuSj;
                 let upperMenuId = (isEmpty(item.upperMenuId) || item.upperMenuId === 0) ? '#' : item.upperMenuId;
                 let menuOrdr = isEmpty(item.menuOrdr) ? 0 : item.menuOrdr;
                 let menuTy = item.menuTy;
@@ -35,6 +36,7 @@
                     "text": menuNm,
                     "data": {
                         menuId: id,
+                        menuSj: menuSj,
                         menuTy: menuTy,
                         menuOrdr: menuOrdr,
                         gnbAt: gnbAt,
@@ -134,11 +136,7 @@
             let menuTy = document.querySelector('input[name=menuTy]:checked').value;
 
             var modalTitle = $("#modalTitle");
-            if (menuTy === 'CNTNTS') {
-                cntntDtLoad(this);
-                modalTitle.text("콘텐츠 선택");
-                popupOn();
-            } else if (menuTy === 'BBS') {
+            if (menuTy === 'BBS') {
                 bbsDtLoad(this);
                 modalTitle.text("게시판 선택");
                 popupOn();
@@ -163,11 +161,7 @@
             let selectNode = '';
 
             let menuTy = document.querySelector('input[name=menuTy]:checked').value;
-            if (menuTy === 'CNTNTS') {
-                selectNode = `<option value="ALL" selected>전체</option>
-                              <option value="">콘텐츠명</option>
-                              <option value="">콘텐츠ID</option>`;
-            } else if (menuTy === 'BBS') {
+            if (menuTy === 'BBS') {
                 selectNode = `<option value="ALL" selected>전체</option>
                               <option value="">게시판명</option>
                               <option value="">게시판ID</option>`;
@@ -185,14 +179,7 @@
             removeAllChild(tableHead);
 
             let headNode = '';
-            if (menuTy === 'CNTNTS') {
-                headNode = `<tr>
-                                <th class="tblHeaderItem check"></th>
-                                <th class="tblHeaderItem tit">콘텐츠명</th>
-                                <th class="tblHeaderItem item02">콘텐츠설명</th>
-                                <th class="tblHeaderItem date">등록일자</th>
-                            </tr>`;
-            } else if (menuTy === 'BBS') {
+            if (menuTy === 'BBS') {
                 headNode = `<tr>
                                 <th class="tblHeaderItem check"></th>
                                 <th class="tblHeaderItem item01">게시판ID</th>
@@ -217,14 +204,7 @@
             let bodyNode = '';
             data.data.forEach(function (element, index) {
                 if (index >= paginationInfo.pageSize) return false;
-                if (menuTy === 'CNTNTS') {
-                    bodyNode = `<tr>
-                                    <td class="tblBodyItem check"><input type="radio" name="checkRadio" value="${'${element.cntntsId}'}"/></td>
-                                    <td class="tblBodyItem tit">${'${element.cntntsNm}'}</td>
-                                    <td class="tblBodyItem item02">${'${element.cntntsDc}'}</td>
-                                    <td class="tblBodyItem date">${'${element.frstRegistDt}'}</td>
-                                </tr>`;
-                } else if (menuTy === 'BBS') {
+                if (menuTy === 'BBS') {
                     bodyNode = `<tr>
                                     <td class="tblBodyItem check"><input type="radio" name="checkRadio" value="${'${element.bbsId}'}"/></td>
                                     <td class="tblBodyItem item01">${'${element.bbsId}'}</td>
@@ -278,6 +258,7 @@
 
         function reset() {
             document.getElementById('menuNm').value = '';
+            document.getElementById('menuSj').value = '';
             document.getElementById('menuOrdr').value = '';
             document.getElementById('menuTy1').checked = true;
             document.getElementById('url').value = '';
@@ -379,6 +360,18 @@
                                         </div>
                                         <div class="row gx-6">
                                             <div class="mb-4 col-12 form-control-validation fv-plugins-icon-container">
+                                                <label class="form-label" for="menuSj"><spring:message
+                                                        code="title.menuSj"/>
+                                                </label>
+                                                <div class="has-validation">
+                                                    <input class="form-control" type="text" name="menuSj" id="menuSj"
+                                                           maxlength="100" placeholder="소제목을 입력하세요.">
+                                                </div>
+                                                <div class="fv-plugins-message-container fv-plugins-message-container--enabled"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row gx-6">
+                                            <div class="mb-4 col-12 form-control-validation fv-plugins-icon-container">
                                                 <label class="form-label" for="menuOrdr"><spring:message
                                                         code="title.menuOrdr"/>
                                                     <span class="text-danger ms-1">*</span>
@@ -404,12 +397,6 @@
                                                                id="menuTy1" value="DIR" checked>
                                                         <label class="form-check-label" for="menuTy1"><spring:message
                                                                 code="title.menuTy.dir"/></label>
-                                                    </div>
-                                                    <div class="form-check mb-0 me-4 me-lg-12">
-                                                        <input class="form-check-input" type="radio" name="menuTy"
-                                                               id="menuTy2" value="CNTNTS">
-                                                        <label class="form-check-label" for="menuTy2"><spring:message
-                                                                code="title.menuTy.contents"/></label>
                                                     </div>
                                                     <div class="form-check mb-0 me-4 me-lg-12">
                                                         <input class="form-check-input" type="radio" name="menuTy"
@@ -625,6 +612,7 @@
 
             document.getElementById('id').value = id;
             document.getElementById('menuNm').value = node.text;
+            document.getElementById('menuSj').value = node.data.menuSj;
             document.getElementById('menuOrdr').value = node.data.menuOrdr;
             document.getElementById('url').value = node.data.url;
 
@@ -862,7 +850,7 @@
                 } else if (menuTy === 'LINK') {
                     urlField.value = '';
                     urlField.readOnly = false;
-                } else if (menuTy === 'CNTNTS' || menuTy === 'BBS' || menuTy === 'PROGRM') {
+                } else if (menuTy === 'BBS' || menuTy === 'PROGRM') {
                     urlField.value = '';
                     urlField.readOnly = true;
                     popupOn();
@@ -899,9 +887,7 @@
             urlPath = urlPath + '/' + id;
 
             let menuTy = document.querySelector('input[name=menuTy]:checked').value;
-            if (menuTy === 'CNTNTS') {
-                urlPath = urlPath + '/cntnts/' + checkRadio.value + '/view';
-            } else if (menuTy === 'BBS') {
+            if (menuTy === 'BBS') {
                 urlPath = urlPath + '/bbs/' + checkRadio.value + '/list';
             } else if (menuTy === 'PROGRM') {
                 urlPath = urlPath + checkRadio.value;
@@ -924,7 +910,7 @@
         document.getElementById('url').addEventListener('click', function () {
             const menuTy = document.querySelector('input[name="menuTy"]:checked')?.value;
 
-            if (menuTy === 'CNTNTS' || menuTy === 'BBS' || menuTy === 'PROGRM') {
+            if (menuTy === 'BBS' || menuTy === 'PROGRM') {
                 popupOn();
                 search(1);
             }

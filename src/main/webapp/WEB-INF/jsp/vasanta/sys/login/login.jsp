@@ -144,7 +144,7 @@
     }
 
     let success = function (data) {
-        goPage('/sys/dashboard/dashBoard');
+        goPage('/sys/system/menu/mngrmenu/list');
     }
 
     let fail = function (xhr, status, error) {

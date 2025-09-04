@@ -6,7 +6,7 @@
                 <h3 class=""><c:out value="${menuTitle}"/></h3>
                 <div class="breadCrumbBox">
                     <ul class="breadCrumb arrow">
-                        <li class="breadCumbItem"><a href="/sys/dashboard/dashBoard"><c:out value="${menuItems.menuNm}"/></a></li>
+                        <li class="breadCumbItem"><a href="/sys/system/menu/mngrmenu/list"><c:out value="${menuItems.menuNm}"/></a></li>
                         <c:forEach var="depth1" items="${menuItems.childList}" varStatus="depth1Status">
                             <c:set var="depth1Url" value="${depth1.menuTy eq 'DIR' ? depth1.firstMatchUrl : depth1.url}"/>
                             <c:if test="${fn:contains(fn:split(depth1Url, '/')[1], fn:split(requestUri, '/')[1])}">

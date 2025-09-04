@@ -13,6 +13,8 @@ public class UpdateMenu {
 
     private String menuNm;
 
+    private String menuSj;
+
     private Long upperMenuId;
 
     private int menuOrdr;

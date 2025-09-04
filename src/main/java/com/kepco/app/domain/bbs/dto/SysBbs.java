@@ -98,9 +98,19 @@ public class SysBbs {
      * 최종수정일시
      */
     private LocalDateTime lastUpdtDt;
-
+    
     /**
      * 권한목록
      */
     private List<Map<String, Object>> roles;
+
+    /**
+     * 첨부파일 표시여부
+     */
+    private String fileDisplayYn;
+
+    /**
+     * 카드형목록 여부
+     */
+    private String cardYn;
 }

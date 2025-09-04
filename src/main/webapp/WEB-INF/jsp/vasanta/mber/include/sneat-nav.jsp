@@ -90,7 +90,7 @@
                                 </li>
                                 <c:if test="${fn:contains(roles, 'ROLE_ADMIN')}">
                                     <li>
-                                        <a class="dropdown-item" href="/sys/dashboard/dashBoard">
+                                        <a class="dropdown-item" href="/sys/system/menu/mngrmenu/list">
                                             <i class="icon-base bx bx-cog icon-md me-3"></i><span>관리자 페이지</span>
                                         </a>
                                     </li>

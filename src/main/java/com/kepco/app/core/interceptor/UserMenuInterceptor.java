@@ -81,6 +81,7 @@ public class UserMenuInterceptor implements HandlerInterceptor {
             for (Menu menu : menuList) {
                 if (menu.getUrl().contains(subRequestURI)) {
                     modelAndView.addObject("menuTitle", menu.getMenuNm());
+                    modelAndView.addObject("menuSj", menu.getMenuSj());
                 }
                 menuMap.put(menu.getMenuId(), menu);
             }

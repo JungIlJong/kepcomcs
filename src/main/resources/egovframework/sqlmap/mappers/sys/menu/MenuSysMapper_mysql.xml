@@ -15,6 +15,7 @@
 		SELECT MENU_ID,
 		       ID,
 			   MENU_NM,
+			   MENU_SJ,
 			   UPPER_MENU_ID,
 			   MENU_ORDR,
 			   MENU_TY,
@@ -32,6 +33,7 @@
 		SELECT MENU_ID,
 		       ID,
 			   MENU_NM,
+			   MENU_SJ,
 			   UPPER_MENU_ID,
 			   MENU_ORDR,
 			   MENU_TY,
@@ -50,6 +52,7 @@
 	<insert id="insertMenu" parameterType="menu" useGeneratedKeys="true" keyProperty="menuId">
 		INSERT INTO VST_MENU (
 		                      MENU_NM,
+		                      MENU_SJ,
 		                      UPPER_MENU_ID,
 		                      MENU_ORDR,
 		                      MENU_TY,
@@ -60,6 +63,7 @@
 		                      MENU_SE
 		) VALUES (
 		          #{menuNm},
+		          #{menuSj},
 		          #{upperMenuId},
 		          #{menuOrdr},
 		          'DIR',
@@ -81,6 +85,7 @@
 		UPDATE VST_MENU
 		SET ID = #{id},
 		    MENU_NM = #{menuNm},
+		    MENU_SJ = #{menuSj},
 		    UPPER_MENU_ID = #{upperMenuId},
 		    MENU_ORDR = #{menuOrdr},
 		    MENU_TY = #{menuTy},
@@ -125,6 +130,7 @@
 		SELECT MENU_ID,
 			   ID,
 			   MENU_NM,
+			   MENU_SJ,
 			   UPPER_MENU_ID,
 			   MENU_ORDR,
 			   MENU_TY,

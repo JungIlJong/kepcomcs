@@ -67,4 +67,14 @@ public class InsertSysBbs {
      */
     @NotNull(message = "{bbs.roles.nonnull}")
     private List<Map<String, Object>> roles;
+    
+    /**
+     * 첨부파일 표시여부
+     */
+    private String fileDisplayYn;
+    
+    /**
+     * 카드형목록 여부
+     */
+    private String cardYn;
 }

@@ -46,16 +46,16 @@
       <div class="bid-tab-wrap">
         <ul class="bid-tab">
           <li class="selected">
-            <a href="/open-manage/bid-info">입찰안내</a>
+            <a href="/mber/open-manage/bid-info">입찰안내</a>
           </li>
           <li>
             <a href="https://www.g2b.go.kr/" target="_blank">입찰공고</a>
           </li>
           <li>
-            <a href="/open-manage/bid-list">자료실</a>
+            <a href="/mber/open-manage/bid-list">자료실</a>
           </li>
           <li>
-            <a href="/open-manage/contract-list">수의계약현황</a>
+            <a href="/mber/open-manage/contract-list">수의계약현황</a>
           </li>
         </ul>
       </div>

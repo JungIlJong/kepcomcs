@@ -19,7 +19,7 @@
       <nav aria-label="breadcrumb" class="d-flex align-items-center d-none d-xl-flex">
         <ol class="breadcrumb mb-0">
           <li class="breadcrumb-item">
-            <a href="/sys/dashboard/dashBoard"><img src="/static/assets/images/icon/home.svg" alt=""></a>
+            <a href="/sys/system/menu/mngrmenu/list"><img src="/static/assets/images/icon/home.svg" alt=""></a>
           </li>
           <c:if test="${not empty menuItems and not empty menuItems.childList and not empty requestUri}">
             <c:forEach var="depth1" items="${menuItems.childList}" varStatus="depth1Status">

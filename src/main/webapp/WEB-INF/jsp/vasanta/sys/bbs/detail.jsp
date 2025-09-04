@@ -61,9 +61,10 @@
             }
 
             $(`#bbsTyCode > option[value='${"${bbs.bbsTyCode}"}']`).attr("selected", "true");
-
+            bbs.fileDisplayYn === 'Y' ? $('#fileDisplayY').prop('checked', true) : $('#fileDisplayN').prop('checked', true)
+            bbs.cardYn === 'Y' ? $('#cardY').prop('checked', true) : $('#cardN').prop('checked', true)
             bbs.useAt === 'Y' ? $('#useY').prop('checked', true) : $('#useN').prop('checked', true)
-
+			bbs.bbsTyCode === 'BBS_DEFAULT' ? $('#defaultBbs').show() : $('#defaultBbs').hide();
             $('#fileAtchCo').val(bbs.fileAtchCo);
             $(`#fileAtchCo > option[value='${"${bbs.fileAtchCo}"}']`).attr("selected", "true");
             $('#fileAtchSize').val(bbs.fileAtchSize);
@@ -112,7 +113,27 @@
                         }
                     })
                 }
-            })
+            });
+            
+            $('#bbsTyCode').on('change', function () {
+                let bbsTyCode = $(this).val();
+                if (bbsTyCode == 'BBS_DEFAULT') {
+                	$('#defaultBbs').show();
+                } else if(bbsTyCode === 'BBS_DOWNLOAD') {
+                	$('#fileAtchCo').val(1);
+                	$('#defaultBbs').hide();
+                } else {
+                	$('#defaultBbs').hide();
+                }
+            });
+           	
+           	$('#fileAtchCo').on('change', function () {
+           		let bbsTyCode = $('#bbsTyCode').val();
+           		if (bbsTyCode === 'BBS_DOWNLOAD') {
+           			alert('파일도운로드형 게시판의 경우 첨부파일이 1개로 제한됩니다.');
+           			$('#fileAtchCo').val(1);
+           		}
+           	});
         }
     </script>
 </head>
@@ -174,11 +195,48 @@
                                                                             code="bbs.bbsTyCode.album"/></option>
                                                                     <option value="BBS_QNA"><spring:message
                                                                             code="bbs.bbsTyCode.qna"/></option>
+                                                                    <option value="BBS_DOWNLOAD"><spring:message
+                                                                            code="bbs.bbsTyCode.download"/></option>
                                                                 </select>
                                                             </div>
                                                             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                                         </div>
                                                     </td>
+                                                </tr>
+                                                <tr id="defaultBbs" style="display:none;">
+                                                    <th>첨부파일<br/>표시여부<span class="text-danger ms-1">*</span></th>
+                                                    <td>
+                                                        <div class="d-flex justify-content-start" id="sttsCd">
+                                                            <div class="form-check mb-0 me-4 me-lg-12">
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="fileDisplayYn" id="fileDisplayY" value="Y">
+                                                                <label class="form-check-label"
+                                                                       for="fileDisplayY">예</label>
+                                                            </div>
+                                                            <div class="form-check mb-0 me-4 me-lg-12">
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="fileDisplayYn" id="fileDisplayN" value="N" checked>
+                                                                <label class="form-check-label"
+                                                                       for="fileDisplayN">아니오</label>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <th>카드형목록<span class="text-danger ms-1">*</span></th>
+                                                    <td>
+                                                        <div class="d-flex justify-content-start" id="sttsCd">
+                                                            <div class="form-check mb-0 me-4 me-lg-12">
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="cardYn" id="cardY" value="Y">
+                                                                <label class="form-check-label"
+                                                                       for="cardY">예</label>
+                                                            </div>
+                                                            <div class="form-check mb-0 me-4 me-lg-12">
+                                                                <input class="form-check-input" type="radio"
+                                                                       name="cardYn" id="cardN" value="N" checked>
+                                                                <label class="form-check-label"
+                                                                       for="cardN">아니오</label>
+                                                            </div>
+                                                        </div>
                                                 </tr>
                                                 <tr>
                                                     <th>사용여부</th>

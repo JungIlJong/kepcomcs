@@ -253,11 +253,9 @@
                     if (quill && quill.root) {
                         // HTML 엔티티 디코딩 - jQuery를 사용한 방법
                         const decodedContent = $('<div/>').html(data.nttCn).text();
-                        console.log('Decoded content:', decodedContent);
 
                         // Quill의 clipboard 모듈을 사용하여 HTML 설정
                         quill.clipboard.dangerouslyPasteHTML(0, decodedContent);
-                        console.log('Content set successfully');
                     } else {
                         console.log('Quill not ready, waiting...');
                         setTimeout(setQuillContent, 100);

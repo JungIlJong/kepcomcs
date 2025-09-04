@@ -3,7 +3,7 @@
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
     <div class="app-brand demo">
-        <a href="/sys/dashboard/dashBoard" class="app-brand-link">
+        <a href="/sys/system/menu/mngrmenu/list" class="app-brand-link">
               <span class="app-brand-logo demo mt-5 mb-10">
                 <img src="<c:out value="${logoUrl}" />" alt="LOGO-TXT" class="logo-img">
               </span>

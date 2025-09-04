@@ -210,9 +210,9 @@
   <main class="customer-main">
     <div class="page-tit">
       <div class="page-tit-wrap">
-      	<c:set var="title" value="${bbsId eq '15' ? 'MOU체결' : ''}"></c:set>
-        <h1><c:out value="${not empty menuTitle ? menuTitle : title}"/></h1>
-        <p>한전MCS 일반공지</p>
+      	<c:set var="menuNm" value="${bbsId eq '15' ? 'MOU체결' : ''}"></c:set>
+        <h1><c:out value="${not empty menuTitle ? menuTitle : menuNm}"/></h1>
+        <p><c:out value="${menuSj}"/></p>
       </div>
       <ul class="rocation">
         <li>

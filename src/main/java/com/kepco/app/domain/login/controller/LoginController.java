@@ -34,7 +34,7 @@ public class LoginController {
                            @RequestParam(required = false) String failCnt,
                            Model model) {
         if (UserDetailsUtil.isAuthenticated()) {
-            return "redirect:/sys/dashboard/dashBoard";
+            return "redirect:/sys/system/menu/mngrmenu/list";
         }
 
         model.addAttribute("failCnt", failCnt);

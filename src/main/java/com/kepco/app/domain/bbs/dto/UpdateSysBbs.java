@@ -75,4 +75,13 @@ public class UpdateSysBbs {
     @NotBlank(message = "{bbs.update.useAt.notblank}")
     private String useAt;
 
+    /**
+     * 첨부파일 표시여부
+     */
+    private String fileDisplayYn;
+    
+    /**
+     * 카드형목록 여부
+     */
+    private String cardYn;
 }
