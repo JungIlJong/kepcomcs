@@ -50,7 +50,7 @@ public class EsgViewController {
      * ESG 경영 > 안전경영 > 국민을 위한 안전활동
      * @return
      */
-    @GetMapping("/safety/safetyact-list")
+    @GetMapping("/safety/safetyact/safetyact-list")
     public String esg_safety_safetyactlist() {
         return "/mcs/home/esg/safety/safetyact-list";
     }

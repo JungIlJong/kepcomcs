@@ -53,23 +53,34 @@
 			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html
 			    success:function(data) {
-					$('#news-view-title').text(data.nttSj);
+			    	let decoded = decodeHtmlEntities(data.nttSj);
+			    	decoded = decodeHtmlEntities(decoded);
+
+			    	$('#news-view-title').text(decoded);
 					$('#news-insert-dt').text(data.frstRegistDt);
 
 					$('#news-view-desc').html(decodeHtml(data.nttCn).replace(/\n/g, '<br/>'));
-
+					$('#menuNm').text(data.bbsNm);
 					if (data.files.length > 0) {
 					    let node = '';
 					    for (let i = 0; i < data.files.length; i++) {
+					    	console.log(data.files[i].orignlFileNm);
 					        node += '<p><a href="/file/download?fileId=' + data.files[i].atchFileId + '">';
 					        node += '<span>' + data.files[i].orignlFileNm + '</span></a></p>'
 					    }
 					    $('#div_filelist').html(node);
+					
+					    // 기존 파일 삭제 버튼은 이벤트 위임으로 처리됨
 					}
 				},// 요청 완료 시
 			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
 			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
 			});
+		}
+		function decodeHtmlEntities(str) {
+		  const txt = document.createElement('textarea');
+		  txt.innerHTML = str;
+		  return txt.value;
 		}
 
 		function decodeHtml(html) {
@@ -114,7 +125,7 @@
   <main class="customer-main">
     <div class="page-tit">
       <div class="page-tit-wrap">
-        <h1>전력 에너지 뉴스</h1>
+        <h1 id="menuNm"></h1>
         <p>전력과 관련된 뉴스를 전달합니다.</p>
       </div>
       <ul class="rocation">
@@ -148,7 +159,8 @@
             </div>
             <div class="news-view-desc" id="news-view-desc">
             </div>
-            <div class="addfile-row" id="div_filelist"></div>
+            <div class="addfile-row" id="div_filelist">
+            </div>
           </li>
         </ul>
         <div class="btn-row btn-row-right">

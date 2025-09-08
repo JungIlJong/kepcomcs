@@ -14,6 +14,8 @@
             A.ANSWER_AT,
             A.USE_AT,
             A.REPLY_AT,
+            A.FILE_DISPLAY_AT,
+            A.CARD_AT,
             replace(A.PERM_EXTSN, ' ', '') PERM_EXTSN
         FROM VST_BBS A
         WHERE A.BBS_ID = #{bbsId} AND A.USE_AT = 'Y'

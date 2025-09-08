@@ -494,7 +494,7 @@ window.initFvProgram = function () {
                                 return {valid: false, message: msg.progrmUrlMaxlength};
                             }
 
-                            const urlRegex = /^\/([a-zA-Z0-9]+\/?)*$/;
+                            const urlRegex = /^\/([a-zA-Z0-9-]+\/?)*$/;
                             if (!urlRegex.test(value)) {
                                 return {valid: false, message: msg.progrmUrlInvalid};
                             }

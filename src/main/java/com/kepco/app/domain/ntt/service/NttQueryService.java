@@ -1,12 +1,17 @@
 package com.kepco.app.domain.ntt.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.kepco.app.domain.ntt.dto.SearchMberNtt;
 
 public interface NttQueryService {
-    Map<String, Object> selectList(SearchMberNtt.Search req);
+	List<HashMap<String, Object>> selectList(HashMap<String, Object> body);
+	
+	Integer selectListCount(HashMap<String, Object> body);
+	
+    Map<String, Object> selectNttList(SearchMberNtt.Search req);
 
     SearchMberNtt.NttDetail selectNonSecretDetail(Long nttId);
 

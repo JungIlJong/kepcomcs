@@ -20,6 +20,8 @@ public class SearchBbs extends ComSearchVO {
     private String bbsTyCode;
     private String secretUseAt;
     private String answerAt;
+    private String fileDisplayAt;
+    private String cardAt;
     private String permExtsn;
     private String authorList;
 }

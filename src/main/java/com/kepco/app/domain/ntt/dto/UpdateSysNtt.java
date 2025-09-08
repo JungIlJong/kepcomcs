@@ -86,6 +86,16 @@ public class UpdateSysNtt {
      * 비밀번호
      */
     private String password;
+    
+    /**
+     * 시작일
+     */
+    private String nttStartDt;
+    
+    /**
+     * 종료일
+     */
+    private String nttEndDt;
 
     /**
      * 첨부파일 목록

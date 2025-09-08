@@ -30,7 +30,9 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
   <script type="text/javascript">
   
-	var bbsId = "${bbsId}";
+  	var bbsId = "${bbsId}";
+	var fileDisplayAt = "${fileDisplayAt}";
+	var cardAt = "${cardAt}";
 	$(document).ready(function () {
 		setMainTable();
 	})

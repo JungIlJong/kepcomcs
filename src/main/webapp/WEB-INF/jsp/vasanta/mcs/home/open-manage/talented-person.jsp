@@ -37,7 +37,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/open-manage/public-notice">열린경영</a>
+          <a href="/mber/open-manage/public-notice">열린경영</a>
         </li>
         <li>채용정보</li>
       </ul>
@@ -46,10 +46,10 @@
       <div class="recruit-intro">
         <ul class="recruit-tab">
           <li class="selected">
-            <a href="/open-manage/talented-person">인재상</a>
+            <a href="/mber/open-manage/talented-person">인재상</a>
           </li>
           <li>
-            <a href="/open-manage/recruit-list">채용공고</a>
+            <a href="/mber/open-manage/recruit-list">채용공고</a>
           </li>
         </ul>
         <div class="recruit-desc">

@@ -31,7 +31,9 @@
   <script type="text/javascript">
   
 	var bbsId = "${bbsId}";
-	$(document).ready(function () {
+	var fileDisplayAt = "${fileDisplayAt}";
+	var cardAt = "${cardAt}";
+	$(document).ready(function () { alert(fileDisplayAt); alert(cardAt);
 		setMainTable();
 	})
 	
@@ -58,6 +60,7 @@
 							        },
 							    },
 								bServerSide : true,
+// 								sAjaxSource : "/api/mber/bbs/"+bbsId,
 								sAjaxSource : "/get/board/list/"+bbsId,
 								sServerMethod : "POST",
 								//POST 파라미터 추가 (게시판명 추가) 

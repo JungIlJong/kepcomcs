@@ -78,10 +78,10 @@ public class UpdateSysBbs {
     /**
      * 첨부파일 표시여부
      */
-    private String fileDisplayYn;
+    private String fileDisplayAt;
     
     /**
      * 카드형목록 여부
      */
-    private String cardYn;
+    private String cardAt;
 }

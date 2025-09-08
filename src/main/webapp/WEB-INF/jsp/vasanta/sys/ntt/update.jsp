@@ -87,6 +87,45 @@
                                                             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                                         </div>
                                                     </td>
+                                                </tr><tr>
+                                                	<th>
+                                                        <label class="form-label" for="period">
+                                                            <spring:message code="ntt.period"/>
+                                                        </label>
+                                                    </th>
+                                                	<td colspan="3">
+	                                                    <div class="form-control-validation fv-plugins-icon-container">
+	                                                        <div class="d-flex flex-column flex-sm-row align-items-center justify-content-start w-100"
+	                                                             id="period">
+	                                                            <div class="mb-0 me-4 w-sm-100">
+	                                                                <div class="input-group input-group-merge">
+	                                                                    <input type="text"
+	                                                                           class="dt-datetime form-control flatpickr-input"
+	                                                                           placeholder="<spring:message code='table.header.stDt'/>"
+	                                                                           id="nttStartDt" name="nttStartDt" readonly>
+	                                                                    <span class="input-group-text cursor-pointer"
+	                                                                          onclick="$('#nttStartDt').focus();"><i
+	                                                                            class="icon-base bx bx-calendar"></i></span>
+	                                                                </div>
+	                                                            </div>
+	                                                            <div class="mb-0 me-sm-4 d-flex align-items-center align-self-sm-center">
+	                                                                <span class="form-label"><i
+	                                                                        class="icon-base bx bx-minus"></i></span>
+	                                                            </div>
+	                                                            <div class="mb-0 me-4 w-sm-100">
+	                                                                <div class="input-group input-group-merge">
+	                                                                    <input type="text"
+	                                                                           class="dt-datetime form-control flatpickr-input"
+	                                                                           placeholder="<spring:message code='table.header.endDt'/>"
+	                                                                           id="nttEndDt" name="nttEndDt" readonly>
+	                                                                    <span class="input-group-text cursor-pointer" 
+	                                                                    	  onclick="$('#nttEndDt').focus();"><i
+	                                                                            class="icon-base bx bx-calendar"></i></span>
+	                                                                </div>
+	                                                            </div>
+	                                                        </div>
+	                                                    </div>
+	                                                </td>
                                                 </tr>
                                                 <tr>
                                                     <th>
@@ -183,6 +222,25 @@
     $(function () {
         initFvNtt();
 
+        const nttStartDt = document.querySelector('#nttStartDt'),
+        nttEndDt = document.querySelector('#nttEndDt')
+        // Date
+        if (nttStartDt) {
+        	nttStartDt.flatpickr({
+                locale: "ko",
+                dateFormat: "Y-m-d",
+                monthSelectorType: "static",
+            });
+        }
+
+        if (nttEndDt) {
+        	nttEndDt.flatpickr({
+                locale: "ko",
+                dateFormat: "Y-m-d",
+                monthSelectorType: "static",
+            });
+        }
+        
         // 파일 삭제 버튼 이벤트 위임 (전역 설정)
         $(document).on('click', '.file-delete-btn', function() {
             const tempId = $(this).data('id');
@@ -244,6 +302,8 @@
 
             $('#nttId').val(data.nttId);
             $('#nttSj').val(data.nttSj);
+            $('#nttStartDt').val(data.nttStartDt);
+            $('#nttEndDt').val(data.nttEndDt);
 
             // 콘텐츠 내용 설정
             if (data.nttCn) {

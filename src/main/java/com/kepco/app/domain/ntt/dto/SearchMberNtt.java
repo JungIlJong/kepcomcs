@@ -25,6 +25,8 @@ public class SearchMberNtt {
         private String wrterNm;
         private String thumbUrl;
         private String frstRegistDt;
+        private String startDt;
+        private String endDt;
         private boolean secret;
         private boolean notice;
         private boolean reply;
@@ -39,6 +41,8 @@ public class SearchMberNtt {
         private String wrterNm;
         private String frstRegistDt;
         private String bbsNm;
+        private String startDt;
+        private String endDt;
         private boolean secret;
         private boolean notice;
         private boolean mine;

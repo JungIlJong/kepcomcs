@@ -46,10 +46,10 @@
       <div class="bid-tab-wrap">
         <ul class="recruit-tab">
           <li class="selected">
-            <a href="/open-manage/business-realname">실명제 개요</a>
+            <a href="/mber/open-manage/business-realname">실명제 개요</a>
           </li>
           <li>
-            <a href="/open-manage/realname-list">실명제 목록</a>
+            <a href="/mber/open-manage/realname-list">실명제 목록</a>
           </li>
         </ul>
       </div>

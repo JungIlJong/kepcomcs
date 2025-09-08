@@ -73,30 +73,39 @@
 	</select>
 	
 	<select id="getBoardList" parameterType="HashMap" resultType="HashMap">
+	<![CDATA[
 		SELECT 
 			A.NTT_ID AS board_no, 
-			A.BBS_ID,
+			A.BBS_ID AS bbsId,
 			EXISTS(SELECT 1 FROM VST_NTT D WHERE D.PARNTSCTT_ID = A.NTT_ID) PARNTSCTT_ID,
 			A.NTT_SJ AS board_title, 
-			A.RDCNT,
-            A.SECRET_AT,
-            A.NOTICE_AT,
+			A.RDCNT AS rdcnt,
+            A.SECRET_AT AS secret_at,
+            A.NOTICE_AT AS notice_at,
 			A.NTT_CN AS board_content, 
-			A.NTT_STTS AS board_status, 
+			DATE_FORMAT(A.NTT_START_DT,'%Y-%m-%d') AS ntt_start_dt,
+			DATE_FORMAT(A.NTT_END_DT,'%Y-%m-%d') AS ntt_end_dt,
+			CASE 
+		        WHEN CURDATE() < NTT_START_DT THEN '채용예정'
+		        WHEN CURDATE() BETWEEN NTT_START_DT AND NTT_END_DT THEN '채용중'
+		        WHEN CURDATE() > NTT_END_DT THEN '채용마감'
+		        ELSE '상태없음'
+		    END AS status,
 			DATE_FORMAT(A.FRST_REGIST_DT,'%Y-%m-%d') insert_dt,
 			A.FRST_REGISTER_ID AS insert_id, 
 			DATE_FORMAT(A.LAST_UPDT_DT,'%Y-%m-%d') update_dt,
 			A.LAST_UPDUSR_ID AS update_id,
 			(SELECT ATCH_FILE_ID FROM VST_ATCHFILE T WHERE T.UPPER_ID = A.NTT_ID ORDER BY ATCH_FILE_ID LIMIT 1) AS atch_file_id,
 			IFNULL(B.ORIGNL_FILE_NM, '') file_name,
-			C.FILE_DISPLAY_YN,
-			C.CARD_YN
+			C.FILE_DISPLAY_AT AS file_display_at,
+			C.CARD_AT AS card_at
 		FROM VST_NTT A  
 		LEFT OUTER JOIN VST_ATCHFILE B ON A.NTT_ID = B.UPPER_ID AND B.FILE_SE = 'thumb'
 		LEFT OUTER JOIN VST_BBS C ON A.BBS_ID = C.BBS_ID
 		WHERE 1 = 1
 		  AND A.BBS_ID = #{board_type}
 		  AND A.USE_AT = 'Y'
+	  ]]>
 	   <if test="sSearch != null and sSearch != ''">
 			  and (A.NTT_SJ like CONCAT('%', #{sSearch}, '%') 
 			  	or A.NTT_CN like CONCAT('%', #{sSearch}, '%')

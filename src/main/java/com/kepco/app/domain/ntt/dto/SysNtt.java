@@ -84,7 +84,17 @@ public class SysNtt {
      * 썸네일 URL
      */
     private String thumbUrl;
+    
+    /**
+     * 시작일
+     */
+    private String nttStartDt;
 
+    /**
+     * 종료일
+     */
+    private String nttEndDt;
+    
     /**
      * 최초등록자 ID
      */

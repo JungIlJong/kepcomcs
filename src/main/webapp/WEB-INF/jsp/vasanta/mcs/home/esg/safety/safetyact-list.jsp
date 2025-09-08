@@ -43,10 +43,9 @@
 			        'Content-Type': 'application/json' 
 			    },
 	         type: "POST",
-	         url: "/get/board/cardlistCount/7",
+	         url: "/get/board/list/7",
 	         dataType: "json", 
 	         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-	         data: JSON.stringify(form),
 	         success: function (data) {
 	         	if(parseInt(data.result))
 	     		{
@@ -54,7 +53,28 @@
 	        		$('#recordCount').text(iTotalRecord);
 	        		if(iTotalRecord > 0){
 	        			iDisplayStart = 0;
-	        			getBoardList(iDisplayStart);
+						iDisplayStart = iDisplayStart + data.data.length;
+		         		
+		         		var li_html = "";
+
+		         		for ( i = 0; i < data.data.length; i++) {
+		         			var ul_list = $("#ul_list"); //ul_list선언
+
+							li_html = li_html + "<a href='/mber/esg/safety/safetyact/bbs/7/detail?id=" + data.data[i].board_no +"'>";
+              				li_html = li_html +  "<p class='news-part'>MCS 안전활동</p>";
+							li_html = li_html +  "<p class='news-tit'>" + data.data[i].board_title + "</p>";
+							li_html = li_html + "<p class='news-date'>" + data.data[i].insert_dt + "</p>";
+							li_html = li_html + "</a>";
+		         			
+							$("#news_list_all").append("<li>"+li_html+"</li>"); //ul_list안쪽에 li추가
+
+		         			li_html = "";
+
+		         		}
+
+		         		if(iTotalRecord == iDisplayStart){
+							$("#btn_more").hide();
+			         	}
 	        		}else{
 	        			$("#btn_more").hide();
 		        	}
@@ -70,71 +90,6 @@
 	         	console.log(e);
 	         }
 	    });
-					
-	}
-
-	function getBoardList(){
-
-		if (iDisplayStart <= iTotalRecord){
-			console.log(iDisplayStart);
-			var form = {
-					board_type :  "7",
-					iDisplayStart :  iDisplayStart,
-					iDisplayLength : "8"
-			    };
-			form.sSearch = hashSearch();
-			$.ajax({
-				 headers: { 
-				        'Accept': 'application/json',
-				        'Content-Type': 'application/json' 
-				    },
-		         type: "POST",
-		         url: "/get/board/cardlist/7",
-		         dataType: "json", 
-		         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-		         data: JSON.stringify(form),
-		         success: function (data) {
-					console.log(data);
-		         	if(parseInt(data.result))
-		     		{
-		         		iDisplayStart = iDisplayStart + data.data.length;
-		         		
-		         		var li_html = "";
-
-		         		for ( i = 0; i < data.data.length; i++) {
-		         			var ul_list = $("#ul_list"); //ul_list선언
-
-							li_html = li_html + "<a href='/open-manage/recruit-view?board_no=" + data.data[i].board_no +"'>";
-              				li_html = li_html +  "<p class='news-part'>MCS 안전활동</p>";
-							li_html = li_html +  "<p class='news-tit'>" + data.data[i].board_title + "</p>";
-							li_html = li_html + "<p class='news-date'>" + data.data[i].insert_dt + "</p>";
-							li_html = li_html + "</a>";
-		         			
-							$("#news_list_all").append("<li>"+li_html+"</li>"); //ul_list안쪽에 li추가
-
-		         			li_html = "";
-
-		         		}
-
-		         		if(iTotalRecord == iDisplayStart){
-							$("#btn_more").hide();
-			         	}
-		         		
-		     		}
-		         	else
-		             {
-						alert("관리자에게 문의바랍니다.");
-						
-		             }
-		         },
-		         error: function (e) {
-		         	alert("관리자에게 문의바랍니다.");
-		         	console.log(e);
-		         }
-		    });
-		    
-		}
-		
 					
 	}
   </script>
@@ -180,11 +135,7 @@
   </div>  
 
   <script>
-
-    
     $("#footer").load("/resources/landing/include/footer.html");
-
   </script>
-
 </body>
 </html>

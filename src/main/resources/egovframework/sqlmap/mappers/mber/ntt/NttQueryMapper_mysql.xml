@@ -15,6 +15,8 @@
         <result property="mine" column="MINE" />
         <result property="anonymousWriter" column="ANONYMOUS_WRITER" />
         <result property="password" column="PASSWORD" />
+        <result property="startDt" column="START_DT" />
+        <result property="endDt" column="END_DT" />
         <association
                 property="replyDetail"
                 javaType="com.kepco.app.domain.ntt.dto.SearchMberNtt$ReplyDetail">
@@ -37,12 +39,68 @@
         </collection>
     </resultMap>
 
+    <select id="selectList" parameterType="HashMap" resultType="HashMap">
+        SELECT 
+			A.NTT_ID AS board_no, 
+			A.BBS_ID,
+			EXISTS(SELECT 1 FROM VST_NTT D WHERE D.PARNTSCTT_ID = A.NTT_ID) PARNTSCTT_ID,
+			A.NTT_SJ AS board_title, 
+			A.RDCNT,
+            A.SECRET_AT,
+            A.NOTICE_AT,
+			A.NTT_CN AS board_content, 
+			A.NTT_STTS AS board_status, 
+			DATE_FORMAT(A.FRST_REGIST_DT,'%Y-%m-%d') insert_dt,
+			A.FRST_REGISTER_ID AS insert_id, 
+			DATE_FORMAT(A.LAST_UPDT_DT,'%Y-%m-%d') update_dt,
+			A.LAST_UPDUSR_ID AS update_id,
+			(SELECT ATCH_FILE_ID FROM VST_ATCHFILE T WHERE T.UPPER_ID = A.NTT_ID ORDER BY ATCH_FILE_ID LIMIT 1) AS atch_file_id,
+			IFNULL(B.ORIGNL_FILE_NM, '') file_name,
+			C.FILE_DISPLAY_AT,
+			C.CARD_AT
+		FROM VST_NTT A  
+		LEFT OUTER JOIN VST_ATCHFILE B ON A.NTT_ID = B.UPPER_ID AND B.FILE_SE = 'thumb'
+		LEFT OUTER JOIN VST_BBS C ON A.BBS_ID = C.BBS_ID
+		WHERE 1 = 1
+		  AND A.BBS_ID = #{board_type}
+		  AND A.USE_AT = 'Y'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (A.NTT_SJ like CONCAT('%', #{sSearch}, '%') 
+			  	or A.NTT_CN like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		<if test="orderCol != null and orderCol != ''">
+			order by ${orderCol} ${sSortDir_0},A.NTT_ID desc
+		</if>
+		<!-- <if test="orderCol == null and orderCol == ''"> -->
+			order by A.NTT_ID desc
+		<!-- </if> -->
+		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
+			limit ${iDisplayStart}, ${iDisplayLength}
+		</if>
+    </select>
+    
+    <select id="selectListCount" parameterType="HashMap" resultType="Integer">
+		SELECT count(C.NTT_ID)
+		FROM (
+		SELECT A.NTT_ID
+		FROM VST_NTT A  LEFT OUTER JOIN VST_ATCHFILE B ON A.NTT_ID = B.UPPER_ID AND B.FILE_SE = 'ntt'
+		WHERE A.BBS_ID = #{board_type}
+		  AND A.USE_AT = 'Y'
+	   <if test="sSearch != null and sSearch != ''">
+		   and (A.NTT_SJ like CONCAT('%', #{sSearch}, '%') 
+			  	or A.NTT_CN like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		GROUP BY A.NTT_ID ) C
+	</select>
+
     <select
-            id="selectList"
+            id="selectNttList"
             parameterType="com.kepco.app.domain.ntt.dto.SearchMberNtt$Search"
             resultType="com.kepco.app.domain.ntt.dto.SearchMberNtt$NttInfo">
         SELECT
-            VN.NTT_ID ID,
+            VN.NTT_ID,
             VN.NTT_SJ,
             VN.WRTER_NM,
             VN.THUMB_URL,
@@ -144,6 +202,8 @@
             CAST(DATE_FORMAT(VN.FRST_REGIST_DT, '%Y-%m-%d') AS CHAR) AS FRST_REGIST_DT,
             VN.WRTER_NM,
             (VN.RDCNT + 1) RDCNT,
+            VN.START_DT,
+            VN.END_DT,
             IF(VN.NOTICE_AT = 'Y', TRUE, FALSE)       AS NOTICE,
             IF(VN.FRST_REGISTER_ID IS NULL, TRUE, FALSE) ANONYMOUS_WRITER,
             VA.ATCH_FILE_ID,

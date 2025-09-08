@@ -13,8 +13,8 @@
         <result column="USE_AT" property="useAt" />
         <result column="REPLY_AT" property="replyAt" />
         <result column="PERM_EXTSN" property="permExtsn" />
-        <result column="FILE_DISPLAY_YN" property="fileDisplayYn" />
-        <result column="CARD_YN" property="cardYn" />
+        <result column="FILE_DISPLAY_AT" property="fileDisplayAt" />
+        <result column="CARD_AT" property="cardAt" />
         <collection  property="roles" ofType="string" javaType="List">
             <result column="AUTHRT_ID" property="authrtId" />
             <result column="AUTHOR_LIST" property="authorList" />
@@ -32,8 +32,8 @@
             USE_AT,
             REPLY_AT,
             PERM_EXTSN,
-            FILE_DISPLAY_YN,
-            CARD_YN,
+            FILE_DISPLAY_AT,
+            CARD_AT,
             FRST_REGISTER_ID,
             FRST_REGIST_DT
         ) VALUES (
@@ -59,8 +59,8 @@
             </otherwise>
         </choose>
             #{permExtsn},
-            #{fileDisplayYn},
-            #{cardYn},
+            #{fileDisplayAt},
+            #{cardAt},
             #{frstRegisterId},
             NOW()
         )
@@ -99,12 +99,12 @@
             PERM_EXTSN = #{permExtsn},
         <choose>
             <when test="bbsTyCode == 'BBS_DEFAULT'">
-	            FILE_DISPLAY_YN = #{fileDisplayYn},
-	            CARD_YN = #{cardYn},
+	            FILE_DISPLAY_AT = #{fileDisplayAt},
+	            CARD_AT = #{cardAt},
             </when>
             <otherwise>
-	            FILE_DISPLAY_YN = 'N',
-	            CARD_YN = 'N',
+	            FILE_DISPLAY_AT = 'N',
+	            CARD_AT = 'N',
             </otherwise>
         </choose>    
             LAST_UPDUSR_ID = #{lastUpdusrId},
@@ -186,8 +186,8 @@
             A.SECRET_USE_AT,
             A.USE_AT,
             A.REPLY_AT,
-            A.FILE_DISPLAY_YN,
-            A.CARD_YN,
+            A.FILE_DISPLAY_AT,
+            A.CARD_AT,
             REPLACE(PERM_EXTSN, ' ', '') PERM_EXTSN,
             B.AUTHRT_ID,
             B.AUTHOR_LIST

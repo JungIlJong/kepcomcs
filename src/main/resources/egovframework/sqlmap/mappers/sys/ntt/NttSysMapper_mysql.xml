@@ -26,6 +26,8 @@
         <result column="REPLY_DT" property="replyDt" />
         <result column="REPORT_IDS" property="reportIds" />
         <result column="BLOCK_IDS" property="blockIds" />
+        <result column="NTT_START_DT" property="nttStartDt" />
+        <result column="NTT_END_DT" property="nttEndDt" />
         <collection  property="files" ofType="Map" javaType="List">
             <result column="ATCH_FILE_ID" property="atchFileId" />
             <result column="ORIGNL_FILE_NM" property="orignlFileNm" />
@@ -91,6 +93,8 @@
             <if test="thumbUrl != null">
             THUMB_URL,
             </if>
+            NTT_START_DT,
+            NTT_END_DT,
             FRST_REGISTER_ID,
             FRST_REGIST_DT
         )   VALUES (
@@ -127,6 +131,8 @@
         <if test="thumbUrl != null">
             #{thumbUrl},
         </if>
+        	CASE WHEN #{nttStartDt} = '' OR #{nttStartDt} IS NULL THEN NULL ELSE '' END,
+        	CASE WHEN #{nttEndDt} = '' OR #{nttEndDt} IS NULL THEN NULL ELSE '' END,
             #{frstRegisterId},
             NOW()
         )
@@ -145,6 +151,12 @@
             NTT_CN = #{nttCn},
         <if test="secretAt != null">
             SECRET_AT = #{secretAt},
+        </if>
+        <if test="nttStartDt != null">
+            NTT_START_DT = #{nttStartDt},
+        </if>
+        <if test="nttEndDt != null">
+            NTT_END_DT = #{nttEndDt},
         </if>
         <choose>
             <when test='noticeAt != null and noticeAt == "Y"'>
@@ -197,6 +209,8 @@
             A.NOTICE_AT,
             A.USE_AT,
             A.WRTER_NM,
+            A.NTT_START_DT,
+            A.NTT_END_DT,
             A.FRST_REGISTER_ID,
             DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d') FRST_REGIST_DT,
             B.BBS_NM,
@@ -272,6 +286,8 @@
             A.NOTICE_AT,
             A.USE_AT,
             A.WRTER_NM,
+            DATE_FORMAT(A.NTT_START_DT, '%Y-%m-%d') AS NTT_START_DT,
+            DATE_FORMAT(A.NTT_END_DT, '%Y-%m-%d') AS NTT_END_DT,
             A.FRST_REGISTER_ID,
             DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d %H:%i') FRST_REGIST_DT,
             A.LAST_UPDUSR_ID,

@@ -33,29 +33,42 @@
 		})
 	
 	function getBoardSet(){
-
-		var form = {
-		        board_type : 5
-		};
-		form.sSearch = hashSearch();
 		$.ajax({
 			 headers: { 
 			        'Accept': 'application/json',
 			        'Content-Type': 'application/json' 
 			    },
 	         type: "POST",
-	         url: "/get/board/cardlistCount/5",
+	         url: "/get/board/list/1316",
 	         dataType: "json", 
 	         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-	         data: JSON.stringify(form),
 	         success: function (data) {
 	         	if(parseInt(data.result))
 	     		{
 	        		iTotalRecord = data.recordsTotal;
 	        		$('#recordCount').text(iTotalRecord);
 	        		if(iTotalRecord > 0){
-	        			iDisplayStart = 0;
-	        			getBoardList(iDisplayStart);
+						iDisplayStart = iDisplayStart + data.data.length;
+		         		
+		         		var li_html = "";
+		         		for ( i = 0; i < data.data.length; i++) {
+		         			var ul_list = $("#ul_list"); //ul_list선언
+
+							li_html = li_html + "<a href='/mber/open-manage/recruit-view?board_no=" + data.data[i].board_no +"'>";
+              				li_html = li_html +  "<p class='news-part'>" + data.data[i].status + "</p>";
+							li_html = li_html +  "<p class='news-tit'>" + data.data[i].board_title + "</p>";
+							li_html = li_html + "<p class='news-date'>기간 : " + data.data[i].ntt_start_dt + "~" + data.data[i].ntt_end_dt + "</p>";
+							li_html = li_html + "</a>";
+		         			
+							$("#news_list_all").append("<li>"+li_html+"</li>"); //ul_list안쪽에 li추가
+
+		         			li_html = "";
+
+		         		}
+
+		         		if(iTotalRecord == iDisplayStart){
+							$("#btn_more").hide();
+			         	}
 	        		}
 	     		}
 	         	else
@@ -152,7 +165,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/open-manage/public-notice">열린경영</a>
+          <a href="/mber/open-manage/public-notice">열린경영</a>
         </li>
         <li>채용정보</li>
       </ul>
@@ -161,10 +174,10 @@
       <div class="recruit-intro">
         <ul class="recruit-tab">
           <li>
-            <a href="/open-manage/talented-person">인재상</a>
+            <a href="/mber/open-manage/talented-person">인재상</a>
           </li>
           <li class="selected">
-            <a href="/open-manage/recruit-list">채용공고</a>
+            <a href="/mber/open-manage/recruit-list">채용공고</a>
           </li>
         </ul>
         <div class="recruit-desc">

@@ -171,13 +171,13 @@
                                                         <div class="d-flex justify-content-start" id="sttsCd">
                                                             <div class="form-check mb-0 me-4 me-lg-12">
                                                                 <input class="form-check-input" type="radio"
-                                                                       name="fileDisplayYn" id="fileDisplayY" value="Y">
+                                                                       name="fileDisplayAt" id="fileDisplayY" value="Y">
                                                                 <label class="form-check-label"
                                                                        for="fileDisplayY">예</label>
                                                             </div>
                                                             <div class="form-check mb-0 me-4 me-lg-12">
                                                                 <input class="form-check-input" type="radio"
-                                                                       name="fileDisplayYn" id="fileDisplayN" value="N" checked>
+                                                                       name="fileDisplayAt" id="fileDisplayN" value="N" checked>
                                                                 <label class="form-check-label"
                                                                        for="fileDisplayN">아니오</label>
                                                             </div>
@@ -188,13 +188,13 @@
                                                         <div class="d-flex justify-content-start" id="sttsCd">
                                                             <div class="form-check mb-0 me-4 me-lg-12">
                                                                 <input class="form-check-input" type="radio"
-                                                                       name="cardYn" id="cardY" value="Y">
+                                                                       name="cardAt" id="cardY" value="Y">
                                                                 <label class="form-check-label"
                                                                        for="cardY">예</label>
                                                             </div>
                                                             <div class="form-check mb-0 me-4 me-lg-12">
                                                                 <input class="form-check-input" type="radio"
-                                                                       name="cardYn" id="cardN" value="N" checked>
+                                                                       name="cardAt" id="cardN" value="N" checked>
                                                                 <label class="form-check-label"
                                                                        for="cardN">아니오</label>
                                                             </div>

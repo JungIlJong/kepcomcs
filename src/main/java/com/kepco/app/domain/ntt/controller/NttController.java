@@ -57,7 +57,8 @@ public class NttController {
     	String url = "mber/ntt/default/list";
     	switch (type) {
     		case "BBS_DEFAULT":
-    			url = "mber/ntt/default/list";
+    			if (bbs.getCardAt().equals("Y")) url = "mber/ntt/card/list";
+    			else url = "mber/ntt/default/list";
     			break;
     		case "BBS_ALBUM":
     			url = "mber/ntt/album/list";
@@ -69,6 +70,8 @@ public class NttController {
     			url = "mber/ntt/download/list";
     			break;
     	}	
+    	model.addAttribute("fileDisplayAt", bbs.getFileDisplayAt());
+    	model.addAttribute("cardAt", bbs.getCardAt());
     	model.addAttribute("bbsId", bbsId);
         return url;
     }

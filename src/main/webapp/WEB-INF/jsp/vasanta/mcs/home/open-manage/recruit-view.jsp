@@ -26,128 +26,76 @@
     <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
     <script type="text/javascript">
 
-        var board_type = "5";
+        var board_type = "1316";
+        var board_no = <%=request.getParameter("board_no") %>;
         $(document).ready(function () {
             setMainTable();
             setNextPrev();
         })
 
         function setMainTable() {
-
-            var form = {
-                board_type: board_type,
-                board_no:  <%=request.getParameter("board_no") %>
-            };
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                url: "/get/news/view", // 요청 할 주소
-                async: true,// false 일 경우 동기 요청으로 변경
-                type: 'POST', // GET, PUT
-                dataType: 'json',// xml, json, script, html
-                data: JSON.stringify(form),
-                success: function (data) {
-                    request = data;
-                    console.log(request.data);
-                    if (parseInt(request.result)) {
-                        if (request.data) {
-                            //var requestJson = JSON.parse(request);
-                            if (request.result == "1") {
-                                $('#news-view-title').text(request.data[0].board_title);
-                                $('#news-insert-dt').text(request.data[0].insert_dt);
-                                if (request.data[0].detail_img_file_name != null && request.data[0].detail_img_file_name != "" && request.data[0].detail_img_file_name != "undefined") {
-                                    $("#news-view-photo").show();
-                                    var pHtml = "";
-                                    var detail_img_list = request.data[0].detail_img_file_name.split(",");
-                            if (detail_img_list.length > 0) {
-                                        for (var i = 0; i < detail_img_list.length; i++) {
-                                            pHtml += '<img src="/api/file/fileDown?file_name=' + encodeURI(detail_img_list[i]) + '">';
-                                        }
-                                        $('#news-view-photo').html(pHtml);
-                                    }
-                                } else {
-                                    $("#news-view-photo").hide();
-                                }
-
-                                if (request.data[0].file_name != null && request.data[0].file_name != "" && request.data[0].file_name != "undefined") {
-
-                                    $('#file-download-url').attr('href', '/api/file/fileDown?file_name=' + encodeURI(request.data[0].file_name));
-                                    $('#file-name').text(request.data[0].file_name);
-
-                                } else {
-                                    $('#filelist').css('display', 'none');
-
-                                    var pHtml = "";
-                                    if (request.fileList.length > 0) {
-
-                                        for (var i = 0; i < request.fileList.length; i++) {
-                                            pHtml += "<p><a href='" + "/api/file/fileDown?file_name=" + encodeURI(request.fileList[i].file_name) + "'>"
-                                            pHtml += "<span>" + request.fileList[i].file_name + "</span></p>"
-                                        }
-                                        $('#div_filelist').html(pHtml);
-                                    }
-
-                                }
-                                $('#news-view-desc').html(request.data[0].board_content.replace(/\n/g, '<br/>'));
-                            }
-                        }
-                    }
-                },// 요청 완료 시
-                error: function (jqXHR) {
-                    alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")
-                },// 요청 실패.
-                complete: function (jqXHR) {
-                }// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
-            });
-        }
-
-        function setNextPrev() {
-
-            var form = {
-                board_type: board_type,
-                board_no:  <%=request.getParameter("board_no") %>
-            };
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                url: "/get/news/nextprev", // 요청 할 주소
-                async: true,// false 일 경우 동기 요청으로 변경
-                type: 'POST', // GET, PUT
-                dataType: 'json',// xml, json, script, html
-                data: JSON.stringify(form),
-                success: function (data) {
-                    request = data;
-                    if (parseInt(request.result)) {
-                        if (request.data) {
-                            if (request.result == "1") {
-                                $("#prev_post_href").prop("disabled", true);
-                                $("#next_post_href").prop("disabled", true);
-                                for (i = 0; i < request.data.length; i++) {
-                                    if (request.data[i].view_type == "prev") {
-                                        $('#prev_post').text(request.data[i].board_title);
-                                        $("#prev_post_href").attr("href", "/open-manage/recruit-view?board_no=" + request.data[i].board_no);
-                                    } else {
-                                        $('#next_post').text(request.data[i].board_title);
-                                        $("#next_post_href").attr("href", "/open-manage/recruit-view?board_no=" + request.data[i].board_no);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },// 요청 완료 시
-                error: function (jqXHR) {
-                    alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")
-                },// 요청 실패.
-                complete: function (jqXHR) {
-                }// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
-            });
-
-
-        }
+			$.ajax({
+				headers: { 
+				        'Accept': 'application/json',
+				        'Content-Type': 'application/json' 
+				},
+				url:"/get/board/view?nttId="+board_no,
+			    async:true,// false 일 경우 동기 요청으로 변경
+			    type:'GET', // GET, PUT
+			    dataType:'json',// xml, json, script, html
+			    success:function(data) {
+					$('#news-view-title').text(data.nttSj);
+					$('#news-insert-dt').text(data.frstRegistDt);
+	
+					$('#news-view-desc').html(decodeHtml(data.nttCn).replace(/\n/g, '<br/>'));
+	
+					if (data.files.length > 0) {
+					    let node = '';
+					    for (let i = 0; i < data.files.length; i++) {
+					        node += '<p><a href="/file/download?fileId=' + data.files[i].atchFileId + '">';
+					        node += '<span>' + data.files[i].orignlFileNm + '</span></a></p>'
+					    }
+					    $('#div_filelist').html(node);
+					}
+				},// 요청 완료 시
+			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
+			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+			});
+		}
+	
+		function decodeHtml(html) {
+			  return $('<textarea/>').html(html).text();
+		}
+		
+		function setNextPrev() {
+			$.ajax({
+				headers: { 
+				        'Accept': 'application/json',
+				        'Content-Type': 'application/json' 
+				},
+				url:"/api/mber/bbs/"+board_type+"/side?nttId="+board_no,
+			    async:true,// false 일 경우 동기 요청으로 변경
+			    type:'GET', // GET, PUT
+			    dataType:'json',// xml, json, script, html
+			    success:function(data) {
+					$("#prev_post_href").prop("disabled", true);
+					$("#next_post_href").prop("disabled", true);
+					for (i=0; i < data.length; i++){
+						if(data[i].viewType == "prev"){
+							$('#prev_post').text(data[i].nttSj);
+							$("#prev_post_href").attr("href",  "recruit-view?board_no=" + data[i].nttId);
+						}else{
+							$('#next_post').text(data[i].nttSj);
+							$("#next_post_href").attr("href", "recruit-view?board_no=" + data[i].nttId);
+						}
+					}
+				},// 요청 완료 시
+			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
+			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+			});
+	
+	
+		}
     </script>
 </head>
 <body id="mcsPage">
@@ -164,7 +112,7 @@
                 <a href="/">Home</a>
             </li>
             <li>
-                <a href="/open-manage/public-notice">열린경영</a>
+                <a href="/mber/open-manage/public-notice">열린경영</a>
             </li>
             <li>채용정보</li>
         </ul>
@@ -173,10 +121,10 @@
         <div class="recruit-intro">
             <ul class="recruit-tab">
                 <li>
-                    <a href="/open-manage/talented-person">인재상</a>
+                    <a href="/mber/open-manage/talented-person">인재상</a>
                 </li>
                 <li class="selected">
-                    <a href="/open-manage/recruit-list">채용공고</a>
+                    <a href="/mber/open-manage/recruit-list">채용공고</a>
                 </li>
             </ul>
         </div>
@@ -196,22 +144,14 @@
                     </div>
                 </li>
                 <li>
-                    <div class="news-view-photo" id="news-view-photo">
-                        <img src="/resources/landing/images/manage/new_sample.jpg">
-                    </div>
+                    <div class="news-view-photo" id="news-view-photo"></div>
                     <div class="news-view-desc" id="news-view-desc">
                     </div>
-                    <div class="addfile-row" id="div_filelist">
-                        <p id="filelist">
-                            <a id="file-download-url">
-                                <span id="file-name"></span>
-                            </a>
-                        </p>
-                    </div>
+                    <div class="addfile-row" id="div_filelist"></div>
                 </li>
             </ul>
             <div class="btn-row-right">
-                <a href="/open-manage/recruit-list">
+                <a href="/mber/open-manage/recruit-list">
                     <button class="btn-list">목록</button>
                 </a>
             </div>

@@ -28,7 +28,7 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
 	
-		var board_type = "11";
+		var board_type = "1317";
 		$(function() {
 			setMainTable();
 		})
@@ -89,12 +89,10 @@
 												"data" : "file_name",
 												"sWidth" : '10%',
 												"render" : function(data, type, row, meta) {
-
+console.log(row.atch_file_id);
 													var return_val = "";
-													if (row.file_name != ""  && row.file_name != "undefined" && row.file_name != null){
-														return_val = "<a href='/api/file/fileDown?file_name="+encodeURI(row.file_name)+"' class='down_data' download></a>";
-													}else if (row.file_name2 != ""  && row.file_name2 != "undefined" && row.file_name2 != null){
-														return_val = "<a href='/api/file/fileDown?file_name="+encodeURI(row.file_name2)+"' class='down_data' download></a>";
+													if (row.atch_file_id != ""  && row.atch_file_id != "undefined" && row.atch_file_id != null){
+														return_val = "<a href='/file/download?fileId="+row.atch_file_id+"' class='down_data' download></a>";
 													}else{
 														return_val = "";
 													}
@@ -178,7 +176,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/open-manage/public-notice">열린경영</a>
+          <a href="/mber/open-manage/public-notice">열린경영</a>
         </li>
         <li>사업실명제</li>
       </ul>
@@ -187,10 +185,10 @@
       <div class="bid-tab-wrap">
         <ul class="recruit-tab">
           <li>
-            <a href="/open-manage/business-realname">실명제 개요</a>
+            <a href="/mber/open-manage/business-realname">실명제 개요</a>
           </li>
           <li class="selected">
-            <a href="/open-manage/realname-list">실명제 목록</a>
+            <a href="/mber/open-manage/realname-list">실명제 목록</a>
           </li>
         </ul>
       </div>

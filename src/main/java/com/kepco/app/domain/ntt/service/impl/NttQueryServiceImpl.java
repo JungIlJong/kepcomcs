@@ -28,13 +28,23 @@ public class NttQueryServiceImpl extends EgovAbstractServiceImpl implements NttQ
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Map<String, Object> selectList(SearchMberNtt.Search req) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        PaginationInfo paginationInfo = SearchUtil.init(req);
-        resultMap.put("data", nttQueryMapper.selectList(req));
-        paginationInfo.setTotalRecordCount(nttQueryMapper.selectTotCnt(req));
-        resultMap.put("paginationInfo", paginationInfo);
-        return resultMap;
+    public List<HashMap<String, Object>> selectList(HashMap<String, Object> body) {
+        return nttQueryMapper.selectList(body);
+    }
+
+    @Override
+    public Integer selectListCount(HashMap<String, Object> body) {
+    	return nttQueryMapper.selectListCount(body);
+    }
+    
+    @Override
+    public Map<String, Object> selectNttList(SearchMberNtt.Search req) {
+    	Map<String, Object> resultMap = new HashMap<String, Object>();
+    	PaginationInfo paginationInfo = SearchUtil.init(req);
+    	resultMap.put("data", nttQueryMapper.selectNttList(req));
+    	paginationInfo.setTotalRecordCount(nttQueryMapper.selectTotCnt(req));
+    	resultMap.put("paginationInfo", paginationInfo);
+    	return resultMap;
     }
 
     @Override
