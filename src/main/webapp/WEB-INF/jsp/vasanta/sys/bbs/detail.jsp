@@ -61,7 +61,7 @@
             }
 
             $(`#bbsTyCode > option[value='${"${bbs.bbsTyCode}"}']`).attr("selected", "true");
-            bbs.fileDisplayAt === 'Y' ? $('#fileDisplayY').prop('checked', true) : $('#fileDisplayN').prop('checked', true)
+            bbs.fileAt === 'Y' ? $('#fileY').prop('checked', true) : $('#fileN').prop('checked', true)
             bbs.cardAt === 'Y' ? $('#cardY').prop('checked', true) : $('#cardN').prop('checked', true)
             bbs.useAt === 'Y' ? $('#useY').prop('checked', true) : $('#useN').prop('checked', true)
 			bbs.bbsTyCode === 'BBS_DEFAULT' ? $('#defaultBbs').show() : $('#defaultBbs').hide();
@@ -204,20 +204,20 @@
                                                     </td>
                                                 </tr>
                                                 <tr id="defaultBbs" style="display:none;">
-                                                    <th>첨부파일<br/>표시여부<span class="text-danger ms-1">*</span></th>
+                                                    <th>첨부파일<br/>필수여부<span class="text-danger ms-1">*</span></th>
                                                     <td>
                                                         <div class="d-flex justify-content-start" id="sttsCd">
                                                             <div class="form-check mb-0 me-4 me-lg-12">
                                                                 <input class="form-check-input" type="radio"
-                                                                       name="fileDisplayAt" id="fileDisplayY" value="Y">
+                                                                       name="fileAt" id="fileY" value="Y">
                                                                 <label class="form-check-label"
-                                                                       for="fileDisplayY">예</label>
+                                                                       for="fileY">예</label>
                                                             </div>
                                                             <div class="form-check mb-0 me-4 me-lg-12">
                                                                 <input class="form-check-input" type="radio"
-                                                                       name="fileDisplayAt" id="fileDisplayN" value="N" checked>
+                                                                       name="fileAt" id="fileN" value="N" checked>
                                                                 <label class="form-check-label"
-                                                                       for="fileDisplayN">아니오</label>
+                                                                       for="fileN">아니오</label>
                                                             </div>
                                                         </div>
                                                     </td>

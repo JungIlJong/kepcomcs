@@ -31,9 +31,8 @@
   <script type="text/javascript">
   
 	var bbsId = "${bbsId}";
-	var fileDisplayAt = "${fileDisplayAt}";
 	var cardAt = "${cardAt}";
-	$(document).ready(function () { alert(fileDisplayAt); alert(cardAt);
+	$(document).ready(function () {
 		setMainTable();
 	})
 	

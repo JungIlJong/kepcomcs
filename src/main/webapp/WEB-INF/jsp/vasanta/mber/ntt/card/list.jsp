@@ -72,10 +72,13 @@
 
 		         		for ( i = 0; i < data.data.length; i++) {
 		         			var ul_list = $("#ul_list"); //ul_list선언
+		         			let decoded = decodeHtmlEntities(data.data[i].board_title);
+					    	decoded = decodeHtmlEntities(decoded);
+					    	
 		         			var rawContent = decodeHtmlEntities(data.data[i].board_content); 
 		         			var content = rawContent.replace(/<[^>]+>/g, ''); 
 							li_html = li_html + "<a href='detail?id=" + data.data[i].board_no +"'>";
-              				li_html = li_html +  "<p class='news-tit'>" + data.data[i].board_title + "</p>";
+              				li_html = li_html +  "<p class='news-tit'>" + decoded + "</p>";
 							li_html = li_html +  "<p class='news-desc'>" + content + "</p>";
 							li_html = li_html + "<p class='news-date' style='margin-top:15px;'>" + data.data[i].insert_dt + "</p>";
 							li_html = li_html + "</a>";

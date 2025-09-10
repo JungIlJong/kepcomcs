@@ -89,7 +89,6 @@
 												"data" : "file_name",
 												"sWidth" : '10%',
 												"render" : function(data, type, row, meta) {
-console.log(row.atch_file_id);
 													var return_val = "";
 													if (row.atch_file_id != ""  && row.atch_file_id != "undefined" && row.atch_file_id != null){
 														return_val = "<a href='/file/download?fileId="+row.atch_file_id+"' class='down_data' download></a>";

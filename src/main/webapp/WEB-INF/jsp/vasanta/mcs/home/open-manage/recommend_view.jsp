@@ -29,7 +29,8 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 <script type="text/javascript">
 	
-		var board_type = "31";
+		var board_type = "1318";
+		var board_no = <%=request.getParameter("board_no") %>;
 		$(document).ready(function () {
 			setMainTable();
 			setNextPrev();
@@ -37,88 +38,70 @@
 		
 		function setMainTable() {
 			
-			var form = {
-					board_type :  board_type,
-					board_no :  <%=request.getParameter("board_no") %>
-			    };
 			$.ajax({
 				headers: { 
 				        'Accept': 'application/json',
 				        'Content-Type': 'application/json' 
 				},
-			    url:"/get/news/view", // 요청 할 주소
+			    url:"/get/board/view?nttId="+board_no, // 요청 할 주소
 			    async:true,// false 일 경우 동기 요청으로 변경
-			    type:'POST', // GET, PUT
+			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html
-		        data: JSON.stringify(form),
 			    success:function(data) {
 					request = data;
-					if(parseInt(request.result))
-					{
-						if(request.data)
-						{
-							//var requestJson = JSON.parse(request);
-							if(request.result == "1")
-							{
-								$('#news-view-title').text(request.data[0].board_title);
-								$('#news-insert-dt').text(request.data[0].insert_dt);
-								$('#news-view-desc').html(request.data[0].board_content.replace(/\n/g, '<br/>'));
-								if(request.fileList.length > 0){
-									//$('#filelist').css('display', 'none');
-									var pHtml = "";
-									for(var i =0; i < request.fileList.length; i++){
-										pHtml += "<p><a href='" + "/api/file/fileDown?file_name=" + encodeURI(request.fileList[i].file_name)  + "'>"
-										pHtml += "<span>" + request.fileList[i].file_name + "</span></p>"
-									}
-									$('#div_filelist').html(pHtml);
-								}
-
-
-							}
+					console.log(data);
+					let decoded = decodeHtmlEntities(data.nttSj);
+			    	decoded = decodeHtmlEntities(decoded);
+			    	
+					$('#news-view-title').text(decoded);
+					$('#news-insert-dt').text(data.frstRegistDt);
+					$('#news-view-desc').html(decodeHtml(data.nttCn).replace(/\n/g, '<br/>'));
+					if(data.files.length > 0){
+						//$('#filelist').css('display', 'none');
+						var pHtml = "";
+						for(var i =0; i < data.files.length; i++){
+							pHtml += "<p><a href='" + "/file/download?fileId=" + data.files[i].atchFileId  + "'>"
+							pHtml += "<span>" + data.files[i].orignlFileNm + "</span></p>"
 						}
+						$('#div_filelist').html(pHtml);
 					}
 				},// 요청 완료 시
 			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
 			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
 			});
 		}
+		
+		function decodeHtmlEntities(str) {
+			  const txt = document.createElement('textarea');
+			  txt.innerHTML = str;
+			  return txt.value;
+			}
+
+			function decodeHtml(html) {
+				  return $('<textarea/>').html(html).text();
+			}
 
 		function setNextPrev() {
 			
-			var form = {
-					board_type :  board_type,
-					board_no :  <%=request.getParameter("board_no") %>
-			    };
 			$.ajax({
 				headers: { 
 				        'Accept': 'application/json',
 				        'Content-Type': 'application/json' 
 				},
-			    url:"/get/news/nextprev", // 요청 할 주소
+			    url:"/api/mber/bbs/"+board_type+"/side?nttId="+board_no,
 			    async:true,// false 일 경우 동기 요청으로 변경
-			    type:'POST', // GET, PUT
+			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html
-		        data: JSON.stringify(form),
 			    success:function(data) {
-					request = data;
-					if(parseInt(request.result))
-					{
-						if(request.data)
-						{
-							if(request.result == "1")
-							{
-								$("#prev_post_href").prop("disabled", true);
-								$("#next_post_href").prop("disabled", true);
-								for (i=0; i < request.data.length; i++){
-									if(request.data[i].view_type == "prev"){
-										$('#prev_post').text(request.data[i].board_title);
-										$("#prev_post_href").attr("href", "/customer/localproduct_view?board_no=" + request.data[i].board_no);
-									}else{
-										$('#next_post').text(request.data[i].board_title);
-										$("#next_post_href").attr("href", "/customer/localproduct_view?board_no=" + request.data[i].board_no);
-									}
-								}
-							}
+					$("#prev_post_href").prop("disabled", true);
+					$("#next_post_href").prop("disabled", true);
+					for (i=0; i < data.length; i++){
+						if(data[i].viewType == "prev"){
+							$('#prev_post').text(data[i].nttSj);
+							$("#prev_post_href").attr("href", "recommend_view?board_no=" + data[i].nttId);
+						}else{
+							$('#next_post').text(data[i].nttSj);
+							$("#next_post_href").attr("href", "recommend_view?board_no=" + data[i].nttId);
 						}
 					}
 				},// 요청 완료 시
@@ -140,10 +123,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/open-manage/public-notice">열린경영</a>
+        <a href="/mber/open-manage/public-notice">열린경영</a>
       </li>
       <li>
-        <a href="/open-manage/public-notice">경영공시</a>
+        <a href="/mber/open-manage/public-notice">경영공시</a>
       </li>
       <li>임원추천위원회</li>
     </ul>
@@ -182,7 +165,7 @@
           </li>
         </ul>
         <div class="btn-row-right">
-          <a href="/open-manage/recommend_list">
+          <a href="/mber/open-manage/recommend_list">
             <button class="btn-list">목록</button>
           </a>
         </div>

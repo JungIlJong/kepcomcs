@@ -30,7 +30,6 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/sh-common.css">
 <script type="text/javascript">
 	
-		var board_type = "24";
 		$(function() {
 			setMainTable();
 		})
@@ -58,14 +57,10 @@
 							        },
 							    },
 								bServerSide : true,
-								sAjaxSource : "/get/board/list/"+board_type,
+								sAjaxSource : "/get/board/list/1321",
 								sServerMethod : "POST",
 								//POST 파라미터 추가 (게시판명 추가) 
 								fnServerParams : function(aoData) {
-									/* aoData.push({
-										"name" : "sSearch",
-										"value" : $('#TbtechSearchBox').val()
-									}); */
 								},
 										
 										columns : [
@@ -84,16 +79,16 @@
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
 	
-													return "<a href='/open-manage/punish_view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
+													return "<a href='/mber/open-manage/punish_view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 												}
 											},
 											{
-												"data" : "file_name2",
+												"data" : "atch_file_id",
 												"sWidth" : '10%',
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
 													
-													if(row.file_name2 != null && row.file_name2 != ""){
+													if(row.atch_file_id != null && row.atch_file_id != ""){
 														return "<img style='width:20px;' src='/resources/landing/images/manage/ico_pdf_over.png'/>";
 													}else{
 														return "";														

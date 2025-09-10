@@ -28,8 +28,6 @@ public class CustomerViewController {
      */
     @GetMapping("/press-view")
     public String customer_pressview(Model model, HttpServletRequest request) {
-        model.addAttribute("board_type", "2");
-        model.addAttribute("board_no", request.getParameter("board_no"));
         return "/mcs/home/customer/press-view";
     }
 

@@ -118,6 +118,7 @@
                                     <input id="fileAtchSize" name="fileAtchSize" type="hidden" value=""/>
                                     <input id="fileAtchCo" name="fileAtchCo" type="hidden" value=""/>
                                     <input id="permExtsn" name="permExtsn" type="hidden" value=""/>
+                                    <input id="fileAt" name="fileAt" type="hidden" value=""/>
                                     <form id="frm">
                                         <div class="table-responsive text-nowrap">
                                             <table class="table table-bordered">
@@ -170,7 +171,7 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <tr id="periodTr" style="display:none;">
                                                 	<th>
                                                         <label class="form-label" for="period">
                                                             <spring:message code="ntt.period"/>
@@ -222,7 +223,7 @@
                                                 <tr>
                                                     <th>
                                                         <label class="form-label" for="files"><spring:message
-                                                                code="atchfile"/></label>
+                                                                code="atchfile"/><span id ="fileRequired" class="text-danger ms-1" style="display:none;">*</span></label>
                                                     </th>
                                                     <td colspan="3">
                                                         <div class="form-control-validation fv-plugins-icon-container">
@@ -331,17 +332,27 @@
         document.getElementById('bbsId').addEventListener('change', function () {
             const selectedBbsId = this.value;
             const bbs = bbsList.find(item => item.bbsId == selectedBbsId);
-
+console.log(bbs);
             if (bbs) {
                 document.getElementById('fileAtchSize').value = bbs.fileAtchSize;
                 document.getElementById('fileAtchCo').value = bbs.fileAtchCo;
                 document.getElementById('permExtsn').value = bbs.permExtsn;
+                document.getElementById('fileAt').value = bbs.fileAt;
 
                 document.getElementById('files').value = '';
-
-                if (fvNttInstance) {
-                    fvNttInstance.revalidateField('files');
+                
+                if (bbs.fileAt === 'Y') {
+                	$("#fileRequired").show();
+                } else {
+                	$("#fileRequired").hide();
                 }
+            }
+            
+            if (selectedBbsId === '1316') {
+            	$("#periodTr").show();
+            } else {
+            	$("#periodTr").hide();
+            	$("#nttStartDt, #nttEndDt").val("");
             }
         });
 
@@ -381,6 +392,25 @@
                 }
             });
         });
+        
+        <%-- 기간 변경 시 이벤트 --%>
+		$("#nttStartDt, #nttEndDt").on("change", function() {
+		    var nttStartDt = $("#nttStartDt").val();
+		    var nttEndDt = $("#nttEndDt").val();
+		
+		    if (nttStartDt && nttEndDt) {
+		        // 문자열 → Date 객체 변환
+		        var start = new Date(nttStartDt);
+		        var end = new Date(nttEndDt);
+		
+		        if (end < start) {
+		            alert("종료일은 시작일보다 빠를 수 없습니다.");
+		            $("#nttEndDt").val(""); 
+		            $("#nttEndDt").focus(); 
+		        }
+		    }
+		});
+
 
         function imgTag() {
             const html = quill.root.innerHTML;

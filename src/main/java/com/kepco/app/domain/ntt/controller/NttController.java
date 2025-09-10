@@ -70,7 +70,7 @@ public class NttController {
     			url = "mber/ntt/download/list";
     			break;
     	}	
-    	model.addAttribute("fileDisplayAt", bbs.getFileDisplayAt());
+    	model.addAttribute("fileAt", bbs.getFileAt());
     	model.addAttribute("cardAt", bbs.getCardAt());
     	model.addAttribute("bbsId", bbsId);
         return url;

@@ -31,26 +31,20 @@
   	var iDisplayStart = 0;
   	var iTotalRecord = 0;
   	var iDisplayLength = 8;
-  	var setBoardType = <%=request.getParameter("board_type") %> ? <%=request.getParameter("board_type") %> : 2;
+  	var board_type = <%=request.getParameter("board_type") %> ? <%=request.getParameter("board_type") %> : 1322;
 	
 	$(document).ready(function () {
-		getBoardSet(setBoardType);
+		getBoardSet();
 	})
 	
-	function getBoardSet(boardType){
+	function getBoardSet(){
 
-		$("#tab_"+boardType).siblings().removeClass("selected");
-		$("#tab_"+boardType).addClass("selected");
+		$("#tab_"+board_type).siblings().removeClass("selected");
+		$("#tab_"+board_type).addClass("selected");
 		
 		iDisplayStart = 0;
 		iTotalRecord = 0;
 		$("#news_list_all").html("");
-		setBoardType = boardType;
-		
-		var form = {
-		        board_type : boardType
-		};
-		form.sSearch = hashSearch();
 
 		$.ajax({
 			 headers: { 
@@ -58,10 +52,9 @@
 			        'Content-Type': 'application/json' 
 			    },
 	         type: "POST",
-	         url: "/get/board/cardlistCount/"+boardType,
+	         url: "/get/board/list/" + board_type,
 	         dataType: "json", 
 	         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-	         data: JSON.stringify(form),
 	         success: function (data) {
 	         	if(parseInt(data.result))
 	     		{
@@ -69,61 +62,15 @@
 	        		$('#recordCount').text(iTotalRecord);
 	        		if(iTotalRecord > 0){
 	        			iDisplayStart = 0;
-	        			getBoardList();
-	        		}else if(iTotalRecord == 0){
-						$("#btn_more").hide();
-			        }
-	     		}
-	         	else
-	             {
-					alert("관리자에게 문의바랍니다.1");
-					
-	             }
-	         },
-	         error: function (e) {
-	         	alert("관리자에게 문의바랍니다.2");
-	         	console.log(e);
-	         }
-	    });
-					
-	}
-
-	function getBoardList(){
-
-		if (iDisplayStart <= iTotalRecord){
-
-			var form = {
-					board_type :  setBoardType,
-					iDisplayStart :  iDisplayStart,
-					iDisplayLength : iDisplayLength
-			    };
-			form.sSearch = hashSearch();
-
-			$.ajax({
-				 headers: { 
-				        'Accept': 'application/json',
-				        'Content-Type': 'application/json' 
-				    },
-		         type: "POST",
-		         url: "/get/board/cardlist/"+setBoardType,
-		         dataType: "json", 
-		         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-		         data: JSON.stringify(form),
-		         success: function (data) {
-					
-		         	if(parseInt(data.result))
-		     		{
-		         		iDisplayStart = iDisplayStart + data.data.length;
+// 	        			iDisplayStart = iDisplayStart + data.data.length;
 		         		
 		         		var li_html = "";
 
 		         		for ( i = 0; i < data.data.length; i++) {
 		         			var ul_list = $("#ul_list"); //ul_list선언
-							console.log(data.data[i]);
-							li_html = li_html + "<a href='/customer/press-view?board_type="+setBoardType+"&board_no=" + data.data[i].board_no +"'>";
+							li_html = li_html + "<a href='/mber/customer/press-view?board_type="+board_type+"&board_no=" + data.data[i].board_no +"'>";
               				li_html = li_html +  "<p class='title'>" + data.data[i].board_title + "</p>";
-							li_html = li_html + "<img src='" + (data.data[i].detail_img_file_name ?
-                                    "/api/file/fileDown?file_name=" + data.data[i].detail_img_file_name.split(",")[0] :
+							li_html = li_html + "<img src='" + (data.data[i].thumb_url ? data.data[i].thumb_url :
                                     "/resources/landing/images/customer/card_list_thumb.jpg") + "' alt=''>";
 							li_html = li_html + "</a>";
 		         			
@@ -138,22 +85,21 @@
 			         	}else{
 			         		$("#btn_more").show();
 			         	}
-		         		
-		     		}
-		         	else
-		             {
-						alert("관리자에게 문의바랍니다.3");
-						
-		             }
-		         }, 
-		         error: function (e) {
-		         	alert("관리자에게 문의바랍니다.4");
-		         	console.log(e);
-		         }
-		    });
-		    
-		}
-		
+	        		}else if(iTotalRecord == 0){
+						$("#btn_more").hide();
+			        }
+	     		}
+	         	else
+	             {
+					alert("관리자에게 문의바랍니다.");
+					
+	             }
+	         },
+	         error: function (e) {
+	         	alert("관리자에게 문의바랍니다.");
+	         	console.log(e);
+	         }
+	    });
 					
 	}
   </script>
@@ -172,7 +118,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>언론속의 한전MCS</li>
       </ul>
@@ -194,8 +140,8 @@
         <p class="conts-desc_01 txt-ac tdesc">언론에 보도된 한전MCS의 다양한 공헌과 활동 뉴스</p>
         <div style="margin-top:50px;" class="tab">
 	        <ul class="recruit-tab js-tmenu">
-	          <li class="selected" id="tab_2"><a href="/customer/press-list?board_type=2">본사</a></li>
-	          <li id="tab_18"><a href="/customer/press-list?board_type=18">지사 및 지점</a></li>
+	          <li class="selected" id="tab_1322"><a href="/mber/customer/press-list?board_type=1322">본사</a></li>
+	          <li id="tab_1323"><a href="/mber/customer/press-list?board_type=1323">지사 및 지점</a></li>
 	        </ul>
 	        <!--  본사 -->
 	        <div class="recruit-desc tab_cont js-tcont selected" style="margin-top:40px;">

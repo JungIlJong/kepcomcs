@@ -34,6 +34,7 @@
                                     <input id="fileAtchSize" name="fileAtchSize" type="hidden" value=""/>
                                     <input id="fileAtchCo" name="fileAtchCo" type="hidden" value=""/>
                                     <input id="permExtsn" name="permExtsn" type="hidden" value=""/>
+                                    <input id="fileAt" name="fileAt" type="hidden" value=""/>
                                     <form id="frm">
                                         <input id="nttId" name="nttId" type="hidden" value=""/>
                                         <input type="hidden" name="<c:out value="${anticsrf.parameterName}"/>"
@@ -87,7 +88,8 @@
                                                             <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                                                         </div>
                                                     </td>
-                                                </tr><tr>
+                                                </tr>
+                                                <tr id="periodTr" style="display:none;">
                                                 	<th>
                                                         <label class="form-label" for="period">
                                                             <spring:message code="ntt.period"/>
@@ -394,13 +396,17 @@
                 document.getElementById('fileAtchSize').value = bbs.fileAtchSize;
                 document.getElementById('fileAtchCo').value = bbs.fileAtchCo;
                 document.getElementById('permExtsn').value = bbs.permExtsn;
+                document.getElementById('fileAt').value = bbs.fileAt;
 
                 document.getElementById('files').value = '';
                 selectedFiles = new DataTransfer(); // 파일 목록 초기화
-                
-                if (fvNttInstance) {
-                    fvNttInstance.revalidateField('files');
-                }
+            }
+            
+            if (selectedBbsId === '1316') {
+            	$("#periodTr").show();
+            } else {
+            	$("#periodTr").hide();
+            	$("#nttStartDt, #nttEndDt").val("");
             }
         });
 
@@ -431,6 +437,24 @@
                 }
             });
         });
+        
+        <%-- 기간 변경 시 이벤트 --%>
+		$("#nttStartDt, #nttEndDt").on("change", function() {
+		    var nttStartDt = $("#nttStartDt").val();
+		    var nttEndDt = $("#nttEndDt").val();
+		
+		    if (nttStartDt && nttEndDt) {
+		        // 문자열 → Date 객체 변환
+		        var start = new Date(nttStartDt);
+		        var end = new Date(nttEndDt);
+		
+		        if (end < start) {
+		            alert("종료일은 시작일보다 빠를 수 없습니다.");
+		            $("#nttEndDt").val(""); 
+		            $("#nttEndDt").focus(); 
+		        }
+		    }
+		});
 
         $('#btnUpdate').on('click', function () {
             fvNttInstance.validate().then(function (status) {

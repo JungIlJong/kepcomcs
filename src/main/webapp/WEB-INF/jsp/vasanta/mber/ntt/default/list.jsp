@@ -31,7 +31,6 @@
   <script type="text/javascript">
   
   	var bbsId = "${bbsId}";
-	var fileDisplayAt = "${fileDisplayAt}";
 	var cardAt = "${cardAt}";
 	$(document).ready(function () {
 		setMainTable();
@@ -81,7 +80,10 @@
 												"sWidth" : '75%',
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
-													return "<a href='#'; onclick='goView(\"" + row.board_no + "\");'>" + row.board_title + "</a>" || "";
+													let decoded = decodeHtmlEntities(row.board_title);
+											    	decoded = decodeHtmlEntities(decoded);
+											    	
+													return "<a href='detail?id=" + row.board_no + "';>" + decoded + "</a>" || "";
 												}
 											},
 											{
@@ -144,9 +146,11 @@
 			
 		}
 	
-	function goView(id) {
-		location.href='detail?id=' + id;
-	}
+		function decodeHtmlEntities(str) {
+		  const txt = document.createElement('textarea');
+		  txt.innerHTML = str;
+		  return txt.value;
+		}
   </script>
   <style>
   	/* datatable style */
@@ -223,7 +227,7 @@
         <li>
             <a href="/customer/opinion">고객소통</a>
         </li>
-        <li>일반공지</li>
+        <li><c:out value="${menuTitle}"/></li>
       </ul>
     </div>
     

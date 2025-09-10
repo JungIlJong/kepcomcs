@@ -176,7 +176,8 @@
 
             fileCountExceeded: '파일은 최대 {0}개까지 허용합니다.',
             fileTypeInvalid: '허용되지 않은 확장자가 포함되어 있습니다. 허용 확장자: {0}',
-            fileSizeExceeded: '첨부파일은 최대 {0}MB까지 허용합니다.'
+            fileSizeExceeded: '첨부파일은 최대 {0}MB까지 허용합니다.',
+            fileRequired: '첨부파일은 필수 입력값입니다.'
         },
         mapmarker: {
             nameRequired: '마커 이름은 필수 입력값입니다.',

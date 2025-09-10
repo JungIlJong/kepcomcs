@@ -64,7 +64,6 @@
 					if (data.files.length > 0) {
 					    let node = '';
 					    for (let i = 0; i < data.files.length; i++) {
-					    	console.log(data.files[i].orignlFileNm);
 					        node += '<p><a href="/file/download?fileId=' + data.files[i].atchFileId + '">';
 					        node += '<span>' + data.files[i].orignlFileNm + '</span></a></p>'
 					    }
@@ -77,6 +76,7 @@
 			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
 			});
 		}
+		
 		function decodeHtmlEntities(str) {
 		  const txt = document.createElement('textarea');
 		  txt.innerHTML = str;

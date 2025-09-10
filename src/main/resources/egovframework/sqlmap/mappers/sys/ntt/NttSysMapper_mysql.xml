@@ -152,10 +152,10 @@
         <if test="secretAt != null">
             SECRET_AT = #{secretAt},
         </if>
-        <if test="nttStartDt != null">
+        <if test="nttStartDt != null and nttStartDt != ''">
             NTT_START_DT = #{nttStartDt},
         </if>
-        <if test="nttEndDt != null">
+        <if test="nttEndDt != null and nttEndDt != ''">
             NTT_END_DT = #{nttEndDt},
         </if>
         <choose>

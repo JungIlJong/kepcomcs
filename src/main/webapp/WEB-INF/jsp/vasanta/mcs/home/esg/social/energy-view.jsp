@@ -49,7 +49,6 @@
 			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html
 			    success:function(data) {
-			    	console.log(data);
 					$('#news-view-title').text(data.nttSj);
 					$('#news-insert-dt').text(data.frstRegistDt);
 	

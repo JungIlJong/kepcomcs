@@ -1247,9 +1247,13 @@ window.initFvNtt = function () {
                             const maxSizeMB = parseFloat($('#fileAtchSize').val()) || 0;
                             const extStr = $('#permExtsn').val() || '';
                             const allowedExts = extStr.split(',').map(ext => ext.trim().toLowerCase());
+							const fileAt = $('#fileAt').val() || 'N';
 
-                            if (!files || files.length === 0) {
-                                return true;
+                            if (fileAt == 'Y' && (!files || files.length === 0)) {
+                                return {
+									valid: false,
+                                    message: VALIDATION_MESSAGES.ntt.fileRequired
+								};
                             }
 
                             if (files.length > maxCount) {

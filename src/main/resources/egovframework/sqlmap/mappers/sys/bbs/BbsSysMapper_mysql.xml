@@ -13,7 +13,7 @@
         <result column="USE_AT" property="useAt" />
         <result column="REPLY_AT" property="replyAt" />
         <result column="PERM_EXTSN" property="permExtsn" />
-        <result column="FILE_DISPLAY_AT" property="fileDisplayAt" />
+        <result column="FILE_AT" property="fileAt" />
         <result column="CARD_AT" property="cardAt" />
         <collection  property="roles" ofType="string" javaType="List">
             <result column="AUTHRT_ID" property="authrtId" />
@@ -32,7 +32,7 @@
             USE_AT,
             REPLY_AT,
             PERM_EXTSN,
-            FILE_DISPLAY_AT,
+            FILE_AT,
             CARD_AT,
             FRST_REGISTER_ID,
             FRST_REGIST_DT
@@ -59,7 +59,7 @@
             </otherwise>
         </choose>
             #{permExtsn},
-            #{fileDisplayAt},
+            #{fileAt},
             #{cardAt},
             #{frstRegisterId},
             NOW()
@@ -99,11 +99,11 @@
             PERM_EXTSN = #{permExtsn},
         <choose>
             <when test="bbsTyCode == 'BBS_DEFAULT'">
-	            FILE_DISPLAY_AT = #{fileDisplayAt},
+	            FILE_AT = #{fileAt},
 	            CARD_AT = #{cardAt},
             </when>
             <otherwise>
-	            FILE_DISPLAY_AT = 'N',
+	            FILE_AT = 'N',
 	            CARD_AT = 'N',
             </otherwise>
         </choose>    
@@ -186,7 +186,7 @@
             A.SECRET_USE_AT,
             A.USE_AT,
             A.REPLY_AT,
-            A.FILE_DISPLAY_AT,
+            A.FILE_AT,
             A.CARD_AT,
             REPLACE(PERM_EXTSN, ' ', '') PERM_EXTSN,
             B.AUTHRT_ID,
@@ -223,6 +223,8 @@
         BBS_ID,
         BBS_NM,
         BBS_TY_CODE,
+        FILE_AT,
+        CARD_AT,
         FILE_ATCH_SIZE,
         FILE_ATCH_CO,
         REPLACE(PERM_EXTSN, ' ', '') PERM_EXTSN

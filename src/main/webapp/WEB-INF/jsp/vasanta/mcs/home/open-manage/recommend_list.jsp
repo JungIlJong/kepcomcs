@@ -30,7 +30,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/sh-common.css">
 <script type="text/javascript">
 	
-		var board_type = "31";
+		var board_type = "1318";
 		$(function() {
 			setMainTable();
 		})
@@ -84,16 +84,16 @@
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
 	
-													return "<a href='/open-manage/recommend_view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
+													return "<a href='/mber/open-manage/recommend_view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 												}
 											},
 											{
-												"data" : "file_name2",
+												"data" : "atch_file_id",
 												"sWidth" : '10%',
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
 													
-													if(row.file_name2 != null && row.file_name2 != ""){
+													if(row.atch_file_id != null && row.atch_file_id != ""){
 														return "<img style='width:20px;' src='/resources/landing/images/manage/ico_pdf_over.png'/>";
 													}else{
 														return "";														
@@ -181,10 +181,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/open-manage/public-notice">열린경영</a>
+        <a href="/mber/open-manage/public-notice">열린경영</a>
       </li>
       <li>
-        <a href="/open-manage/public-notice">경영공시</a>
+        <a href="/mber/open-manage/public-notice">경영공시</a>
       </li>
       <li>임원추천위원회</li>
     </ul>     

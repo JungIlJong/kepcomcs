@@ -508,14 +508,14 @@
           <ul class="public-list">
             <li class="no-pdf">
               <p>
-                <a href="/open-manage/punish_list">
+                <a href="/mber/open-manage/punish_list">
                   <span>징계처분 현황(수시)</span>
                 </a>
               </p>
             </li>
             <li class="no-pdf">
               <p>
-                <a href="/open-manage/recommend_list">
+                <a href="/mber/open-manage/recommend_list">
                   <span>임원추천위원회</span>
                 </a>
               </p>

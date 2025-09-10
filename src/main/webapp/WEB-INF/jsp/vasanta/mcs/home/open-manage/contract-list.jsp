@@ -91,7 +91,7 @@
 												"render" : function(data, type, row, meta) {
 													var return_val = "";
 													if (row.atch_file_id != ""  && row.atch_file_id != "undefined" && row.file_name != null){
-														return_val = "<a href='/file/download?fileId=" + data + "' class='down_data' download></a>";
+														return_val = "<a href='/file/download?fileId=" + row.atch_file_id + "' class='down_data' download></a>";
 													}else{
 														return_val = "";
 													}

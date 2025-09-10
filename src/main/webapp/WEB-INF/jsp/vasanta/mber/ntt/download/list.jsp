@@ -64,41 +64,54 @@
 								fnServerParams : function(aoData) {
 								},
 										
-										columns : [
-											{
-												"data" : "board_no",
-												"title" : "번호",
-												"sWidth" : '10%',
-												"render" : function(data, type, row, meta) {
+									columns : [
+										{
+											"data" : "board_no",
+											"title" : "번호",
+											"sWidth" : '7%',
+											"render" : function(data, type, row, meta) {
 	
-													return (parseInt(mainTable.page.info().recordsTotal) - (parseInt(mainTable.page.info().start) + parseInt(meta.row)));
-												}
-											},
-											{
-												"data" : "board_title",
-												"sWidth" : '65%',
-												"orderable" : false,
-												"render" : function(data, type, row, meta) {
-													return "<a href='#'; onclick='goView(\"" + row.board_no + "\");'>" + row.board_title + "</a>" || "";
-												}
-											},
-											{
-												"data" : "atch_file_id",
-												"sWidth" : '10%',
-												"orderable" : false,
-												"render" : function(data, type, row, meta) {
-													return "<a href='#'; onclick='goView(\"" + row.board_no + "\");' class='down_zipfile' download></a>" || "";
-												}
-											},
-											{
-												"data" : "insert_dt",
-												"sWidth" : '15%',
-												"render" : function(data, type, row, meta) {
-													
-													return row.insert_dt || "";
-												}
+												return (parseInt(mainTable.page.info().recordsTotal) - (parseInt(mainTable.page.info().start) + parseInt(meta.row)));
 											}
-										],											
+										},
+										{
+											"data" : "board_title",
+											"sWidth" : '73%',
+											"orderable" : false,
+											"render" : function(data, type, row, meta) {
+												let decoded = decodeHtmlEntities(row.board_title);
+										    	decoded = decodeHtmlEntities(decoded);
+												return "<a href='detail?id=" + row.board_no + "'>" + decoded + "</a>" || "";
+											}
+										},
+										{
+											"data" : "file_name",
+											"sWidth" : '5%',
+											"render" : function(data, type, row, meta) {
+	
+	
+												var return_val = "";
+												if (row.atch_file_id != "" && row.atch_file_id != "undefined" && row.atch_file_id != null){
+													return_val = "<a href='/file/download?fileId=" + row.atch_file_id + "' class='down_zipfile' download></a>";
+	
+												} else{
+													return_val = "";
+												}
+												
+												return return_val || "";
+	
+	
+												}
+										},
+										{
+											"data" : "insert_dt",
+											"sWidth" : '15%',
+											"render" : function(data, type, row, meta) {
+												
+												return row.insert_dt || "";
+											}
+										}
+									],											
 								initComplete : function() {
 
 									$('#pageMainTable tbody').on(
@@ -120,6 +133,9 @@
 												}
 
 												if ($(this).hasClass('selected')) {
+													//$(this).removeClass('selected');
+													//$(this).removeClass('edit');
+													//selectedData = null;
 												} else {
 													mainTable.$('tr').removeClass(
 															'selected');
@@ -150,9 +166,11 @@
 			
 		}
 	
-	function goView(id) {
-		location.href='detail?id=' + id;
-	}
+	function decodeHtmlEntities(str) {
+		  const txt = document.createElement('textarea');
+		  txt.innerHTML = str;
+		  return txt.value;
+		}
   </script>
   <style>
   	/* datatable style */
@@ -219,7 +237,7 @@
     <div class="page-tit">
       <div class="page-tit-wrap">
         <h1><c:out value="${menuTitle}"/></h1>
-        <p>한전MCS 일반공지</p>
+        <p><c:out value="${menuSj}"/></p>
       </div>
       <ul class="rocation">
         <li>
@@ -228,7 +246,7 @@
         <li>
             <a href="/customer/opinion">고객소통</a>
         </li>
-        <li>일반공지</li>
+        <li><c:out value="${menuTitle}"/></li>
       </ul>
     </div>
     

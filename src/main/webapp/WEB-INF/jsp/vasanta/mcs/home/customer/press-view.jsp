@@ -27,108 +27,78 @@
     <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
     <script type="text/javascript">
 
+   		var board_type = <%=request.getParameter("board_type") %>;
+    	var board_no = <%=request.getParameter("board_no") %>;
         $(document).ready(function () {
             setMainTable();
             setNextPrev();
         })
 
         function setMainTable() {
-
-            var form = {
-                board_type: <%=request.getParameter("board_type") %>,
-                board_no:  <%=request.getParameter("board_no") %>
-            };
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                url: "/get/news/view", // 요청 할 주소
-                async: true,// false 일 경우 동기 요청으로 변경
-                type: 'POST', // GET, PUT
-                dataType: 'json',// xml, json, script, html
-                data: JSON.stringify(form),
-                success: function (data) {
-                    request = data;
-                    if (parseInt(request.result)) {
-                        if (request.data) {
-                            //var requestJson = JSON.parse(request);
-                            if (request.result == "1") {
-                                $('#news-view-title').text(request.data[0].board_title);
-                                $('#news-insert-dt').text(request.data[0].insert_dt);
-                                if (request.data[0].detail_img_file_name != null && request.data[0].detail_img_file_name != "" && request.data[0].detail_img_file_name != "undefined") {
-                                    $("#news-view-photo").show();
-                                    var pHtml = "";
-                                    var detail_img_list = request.data[0].detail_img_file_name.split(",");
-                            if (detail_img_list.length > 0) {
-                                        for (var i = 0; i < detail_img_list.length; i++) {
-                                            pHtml += '<img src="/api/file/fileDown?file_name=' + encodeURI(detail_img_list[i]) + '">';
-                                        }
-                                        $('#news-view-photo').html(pHtml);
-                                    }
-                                } else {
-                                    $("#news-view-photo").hide();
-                                }
-
-                                $('#news-view-desc').html(request.data[0].board_content.replace(/\n/g, '<br/>'));
-
-                            }
-                        }
-                    }
-                },// 요청 완료 시
-                error: function (jqXHR) {
-                    alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")
-                },// 요청 실패.
-                complete: function (jqXHR) {
-                }// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
-            });
-        }
-
-        function setNextPrev() {
-
-            var form = {
-                board_type:  <%=request.getParameter("board_type") %>,
-                board_no:  <%=request.getParameter("board_no") %>
-            };
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                url: "/get/news/nextprev", // 요청 할 주소
-                async: true,// false 일 경우 동기 요청으로 변경
-                type: 'POST', // GET, PUT
-                dataType: 'json',// xml, json, script, html
-                data: JSON.stringify(form),
-                success: function (data) {
-                    request = data;
-                    if (parseInt(request.result)) {
-                        if (request.data) {
-                            if (request.result == "1") {
-                                $("#prev_post_href").prop("disabled", true);
-                                $("#next_post_href").prop("disabled", true);
-                                for (i = 0; i < request.data.length; i++) {
-                                    if (request.data[i].view_type == "prev") {
-                                        $('#prev_post').text(request.data[i].board_title);
-                                        $("#prev_post_href").attr("href", "/customer/press-view?board_type=" + request.data[i].board_type + "&board_no=" + request.data[i].board_no);
-                                    } else {
-                                        $('#next_post').text(request.data[i].board_title);
-                                        $("#next_post_href").attr("href", "/customer/press-view?board_type=" + request.data[i].board_type + "&board_no=" + request.data[i].board_no);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },// 요청 완료 시
-                error: function (jqXHR) {
-                    alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")
-                },// 요청 실패.
-                complete: function (jqXHR) {
-                }// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
-            });
-
-
-        }
+			$.ajax({
+				headers: { 
+				        'Accept': 'application/json',
+				        'Content-Type': 'application/json' 
+				},
+				url:"/get/board/view?nttId="+board_no,
+			    async:true,// false 일 경우 동기 요청으로 변경
+			    type:'GET', // GET, PUT
+			    dataType:'json',// xml, json, script, html
+			    success:function(data) {
+					$('#news-view-title').text(data.nttSj);
+					$('#news-insert-dt').text(data.frstRegistDt);
+	
+					$('#news-view-desc').html(decodeHtml(data.nttCn).replace(/\n/g, '<br/>'));
+	
+					if (data.files.length > 0) {
+					    let node = '';
+					    for (let i = 0; i < data.files.length; i++) {
+					    	console.log(data.files[i].orignlFileNm);
+					        node += '<p><a href="/file/download?fileId=' + data.files[i].atchFileId + '">';
+					        node += '<span>' + data.files[i].orignlFileNm + '</span></a></p>'
+					    }
+					    $('#div_filelist').html(node);
+					}
+				},// 요청 완료 시
+			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
+			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+			});
+		}
+	
+		function decodeHtml(html) {
+			  return $('<textarea/>').html(html).text();
+		}
+		
+		function setNextPrev() {
+			$.ajax({
+				headers: { 
+				        'Accept': 'application/json',
+				        'Content-Type': 'application/json' 
+				},
+				url:"/api/mber/bbs/"+board_type+"/side?nttId="+board_no,
+			    async:true,// false 일 경우 동기 요청으로 변경
+			    type:'GET', // GET, PUT
+			    dataType:'json',// xml, json, script, html
+			    success:function(data) {
+			    	console.log(data);
+					$("#prev_post_href").prop("disabled", true);
+					$("#next_post_href").prop("disabled", true);
+					for (i=0; i < data.length; i++){
+						if(data[i].viewType == "prev"){
+							$('#prev_post').text(data[i].nttSj);
+							$("#prev_post_href").attr("href",  "press-view?board_type="+board_type+"&board_no=" + data[i].nttId);
+						}else{
+							$('#next_post').text(data[i].nttSj);
+							$("#next_post_href").attr("href", "press-view?board_type="+board_type+"&board_no=" + data[i].nttId);
+						}
+					}
+				},// 요청 완료 시
+			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
+			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
+			});
+	
+	
+		}
     </script>
 </head>
 <body id="mcsPage">
@@ -168,15 +138,12 @@
                     </div>
                 </li>
                 <li>
-                    <div class="news-view-photo" id="news-view-photo">
-                        <img src="/resources/landing/images/manage/new_sample.jpg">
-                    </div>
                     <div class="news-view-desc" id="news-view-desc">
                     </div>
                 </li>
             </ul>
             <div class="btn-row-right">
-                <a href="/customer/press-list?board_type=<%=request.getParameter("board_type") %>">
+                <a href="/mber/customer/press-list?board_type=<%=request.getParameter("board_type") %>">
                     <button class="btn-list">목록</button>
                 </a>
             </div>

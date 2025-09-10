@@ -107,7 +107,7 @@ public class SysBbs {
     /**
      * 첨부파일 표시여부
      */
-    private String fileDisplayAt;
+    private String fileAt;
 
     /**
      * 카드형목록 여부
