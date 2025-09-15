@@ -38,22 +38,21 @@
   <script type="text/javascript">
 	var board_no = <%=request.getParameter("board_no") %>;
 	$(function() {
-		//$('#notice_type').val(board_type)
-		var board_no = <%=request.getParameter("board_no") %>;
-		if (board_no != null || board_no != "" || board_no != 'undefined'){
+		console.log(board_no);
+		if (board_no != null && board_no != "" && board_no != 'undefined'){
 			readBoardData();
 		}
 	})
 	  $(function() {
-		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){
+<%-- 		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){ --%>
 
-			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
-			location.href="./integrity-certification";
+// 			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
+// 			location.href="./integrity-certification";
 			
-		}else{
+// 		}else{
 			$('#author_name').text($.cookie('authorName'));
 			$('#author_hp').text($.cookie('authorHp'));
-		}
+// 		}
 
 		let today = new Date();   
 
@@ -66,43 +65,24 @@
 	})
 	function readBoardData(){
 
-		var form = {
-				board_type :  "22",
-				board_no :  <%=request.getParameter("board_no") %>,
-				board_pwd : '<%=request.getParameter("board_pwd") %>'
-		    };
-	    
 		$.ajax({
 			headers: { 
 			        'Accept': 'application/json',
 			        'Content-Type': 'application/json' 
 			},
-		    url:"/get/board/view", // 요청 할 주소
+			url:"/get/board/view?nttId="+board_no, // 요청 할 주소
 		    async:true,// false 일 경우 동기 요청으로 변경
-		    type:'POST', // GET, PUT
+		    type:'GET', // GET, PUT
 		    dataType:'json',// xml, json, script, html
-	        data: JSON.stringify(form),
 		    success:function(data) {
-				request = data;
-				if(parseInt(request.result))
-				{
-					if(request.data)
-					{
-						//var requestJson = JSON.parse(request);
-						if(request.result == "1")
-						{
-							console.log(request.data[0].board_status);
-							if (request.data[0].board_status == 0){
-								$('#board_title').val(request.data[0].board_title);
-								$('#board_author').val(request.data[0].insert_id);
-								$('#board_content').val(request.data[0].board_content);
-							}
-							else{
-								alert("문의 글을 접수중일 때에만 수정하실 수 있습니다.")
-							}
-							
-						}
-					}
+		    	if (data.nttStatus == 0){
+					$('#board_title').val(data.nttSj);
+					$('#board_author').val(data.wrterNm);
+					$('#board_content').val(data.nttCn);
+					$('#email').val(data.email);
+				}
+				else{
+					alert("문의 글을 접수중일 때에만 수정하실 수 있습니다.")
 				}
 			},// 요청 완료 시
 		    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
@@ -113,7 +93,7 @@
 
 	
 	function saveNotice(){
-		var board_type = 22;
+		var board_type = 39;
 
 		grecaptcha.ready(function() {
 	          grecaptcha.execute('6Le8_iQcAAAAACCuc_W--e48akBOB61Uzu839PkO', {action: 'submit'}).then(function(token) {
@@ -183,7 +163,7 @@
 	    	            success: function (data) {
 	    	            	if(parseInt(data.result))
 	    	        		{
-	    		        		replaceUrl = "/customer/integrity-list";
+	    		        		replaceUrl = "/mber/customer/integrity-list";
 	    	            		alert("정상적으로 등록되었습니다.");
 	    	            		location.replace(replaceUrl);
 	    		        		/*
@@ -227,7 +207,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>청렴·부패 신고</li>
       </ul>

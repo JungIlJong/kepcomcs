@@ -27,7 +27,7 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
 	
-		var board_type = "22";
+		var board_type = "39";
 		$(function() {
 			//$('#notice_type').val(board_type)
 			console.log(board_type)
@@ -82,7 +82,7 @@
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
 	
-													return "<a href='/customer/integrity-pwd?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
+													return "<a href='/mber/customer/integrity-pwd?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 												}
 											},
 											{
@@ -191,7 +191,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>청렴·부패 신고</li>
       </ul>
@@ -199,7 +199,7 @@
     <div class="contents"> 
       <div class="conts-ani tab-list" data-trigger>
         <div>
-          <a href="/customer/integrity-agree">
+          <a href="/mber/customer/integrity-agree">
             <button class="btn-write">작성하기</button>    
           </a>    
         </div>

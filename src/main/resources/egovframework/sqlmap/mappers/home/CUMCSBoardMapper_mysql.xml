@@ -16,6 +16,12 @@
         <result property="anonymousWriter" column="ANONYMOUS_WRITER" />
         <result property="password" column="PASSWORD" />
         <result property="bbsNm" column="BBS_NM" />
+        <result property="nttStatus" column="NTT_STATUS" />
+        <result property="nttReply" column="NTT_REPLY" />
+        <result property="email" column="EMAIL" />
+        <result property="authorHp" column="PHONE" />
+        <result property="opinionTitleHead" column="OPINION_TITLE_HEAD" />
+        <result property="linkUrl" column="LINK_URL" />
         <association
                 property="replyDetail"
                 javaType="com.kepco.app.domain.ntt.dto.SearchMberNtt$ReplyDetail">
@@ -77,12 +83,14 @@
 		SELECT 
 			A.NTT_ID AS board_no, 
 			A.BBS_ID AS bbsId,
+			A.NTT_STATUS AS board_status,
 			EXISTS(SELECT 1 FROM VST_NTT D WHERE D.PARNTSCTT_ID = A.NTT_ID) PARNTSCTT_ID,
 			A.NTT_SJ AS board_title, 
 			A.RDCNT AS rdcnt,
             A.SECRET_AT AS secret_at,
             A.NOTICE_AT AS notice_at,
 			A.NTT_CN AS board_content, 
+			A.NTT_STATUS AS board_status,
 			DATE_FORMAT(A.NTT_START_DT,'%Y-%m-%d') AS ntt_start_dt,
 			DATE_FORMAT(A.NTT_END_DT,'%Y-%m-%d') AS ntt_end_dt,
 			CASE 
@@ -106,18 +114,18 @@
 		  AND A.USE_AT = 'Y'
 	  ]]>
 	   <if test="sSearch != null and sSearch != ''">
-			  and (A.NTT_SJ like CONCAT('%', #{sSearch}, '%') 
-			  	or A.NTT_CN like CONCAT('%', #{sSearch}, '%')
+			  AND (A.NTT_SJ like CONCAT('%', #{sSearch}, '%') 
+			  	OR A.NTT_CN like CONCAT('%', #{sSearch}, '%')
 			  )
 		</if>
 		<if test="orderCol != null and orderCol != ''">
-			order by ${orderCol} ${sSortDir_0},A.NTT_ID desc
+			ORDER BY ${orderCol} ${sSortDir_0},A.NTT_ID DESC
 		</if>
 		<!-- <if test="orderCol == null and orderCol == ''"> -->
-			order by A.NTT_ID desc
+			ORDER BY A.NTT_ID DESC
 		<!-- </if> -->
 		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
-			limit ${iDisplayStart}, ${iDisplayLength}
+			LIMIT ${iDisplayStart}, ${iDisplayLength}
 		</if>
 	</select>
 
@@ -203,6 +211,12 @@
             CAST(DATE_FORMAT(VN.FRST_REGIST_DT, '%Y-%m-%d') AS CHAR) AS FRST_REGIST_DT,
             VN.WRTER_NM,
             (VN.RDCNT + 1) RDCNT,
+            VN.NTT_STATUS,
+            VN.NTT_REPLY,
+            VN.EMAIL,
+            VN.PHONE,
+            VN.OPINION_TITLE_HEAD,
+            VN.LINK_URL,
             IF(VN.NOTICE_AT = 'Y', TRUE, FALSE)       AS NOTICE,
             IF(VN.FRST_REGISTER_ID IS NULL, TRUE, FALSE) ANONYMOUS_WRITER,
             VA.ATCH_FILE_ID,
@@ -211,6 +225,27 @@
         FROM VST_NTT VN
         LEFT OUTER JOIN VST_ATCHFILE VA ON VN.NTT_ID = VA.UPPER_ID
         WHERE VN.NTT_ID = #{nttId} AND VN.USE_AT = 'Y'
+	</select>
+	
+	<select id="getBoardView2" parameterType="HashMap" resultType="HashMap">
+		SELECT 
+			a.NTT_ID AS board_no, 
+			a.NTT_SJ AS board_title, 
+			a.NTT_CN AS board_content, 
+			a.NTT_STATUS AS board_status, 
+			CAST(DATE_FORMAT(a.FRST_REGIST_DT, '%Y-%m-%d') AS CHAR) AS insert_dt,
+			a.FRST_REGISTER_ID AS insert_id, 
+			DATE_FORMAT(a.LAST_UPDT_DT,'%Y-%m-%d') update_dt,
+			a.LAST_UPDUSR_ID AS update_id,
+			a.NAME AS name,
+			a.LINK_URL AS link_url,
+			a.PHONE AS phone
+		FROM VST_NTT a
+		WHERE 1=1
+		  AND BBS_ID = #{board_type}
+		  AND NTT_ID = #{board_no}
+		  AND NTT_PWD = #{board_pwd}
+		  AND USE_AT = 'Y'
 	</select>
 	
 	<select id="getNewsView" parameterType="HashMap" resultType="HashMap">
@@ -251,14 +286,18 @@
 	
 	<select id="chkBoardPassword" parameterType="HashMap" resultType="Integer">
 		SELECT 
-			count(*)
-		FROM board a
-		where 1=1
-		and del_yn = 'N'
-		  and board_type = #{board_type}
-		  and board_no = #{board_no}
-		  and board_pwd = #{board_pwd}
+			COUNT(*)
+		FROM VST_NTT a
+		WHERE 1=1
+		AND a.USE_AT = 'Y'
+		  AND BBS_ID = #{board_type}
+		  AND NTT_ID = #{board_no}
+		  AND NTT_PWD = #{board_pwd}
 	</select>
+	
+	<update id="boardDelete">
+		UPDATE VST_NTT SET USE_AT = 'N' WHERE NTT_ID = #{board_no}
+	</update>
 	
 	<insert id="setBoard" parameterType="HashMap">
 		INSERT INTO board 
@@ -360,10 +399,10 @@
 	
 	<select id="getProhibitiveWordList" resultType="HashMap">
 		SELECT 
-			word
-		FROM tbl_prohibitiveword
-		where 1=1
-		  and USE_AT = 'Y'
+			WORD
+		FROM VST_PROHIBITIVEWORD
+		WHERE 1=1
+		  AND USE_AT = 'Y'
 	</select>
 	
 	<insert id="insertOpinion" parameterType="HashMap">

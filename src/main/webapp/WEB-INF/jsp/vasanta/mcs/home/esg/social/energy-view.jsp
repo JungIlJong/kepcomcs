@@ -57,7 +57,6 @@
 					if (data.files.length > 0) {
 					    let node = '';
 					    for (let i = 0; i < data.files.length; i++) {
-					    	console.log(data.files[i].orignlFileNm);
 					        node += '<p><a href="/file/download?fileId=' + data.files[i].atchFileId + '">';
 					        node += '<span>' + data.files[i].orignlFileNm + '</span></a></p>'
 					    }
@@ -89,10 +88,10 @@
 					for (i=0; i < data.length; i++){
 						if(data[i].viewType == "prev"){
 							$('#prev_post').text(data[i].nttSj);
-							$("#prev_post_href").attr("href",  "detail?id=" + data[i].nttId);
+							$("#prev_post_href").attr("href",  "energy-view?id=" + data[i].nttId);
 						}else{
 							$('#next_post').text(data[i].nttSj);
-							$("#next_post_href").attr("href", "detail?id=" + data[i].nttId);
+							$("#next_post_href").attr("href", "energy-view?id=" + data[i].nttId);
 						}
 					}
 				},// 요청 완료 시

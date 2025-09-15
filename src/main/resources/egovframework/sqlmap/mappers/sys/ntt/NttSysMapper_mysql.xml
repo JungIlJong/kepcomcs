@@ -28,6 +28,7 @@
         <result column="BLOCK_IDS" property="blockIds" />
         <result column="NTT_START_DT" property="nttStartDt" />
         <result column="NTT_END_DT" property="nttEndDt" />
+        <result column="EMAIL" property="email" />
         <collection  property="files" ofType="Map" javaType="List">
             <result column="ATCH_FILE_ID" property="atchFileId" />
             <result column="ORIGNL_FILE_NM" property="orignlFileNm" />
@@ -93,8 +94,19 @@
             <if test="thumbUrl != null">
             THUMB_URL,
             </if>
+            NTT_PWD,
             NTT_START_DT,
             NTT_END_DT,
+            EMAIL,
+            PHONE,
+            OPINION_TITLE_HEAD,
+            CP_NM,
+            AREA,
+            ADDRESS1,
+            ADDRESS2,
+            ADDRESS3,
+            FEEDBACK_YN,
+            LINK_URL,
             FRST_REGISTER_ID,
             FRST_REGIST_DT
         )   VALUES (
@@ -131,8 +143,19 @@
         <if test="thumbUrl != null">
             #{thumbUrl},
         </if>
+            #{password},
         	CASE WHEN #{nttStartDt} = '' OR #{nttStartDt} IS NULL THEN NULL ELSE '' END,
         	CASE WHEN #{nttEndDt} = '' OR #{nttEndDt} IS NULL THEN NULL ELSE '' END,
+        	#{email},
+        	#{authorHp},
+        	#{opinionTitleHead},
+        	#{cpNm},
+            #{area},
+            #{address1},
+            #{address2},
+            #{address3},
+            #{feedbackYn},
+            #{linkUrl},
             #{frstRegisterId},
             NOW()
         )
@@ -177,6 +200,18 @@
         </if>
         <if test="thumbUrl != null">
             THUMB_URL = #{thumbUrl},
+        </if>
+        <if test="email != null">
+            EMAIL = #{email},
+        </if>
+        <if test="authorHp != null">
+            PHONE = #{authorHp},
+        </if>
+        <if test="opinionTitleHead != null">
+            OPINION_TITLE_HEAD = #{opinionTitleHead},
+        </if>
+        <if test="linkUrl != null">
+            LINK_URL = #{linkUrl},
         </if>
             LAST_UPDUSR_ID = #{lastUpdusrId},
             LAST_UPDT_DT = NOW()
@@ -343,4 +378,11 @@
         SET REPORT_IDS = ''
         WHERE NTT_ID = #{nttId}
     </update>
+    
+    <select id="getProhibitiveWordList" resultType="HashMap">
+		SELECT 
+			WORD
+		FROM VST_PROHIBITIVEWORD
+		WHERE USE_AT = 'Y'
+	</select>
 </mapper>

@@ -4,6 +4,7 @@ import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
 import com.kepco.app.domain.ntt.dto.SysNtt;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,4 +85,6 @@ public interface NttSysMapper {
     void increseRdcnt(String nttId);
 
     void updateNttReportIds(String nttId);
+    
+    List<HashMap<String, Object>> getProhibitiveWordList();
 }

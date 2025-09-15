@@ -29,60 +29,45 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/sh-common.css">
 <script type="text/javascript">
 	
-		var board_type = "20";
+		var board_type = "36";
+		var board_no = <%=request.getParameter("board_no") %>;
 		$(document).ready(function () {
 			setMainTable();
 			setNextPrev();
 		})
 		
 		function setMainTable() {
-			
-			var form = {
-					board_type :  board_type,
-					board_no :  <%=request.getParameter("board_no") %>
-			    };
 			$.ajax({
 				headers: { 
 				        'Accept': 'application/json',
 				        'Content-Type': 'application/json' 
 				},
-			    url:"/get/news/view", // 요청 할 주소
+				url:"/get/board/view?nttId="+board_no,
 			    async:true,// false 일 경우 동기 요청으로 변경
-			    type:'POST', // GET, PUT
+			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html
-		        data: JSON.stringify(form),
 			    success:function(data) {
-					request = data;
-					if(parseInt(request.result))
-					{
-						if(request.data)
-						{
-							//var requestJson = JSON.parse(request);
-							if(request.result == "1")
-							{
-								$('#news-view-title').text(request.data[0].board_title);
-								$('#news-view-name').text(request.data[0].name);
-								$('#news-view-phone').text(request.data[0].phone);
-								$('#news-view-link').text(request.data[0].link_url);
-								$("#news-view-link").attr("href", request.data[0].link_url);
-								$("#news-view-link").attr("target", "_blank");
-								$('#news-insert-dt').text(request.data[0].insert_dt);
-								if(request.data[0].main_img_file_name != null && request.data[0].main_img_file_name != "" && request.data[0].main_img_file_name != "undefined"){
-									$("#news-view-photo").show();
-									$('#news-view-photo').attr('src', '/api/file/fileDown?file_name=' + encodeURI(request.data[0].main_img_file_name));
-								}else{
-									$("#news-view-photo").hide();
-								}
-
-								$('#news-view-desc').html(request.data[0].board_content.replace(/\n/g, '<br/>'));
-								
-								$("#modify_href").prop("disabled", true);
-								$("#modify_href").attr("href", "/customer/localproduct-pwdModify?board_no=" + <%=request.getParameter("board_no") %>);
-								$("#delete_href").prop("disabled", true);
-								$("#delete_href").attr("href", "/customer/localproduct-pwdDelete?board_no=" + <%=request.getParameter("board_no") %>);
-							}
-						}
+					$('#news-view-title').text(data.nttSj);
+					$('#news-view-name').text(data.wrterNm);
+					$('#news-view-phone').text(data.authorHp);
+					$('#news-view-link').text(data.linkUrl);
+					$("#news-view-link").attr("href", data.linkUrl);
+					$("#news-view-link").attr("target", "_blank");
+					$('#news-insert-dt').text(data.frstRegistDt);
+					
+					if (data.files.length > 0) {
+						$("#news-view-photo").show();
+						$('#news-view-photo').attr('src', '/file/download?fileId=' + data.files[0].atchFileId);
+					} else {
+						$("#news-view-photo").hide();
 					}
+
+					$('#news-view-desc').html(data.nttCn.replace(/\n/g, '<br/>'));
+					
+					$("#modify_href").prop("disabled", true);
+					$("#modify_href").attr("href", "/mber/customer/localproduct-pwdModify?board_no=" + <%=request.getParameter("board_no") %>);
+					$("#delete_href").prop("disabled", true);
+					$("#delete_href").attr("href", "/mber/customer/localproduct-pwdDelete?board_no=" + <%=request.getParameter("board_no") %>);
 				},// 요청 완료 시
 			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
 			    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
@@ -90,41 +75,25 @@
 		}
 
 		function setNextPrev() {
-			
-			var form = {
-					board_type :  board_type,
-					board_no :  <%=request.getParameter("board_no") %>
-			    };
 			$.ajax({
 				headers: { 
 				        'Accept': 'application/json',
 				        'Content-Type': 'application/json' 
 				},
-			    url:"/get/news/nextprev", // 요청 할 주소
+				url:"/api/mber/bbs/"+board_type+"/side?nttId="+board_no,
 			    async:true,// false 일 경우 동기 요청으로 변경
-			    type:'POST', // GET, PUT
+			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html
-		        data: JSON.stringify(form),
 			    success:function(data) {
-					request = data;
-					if(parseInt(request.result))
-					{
-						if(request.data)
-						{
-							if(request.result == "1")
-							{
-								$("#prev_post_href").prop("disabled", true);
-								$("#next_post_href").prop("disabled", true);
-								for (i=0; i < request.data.length; i++){
-									if(request.data[i].view_type == "prev"){
-										$('#prev_post').text(request.data[i].board_title);
-										$("#prev_post_href").attr("href", "/customer/localproduct-view?board_no=" + request.data[i].board_no);
-									}else{
-										$('#next_post').text(request.data[i].board_title);
-										$("#next_post_href").attr("href", "/customer/localproduct-view?board_no=" + request.data[i].board_no);
-									}
-								}
-							}
+			    	$("#prev_post_href").prop("disabled", true);
+					$("#next_post_href").prop("disabled", true);
+					for (i=0; i < data.length; i++){
+						if(data[i].viewType == "prev"){
+							$('#prev_post').text(data[i].nttSj);
+							$("#prev_post_href").attr("href",  "localproduct-view?board_no=" + data[i].nttId);
+						}else{
+							$('#next_post').text(data[i].nttSj);
+							$("#next_post_href").attr("href", "localproduct-view?board_no=" + data[i].nttId);
 						}
 					}
 				},// 요청 완료 시
@@ -151,7 +120,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>로컬생산품 판로지원</li>
       </ul>
@@ -200,7 +169,7 @@
           <a href="javascript:void(0);" id="delete_href">
             <button class="btn-save" style="background-color:#C31011;" >삭제</button>
           </a>
-          <a href="/customer/localproduct-list">
+          <a href="/mber/customer/localproduct-list">
             <button class="btn-list">목록</button>
           </a>
         </div>

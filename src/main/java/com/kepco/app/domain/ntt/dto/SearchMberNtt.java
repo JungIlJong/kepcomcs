@@ -43,6 +43,12 @@ public class SearchMberNtt {
         private String bbsNm;
         private String startDt;
         private String endDt;
+        private String nttStatus;
+        private String nttReply;
+        private String email;
+        private String authorHp;
+        private String opinionTitleHead;
+        private String linkUrl;
         private boolean secret;
         private boolean notice;
         private boolean mine;

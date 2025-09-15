@@ -149,8 +149,6 @@ public class CustomerViewController {
      */
     @GetMapping("/localproduct-view")
     public String customer_localproduct_view(Model model, HttpServletRequest request) {
-        model.addAttribute("board_type", "20");
-        model.addAttribute("board_no", request.getParameter("board_no"));
         return "/mcs/home/customer/localproduct-view";
     }
 
@@ -161,16 +159,13 @@ public class CustomerViewController {
 
     @GetMapping("/localproduct-form")
     public String customer_localproduct_form(Model model, HttpServletRequest request) {
-        model.addAttribute("board_type", "20");
-        model.addAttribute("board_no", request.getParameter("board_no"));
-        model.addAttribute("board_pwd", request.getParameter("board_pwd"));
         return "/mcs/home/customer/localproduct-form";
     }
 
     @GetMapping("/localproduct-pwd{procType}")
     public String customer_localproduct_pwd(Model model, HttpServletRequest request, @PathVariable String procType) {
         model.addAttribute("procType", procType);
-        model.addAttribute("board_type", "20");
+        model.addAttribute("board_type", "36");
         model.addAttribute("board_no", request.getParameter("board_no"));
         return "/mcs/home/customer/localproduct-pwd";
     }
@@ -210,7 +205,7 @@ public class CustomerViewController {
 
     @GetMapping("/integrity-view")
     public String customer_integrity_view(Model model, HttpServletRequest request) {
-        model.addAttribute("board_type", "22");
+        model.addAttribute("board_type", "21");
         model.addAttribute("board_no", request.getParameter("board_no"));
         model.addAttribute("board_pwd", request.getParameter("board_pwd"));
         //return "/common/error400";

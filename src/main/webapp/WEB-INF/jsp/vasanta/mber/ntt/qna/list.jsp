@@ -27,10 +27,8 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
 	
-		var board_type = 21;
+	var board_type = <%=request.getParameter("board_type") %> ? <%=request.getParameter("board_type") %> : 21;
 		$(function() {
-			//$('#notice_type').val(board_type)
-			console.log(board_type)
 			setMainTable();
 		})
 		
@@ -81,7 +79,7 @@
 												"sWidth" : '50%',
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
-	
+					console.log(data);
 													return "<a href='/mber/customer/cooperation-pwd?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 												}
 											},

@@ -134,4 +134,54 @@ public class SysNtt {
      * 차단 ID 목록
      */
     private String blockIds;
+    
+    /**
+     * e메일
+     */
+    private String email;
+
+    /**
+     *  연락처
+     */
+    private String authorHp;
+    
+    /**
+     * 머리말
+     */
+    private String opinionTitleHead;
+    
+    /**
+     * 업체명
+     */
+    private String cpNm;
+    
+    /**
+     * 지역
+     */
+    private String area;
+    
+    /**
+     * 주소1
+     */
+    private String address1;
+    
+    /**
+     * 주소2
+     */
+    private String address2;
+    
+    /**
+     * 주소3
+     */
+    private String address3;
+    
+    /**
+     * 회신여부
+     */
+    private String feedbackYn;
+    
+    /**
+     * 링크URL
+     */
+    private String linkUrl;
 }

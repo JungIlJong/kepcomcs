@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.kepco.app.domain.ntt.dto.SearchMberNtt;
+import com.kepco.app.domain.ntt.dto.SysNtt;
 
 public interface CUBoardService {
 
@@ -16,14 +17,17 @@ public interface CUBoardService {
 	HashMap<String, Object> setBoard(HashMap<String, Object> param);
 
 	//File Upload 게시판
-	HashMap<String, Object> setBoardFile(HashMap<String, Object> param);
+	HashMap<String, Object> setBoardFile(SysNtt nt);
 	
 	SearchMberNtt.NttDetail getBoardView(Long nttId);
+	List<HashMap<String, Object>> getBoardView2(HashMap<String, Object> body);
 	List<HashMap<String, Object>> getNewsView(HashMap<String, Object> body);
 	
 	List<HashMap<String, Object>> getNewsViewNextPrev(HashMap<String, Object> body);
 	
 	Integer chkBoardPassword(HashMap<String, Object> body);
+	
+	int boardDelete(HashMap<String, Object> body);
 	
 	//고객의 소리 등록
 	HashMap<String, Object> insertOpinion(HashMap<String, Object> param);

@@ -40,7 +40,7 @@
 				board_no :  <%=request.getAttribute("board_no") %>,
 				board_pwd :  SHA256($('#board_pwd').val())
 		    };
-			
+		console.log(form);	
 		$.ajax({
 			 headers: { 
 			        'Accept': 'application/json',
@@ -54,7 +54,7 @@
 	         success: function (data) {
 	         	if(parseInt(data.result))
 	     		{
-	        		location.href="/customer/cooperation-view?board_no=" + <%=request.getAttribute("board_no") %> + "&board_pwd=" + SHA256($('#board_pwd').val());
+	        		location.href="/mber/customer/cooperation-view?board_no=" + <%=request.getAttribute("board_no") %>;
 	     		}
 	         	else
 	             {
@@ -109,7 +109,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>신사업 및 협력사업 문의·제안</li>
       </ul>

@@ -18,6 +18,7 @@ import com.kepco.app.domain.ntt.service.NttSysService;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -189,4 +190,11 @@ public class NttSysServiceImpl extends EgovAbstractServiceImpl implements NttSys
             fileService.insertAtchfile(insertAtchFile);
         }
     }
+    
+    /**
+     * 금칙어 조회
+     */
+    public List<HashMap<String, Object>> getProhibitiveWordList() {
+		return nttSysMapper.getProhibitiveWordList();
+	}
 }

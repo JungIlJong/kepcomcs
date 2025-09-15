@@ -29,7 +29,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/sh-common.css">
 <script type="text/javascript">
 	
-		var board_type = "20";
+		var board_type = "36";
 		$(function() {
 			setMainTable();
 		})
@@ -83,7 +83,7 @@
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
 	
-													return "<a href='/customer/localproduct-view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
+													return "<a href='/mber/customer/localproduct-view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 												}
 											},
 											{
@@ -172,14 +172,14 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>로컬생산품 판로지원</li>
       </ul>
     </div>
     <div class="contents localproduct"> 
-   		<!-- <img src="/resources/landing/images/customer/img_localproduct_nocont_pc.png" class="img_nocont pc"> -->
-   		<!-- <img src="/resources/landing/images/customer/img_localproduct_nocont_mo.png" class="img_nocont mo"> -->
+   		<!-- <img src="/resources/landing/images/mber/customer/img_localproduct_nocont_pc.png" class="img_nocont pc"> -->
+   		<!-- <img src="/resources/landing/images/mber/customer/img_localproduct_nocont_mo.png" class="img_nocont mo"> -->
     
  	    <div class="page-tit-wrap">
        		<h2>농가와 소상공인, 함께 응원해요!</h2>  
@@ -187,9 +187,9 @@
 	    <div class="local_list">
 	     	<div class="inner">
 	     		<ul>
-	     			<li><img src="/resources/landing/images/customer/img_localproduct_1.png" alt="" /></li>
-	     			<li><img src="/resources/landing/images/customer/img_localproduct_2.png" alt="" /></li>
-	     			<li><img src="/resources/landing/images/customer/img_localproduct_3.png" alt="" /></li>
+	     			<li><img src="/resources/landing/images/mber/customer/img_localproduct_1.png" alt="" /></li>
+	     			<li><img src="/resources/landing/images/mber/customer/img_localproduct_2.png" alt="" /></li>
+	     			<li><img src="/resources/landing/images/mber/customer/img_localproduct_3.png" alt="" /></li>
 	     		</ul>
 	     		<p>* 위 상품 이미지는 단순 참고용입니다.</p>
 	     	</div>
@@ -199,7 +199,7 @@
       <div class="social-list">
         <div class="tbl-wrap">
         <div style="display:inline-block;">
-          <a href="/customer/localproduct-form">
+          <a href="/mber/customer/localproduct-form">
             <button class="btn-write" style="position:absolute;top:20px;">작성하기</button>  
           </a>    
         </div>

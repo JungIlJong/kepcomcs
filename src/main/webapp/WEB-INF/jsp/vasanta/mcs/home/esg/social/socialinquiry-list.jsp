@@ -29,10 +29,8 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
 	
-		var board_type = "23";
+		var board_type = 1325;
 		$(function() {
-			//$('#notice_type').val(board_type)
-			console.log(board_type)
 			setMainTable();
 		})
 		
@@ -84,7 +82,7 @@
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
 	
-													return "<a href='/esg/social/socialinquiry-pwd?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
+													return "<a href='/mber/esg/social/socialinquiry-pwd?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 												}
 											},
 											{
@@ -182,10 +180,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/social/social-activity">사회적가치</a>
+        <a href="/mber/esg/social/social-activity">사회적가치</a>
       </li>
       <li>사회공헌문의</li>
     </ul>   
@@ -195,7 +193,7 @@
       </div>
       <div class="conts-ani soci-inqu-list">
         <div>
-          <a href="/esg/social/socialinquiry-agree">
+          <a href="/mber/esg/social/socialinquiry-agree">
             <button class="btn-write">작성하기</button>    
           </a>    
         </div>
@@ -213,7 +211,7 @@
             <tr class="manager">
               <td>공지</td>
               <td>
-                <a href="/esg/social/socialinquiry-view.html">
+                <a href="/mber/esg/social/socialinquiry-view.html">
                   <p class="tbl-title">신사업 문의 방법</p>
                 </a>
               </td>
@@ -224,7 +222,7 @@
             <tr>
               <td>10</td>
               <td>
-                <a href="/esg/social/socialinquiry-view.html">
+                <a href="/mber/esg/social/socialinquiry-view.html">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요? 사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -237,7 +235,7 @@
             <tr>
               <td>9</td>
               <td>
-                <a href="/esg/social/socialinquiry-view.html">
+                <a href="/mber/esg/social/socialinquiry-view.html">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요? 사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               </td>
@@ -250,7 +248,7 @@
             <tr>
               <td>8</td>
               <td>
-                <a href="/esg/social/socialinquiry-view.html">
+                <a href="/mber/esg/social/socialinquiry-view.html">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               </td>
@@ -263,7 +261,7 @@
             <tr>
               <td>7</td>
               <td>
-                <a href="/esg/social/socialinquiry-view.html">
+                <a href="/mber/esg/social/socialinquiry-view.html">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               </td>
@@ -276,7 +274,7 @@
             <tr>
               <td>6</td>
               <td>
-                <a href="/esg/social/socialinquiry-view.html">
+                <a href="/mber/esg/social/socialinquiry-view.html">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               <td>홍**</td>

@@ -33,60 +33,45 @@
 <script type="text/javascript">
 	
 	var board_no = <%=request.getParameter("board_no") %>;
+	var board_type = <%=request.getParameter("board_type") %>;
 	$(function() {
 		//$('#notice_type').val(board_type)
-		var board_no = <%=request.getParameter("board_no") %>;
-		if (board_no != null || board_no != "" || board_no != 'undefined'){
+		var board_type = <%=request.getParameter("board_type") %>;
+		if (board_no != null && board_no != "" && board_no != 'undefined'){
 			readBoardData();
 		}
 	})
 	function gotoList(){
-		location.href="/customer/localproduct-list";
+		location.href="/mber/customer/localproduct-list";
 	}
 	function readBoardData(){
-
-		var form = {
-				board_type :  "20",
-				board_no :  <%=request.getParameter("board_no") %>,
-				board_pwd : '<%=request.getParameter("board_pwd") %>'
-		    };
-	    
 		$.ajax({
 			headers: { 
 			        'Accept': 'application/json',
 			        'Content-Type': 'application/json' 
 			},
-		    url:"/get/board/view", // 요청 할 주소
+			url:"/get/board/view?nttId="+board_no,
 		    async:true,// false 일 경우 동기 요청으로 변경
-		    type:'POST', // GET, PUT
+		    type:'GET', // GET, PUT
 		    dataType:'json',// xml, json, script, html
-	        data: JSON.stringify(form),
 		    success:function(data) {
-				request = data;
-				if(parseInt(request.result))
-				{
-					if(request.data)
-					{
-					
-						if(request.result == "1"){
-								$('#board_title').val(request.data[0].board_title);
-								$('#board_author').val(request.data[0].name);
-								$('#board_content').val(request.data[0].board_content);
-								$('#board_name').val(request.data[0].name);
-								$('#board_link').val(request.data[0].link_url);
-								$('#board_phone').val(request.data[0].phone);
-								if(request.data[0].detail_img_file_name != '' && request.data[0].detail_img_file_name != null && request.data[0].detail_img_file_name !== undefined){
-									$('#board_img').val(request.data[0].detail_img_file_name);
-									var t = $('#addFileList').DataTable();
-									t.row().remove();
-							        t.row.add( [
-								            '<a href="#" onclick="deleteFileRow();return false;" style="color:red;">삭제</a>',
-								            request.data[0].detail_img_file_name,
-								            ''
-								        ] ).draw( false );
-
-								}
-						}
+		    	console.log(data);
+				$('#board_title').val(data.nttSj);
+				$('#board_author').val(data.wrterNm);
+				$('#board_phone').val(data.authorHp);
+				$('#board_link').val(data.linkUrl);
+				$('#board_content').val(data.nttCn);
+				
+				if (data.files.length > 0) {
+					for (let i = 0; i < data.files.length; i++) {
+						$('#board_img').val("테스트~!~!~!~!");
+						var t = $('#addFileList').DataTable();
+						t.row().remove();
+				        t.row.add( [
+					            '<a href="#" onclick="deleteFileRow();return false;" style="color:red;">삭제</a>',
+					            data.files[i].orignlFileNm,
+					            ''
+					        ] ).draw( false );
 					}
 				}
 			},// 요청 완료 시
@@ -98,7 +83,7 @@
 
 	
 	function saveNotice(){
-		var board_type = 20;
+		var board_type = 36;
 
 		grecaptcha.ready(function() {
 	          grecaptcha.execute('6Le8_iQcAAAAACCuc_W--e48akBOB61Uzu839PkO', {action: 'submit'}).then(function(token) {
@@ -144,7 +129,7 @@
 	    			formData.append("board_content", $('#board_content').val());
 	    			formData.append("link_url", $('#board_link').val());
 	    			formData.append("name", $('#board_author').val()); 
-	    			formData.append("phone", $('#board_phone').val());
+	    			formData.append("author_hp", $('#board_phone').val());
 	    			formData.append("board_type", board_type);
 	    			formData.append("file_list", $("#file_list")[0].files[0])
 	    			formData.append("board_pwd", SHA256($('#board_pwd').val())); 
@@ -180,10 +165,10 @@
 	    	        		{
 	    	            		if(<%=request.getParameter("board_no") %> != "" && <%=request.getParameter("board_no") %> != null){
 	    	            			alert("정상적으로 수정되었습니다.");
-	    	            			location.href="/customer/localproduct-view?board_no=" + <%=request.getAttribute("board_no") %>;
+	    	            			location.href="/mber/customer/localproduct-view?board_no=" + <%=request.getParameter("board_no") %>;
 	    	            		}else{
 	    	            			alert("정상적으로 등록되었습니다.");
-	    	            			location.href="/customer/localproduct-list";
+	    	            			location.href="/mber/customer/localproduct-list";
 	    	            			
 	    	            		}
 	    		        		
@@ -224,7 +209,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>로컬생산품 판로지원</li>
       </ul>

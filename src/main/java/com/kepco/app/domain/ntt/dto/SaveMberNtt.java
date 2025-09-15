@@ -58,7 +58,7 @@ public class SaveMberNtt {
          */
         private String thumbUrl;
 
-
+        private String googleToken;
         /**
          * 첨부파일
          */

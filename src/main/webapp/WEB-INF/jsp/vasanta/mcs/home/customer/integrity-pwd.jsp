@@ -29,7 +29,7 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
   <script type="text/javascript">
 	function pwdChk(){
-		var board_type = 22;
+		var board_type = 39;
 
 		if($('#board_pwd').val() == ""){ 
 			alert("비밀번호를 입력해 주세요."); return;
@@ -54,7 +54,7 @@
 	         success: function (data) {
 	         	if(parseInt(data.result))
 	     		{
-	        		location.href="/customer/integrity-view?board_no=" + <%=request.getAttribute("board_no") %> + "&board_pwd=" + SHA256($('#board_pwd').val());
+	        		location.href="/mber/customer/integrity-view?board_no=" + <%=request.getAttribute("board_no") %>;
 	     		}
 	         	else
 	             {
@@ -109,7 +109,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customeropinion">고객소통</a>
         </li>
         <li>청렴·부패 신고</li>
       </ul>

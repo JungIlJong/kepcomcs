@@ -135,7 +135,7 @@ $(document).ready(function() {
 	$.cookie('kepcomcssResponseNumber', '<%=sResponseNumber%>');
 	$.cookie('authorName', '<%=sName%>');
 	$.cookie('authorHp', '<%=sMobileNo%>');
-	opener.location.href="/customer/cooperation-form";
+	opener.location.href="/mber/customer/cooperation-form";
 	self.close(); 
 });
 ///////

@@ -29,7 +29,7 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 <script type="text/javascript">
 	function pwdChk(){
-		var board_type = 23;
+		var board_type = 1325;
 
 		if($('#board_pwd').val() == ""){ 
 			alert("비밀번호를 입력해 주세요."); return;
@@ -54,7 +54,7 @@
 	         success: function (data) {
 	         	if(parseInt(data.result))
 	     		{
-	        		location.href="/esg/social/socialinquiry-view?board_no=" + <%=request.getAttribute("board_no") %> + "&board_pwd=" + SHA256($('#board_pwd').val());
+	        		location.href="/mber/esg/social/socialinquiry-view?board_no=" + <%=request.getAttribute("board_no") %>;
 	     		}
 	         	else
 	             {
@@ -103,10 +103,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/social/social-activity">사회적가치</a>
+        <a href="/mber/esg/social/social-activity">사회적가치</a>
       </li>
       <li>사회공헌문의</li>
     </ul>   

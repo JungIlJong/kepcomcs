@@ -472,7 +472,7 @@ window.initFvProgram = function () {
                             if (value.length > 20) {
                                 return {valid: false, message: msg.progrmNmMaxlength};
                             }
-                            const regex = /^[가-힣a-zA-Z0-9\s]+$/;
+                            const regex = /^[가-힣a-zA-Z0-9\s·]+$/;
                             if (!regex.test(value)) {
                                 return {valid: false, message: msg.progrmNmInvalid};
                             }

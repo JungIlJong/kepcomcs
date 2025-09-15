@@ -70,13 +70,13 @@
 				
 					myForm = document.getElementById('myForm2');
 		   			var formData = new FormData(myForm);
-					console.log(formData);
-		   			formData.append("author_name", $('#author_name').text());
-		   			formData.append("author_email", $('#author_email').val());
+		   			formData.append("board_author", $('#author_name').text());
+		   			formData.append("email", $('#author_email').val());
 		   			formData.append("author_hp", $('#author_hp').text());
 		   			formData.append("opinion_title_head", $('#board_title_head').val());
-		   			formData.append("opinion_title", $('#board_title').val());
-		   			formData.append("opinion_content", $('#board_content').val()); 
+		   			formData.append("board_title", $('#board_title').val());
+		   			formData.append("board_content", $('#board_content').val()); 
+		   			formData.append("board_type", 1326);
 		   			formData.append("file_list", $("#file_list")[0].files[0])
 		   			formData.append("google_token", token);
 
@@ -98,7 +98,7 @@
 		   			$.ajax({
 		   	            type: "POST",
 		   	            enctype: 'multipart/form-data',
-		   	            url: "/insert/Report",
+		   	         	url: "/set/boardfile",
 		   	            data: formData,
 		   	            processData: false,
 		   	            contentType: false,
@@ -107,17 +107,17 @@
 		   	            success: function (data) {
 		   	            	if(parseInt(data.result))
 		   	        		{
-		   		        		replaceUrl = "/esg/ethic/report";
+		   		        		replaceUrl = "/mber/esg/ethic/report";
 		   	            		alert("정상적으로 등록되었습니다.");
 		   	            		location.replace(replaceUrl);
 		   	        		}
 		   	            	else
 		   	                {
-		   						alert("관리자에게 문의바랍니다2.");
+		   						alert("관리자에게 문의바랍니다.");
 		   	                }
 		   	            },
 		   	            error: function (e) {
-		   	            	alert("관리자에게 문의바랍니다1.");
+		   	            	alert("관리자에게 문의바랍니다.");
 		   	            	console.log(e);
 		   	            }
 		   	        });
@@ -153,10 +153,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction.html">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction.html">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/ethic/ethic-introduction.html">윤리경영</a>
+        <a href="/mber/esg/ethic/ethic-introduction.html">윤리경영</a>
       </li>
       <li>신문고</li>
     </ul>     

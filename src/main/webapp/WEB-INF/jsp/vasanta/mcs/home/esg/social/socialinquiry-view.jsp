@@ -31,61 +31,41 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
 	
-		var board_type = "23";
+		var board_type = 1325;
+		var board_no = <%=request.getParameter("board_no") %>;
 		$(function() {
 			setMainTable();
 		})
 		
 		function setMainTable() {
 			
-			var form = {
-					board_type :  board_type,
-					board_no :  <%=request.getAttribute("board_no") %>,
-					board_pwd : '<%=request.getAttribute("board_pwd") %>'
-			    };
-		    
 			$.ajax({
 				headers: { 
 				        'Accept': 'application/json',
 				        'Content-Type': 'application/json' 
 				},
-			    url:"/get/board/view", // 요청 할 주소
+				url:"/get/board/view?nttId="+board_no, // 요청 할 주소
 			    async:true,// false 일 경우 동기 요청으로 변경
-			    type:'POST', // GET, PUT
+			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html
-		        data: JSON.stringify(form),
 			    success:function(data) {
-					request = data;
-					if(parseInt(request.result))
-					{
-						if(request.data)
-						{
-							//var requestJson = JSON.parse(request);
-							if(request.result == "1")
-							{
-								$('#board-view-title').text(request.data[0].board_title);
-								//$('#title').text(DataList[index].title);
-								//var dataJson = JSON.parse(requestJson.data);
-								//console.log(dataJson);
-								if(request.data[0].board_status == 0){
-									$('#board-status').text("접수완료");
-								}else if(request.data[0].board_status == 1){
-									$('#board-status').text("처리중");
-									$('#board_btn_save').hide();
-								}
+					$('#board-view-title').text(data.nttSj);
+					if(data.nttStatus == 0){
+						$('#board-status').text("접수완료");
+					}else if(data.nttStatus == 1){
+						$('#board-status').text("처리중");
+						$('#board_btn_save').hide();
+					}
 
-								$('#board-form-conts').text(request.data[0].insert_dt);
-								$('#board-author-name').text(request.data[0].insert_id);
-								$('#board-content').html(request.data[0].board_content.replace(/\n/g, '<br/>'));
-								if(request.data[0].reply_content == "" || request.data[0].reply_content == null){
-									var p = $('#reply-content').text("문의해 주셔서 감사드립니다.\n담당자가 내용을 확인하였으며, 처리 중에 있습니다.\n곧 답변해 드리도록 하겠습니다.\n감사합니다.");
-									p.html(p.html().replace(/\n/g, '<br/>'));
-								}else{
-									var p = $('#reply-content').text(request.data[0].reply_content);
-									p.html(p.html().replace(/\n/g, '<br/>'));
-								}
-							}
-						}
+					$('#board-form-date').text(data.frstRegistDt);
+					$('#board-author-name').text(data.wrterNm);
+					$('#board-content').html(data.nttCn.replace(/\n/g, '<br/>'));
+					if(data.nttReply == "" || data.nttReply == null){
+						var p = $('#reply-content').text("문의해 주셔서 감사드립니다.\n담당자가 내용을 확인하였으며, 처리 중에 있습니다.\n곧 답변해 드리도록 하겠습니다.\n감사합니다.");
+						p.html(p.html().replace(/\n/g, '<br/>'));
+					}else{
+						var p = $('#reply-content').text(data.nttReply);
+						p.html(p.html().replace(/\n/g, '<br/>'));
 					}
 				},// 요청 완료 시
 			    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
@@ -106,10 +86,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/social/social-activity">사회적가치</a>
+        <a href="/mber/esg/social/social-activity">사회적가치</a>
       </li>
       <li>사회공헌문의</li>
     </ul>   
@@ -133,7 +113,7 @@
 	          <li>
 	            <div class="board-form-tit" id="board-insert-dt">작성일</div>
 	            <div class="board-form-conts">
-	              <p>비정상적인 접근입니다. 정상적인 방법으로 문의 내용을 확인해 주세요.</p>
+	              <p id="board-form-date">비정상적인 접근입니다. 정상적인 방법으로 문의 내용을 확인해 주세요.</p>
 	            </div>
 	          </li>
 	          <li class="board-form-name">
@@ -160,10 +140,10 @@
 	          </li>
 	        </ul>
 	        <div class="btn-row btn-row-right">
-	          <a href="/esg/social/socialinquiry-form?board_no=<%=request.getAttribute("board_no") %>&board_pwd=<%=request.getAttribute("board_pwd") %>">
+	          <a href="/mber/esg/social/socialinquiry-form?board_no=<%=request.getAttribute("board_no") %>">
 	            <button class="btn-save" style="background-color:#002581;" id="board_btn_save">수정</button>
 	          </a>
-	          <a href="/esg/social/socialinquiry-list">
+	          <a href="/mber/esg/social/socialinquiry-list">
 	            <button class="btn-list">목록</button>
 	          </a>
 	        </div>

@@ -5,6 +5,7 @@ import org.egovframe.rte.fdl.cmmn.exception.FdlException;
 import com.kepco.app.domain.ntt.dto.SysNtt;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,4 +83,10 @@ public interface NttSysService {
     void deleteByBbsId(String bbsId) throws IOException;
 
     void updateNttReportIds(String nttId);
+    
+  	/**
+  	 * 금칙어 조회
+  	 * @return
+  	 */
+  	List<HashMap<String, Object>> getProhibitiveWordList();
 }

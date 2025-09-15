@@ -39,7 +39,7 @@
 	})
 	
 	function pwdChk(){
-		var board_type = 20;
+		var board_type = 36;
 
 		if($('#board_pwd').val() == ""){ 
 			$('#board_pwd').focus();
@@ -66,31 +66,25 @@
 	     		{	
 	         		const type =  '<%=request.getAttribute("procType") %>';
 		          	if(type == "Modify"){
-		          		location.href="/customer/localproduct-form?board_no=" + <%=request.getAttribute("board_no") %> + "&board_pwd=" + SHA256($('#board_pwd').val());
+		          		location.href="/mber/customer/localproduct-form?board_no=" + <%=request.getAttribute("board_no") %>;
 		          	}else if(type == "Delete"){
 		          		
-		          		var formData = new FormData();
-		        		formData.append("board_no", '<%=request.getAttribute("board_no") %>');
-		        		
+		          		var form = {
+		        				board_no :  <%=request.getAttribute("board_no") %>
+		        		    };
 		        		$.ajax({
+		        			headers: { 
+		    			        'Accept': 'application/json',
+		    			        'Content-Type': 'application/json' 
+		    			    },
 		        	         type: "POST",
-		        	         url: "/mcsAdmin/set/boardDelete",
-		        	         data: formData,
-		        	         processData: false,
-		        	         contentType: false,
-		        	         cache: false,
-		        	         dataType: "JSON",
+		        	         url: "/set/boardDelete",
+		        	         data: JSON.stringify(form),
+		        	         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		        	         dataType: "json",
 		        	         success: function (data) {
-		        	         	if(parseInt(data.result))
-		        	     		{
-		        	        		alert("정상적으로 삭제되었습니다.");
-		        	        		location.href="/customer/localproduct-list";
-		        	     		}
-		        	         	else
-		        	             {
-		        					alert("관리자에게 문의바랍니다.");
-		        					
-		        	             }
+	        	        		alert("정상적으로 삭제되었습니다.");
+	        	        		location.href="/mber/customer/localproduct-list";
 		        	         },
 		        	         error: function (e) {
 		        	         	alert("관리자에게 문의바랍니다.");
@@ -157,7 +151,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>로컬생산품 판로지원</li>
       </ul>

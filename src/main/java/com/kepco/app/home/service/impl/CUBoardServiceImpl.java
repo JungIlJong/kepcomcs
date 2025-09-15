@@ -1,20 +1,42 @@
 package com.kepco.app.home.service.impl;
 
+import java.io.File;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.egovframe.rte.fdl.cmmn.exception.FdlException;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kepco.app.domain.atchfile.dto.InsertAtchFile;
+import com.kepco.app.domain.atchfile.service.FileService;
 import com.kepco.app.domain.ntt.dto.SearchMberNtt;
+import com.kepco.app.domain.ntt.dto.SysNtt;
+import com.kepco.app.domain.ntt.mapper.NttSysMapper;
 import com.kepco.app.home.mapper.CUBoardMapper;
 import com.kepco.app.home.service.CUBoardService;
 
 @Service("CUBoardService")
 public class CUBoardServiceImpl implements CUBoardService {
 
-	@Autowired
-	CUBoardMapper boardMapper;
+	private final CUBoardMapper boardMapper;
+	
+	private final NttSysMapper nttSysMapper;
+
+    private final FileService fileService;
+
+    private final String path;
+
+    public CUBoardServiceImpl(CUBoardMapper boardMapper, NttSysMapper nttSysMapper, FileService fileService, Environment env) {
+        this.boardMapper = boardMapper;
+        this.nttSysMapper = nttSysMapper;
+        this.fileService = fileService;
+        this.path = env.getProperty("Globals.fileStorePath", String.class);
+    }
 
 	public List<HashMap<String, Object>> getBoardList(HashMap<String, Object> body) {
 		return boardMapper.getBoardList(body);
@@ -90,60 +112,19 @@ public class CUBoardServiceImpl implements CUBoardService {
 		return result;
 	}
 	
-	public HashMap<String, Object> setBoardFile(HashMap<String, Object> param) {
+	@Transactional
+	public HashMap<String, Object> setBoardFile(SysNtt ntt) {
 		HashMap<String,Object> result = new HashMap<String,Object>();
 		try {
-			if(param.get("board_author") == null || param.get("board_author").equals(""))
-			{
-				result.put("result", 0);
-				result.put("code", "400");
-				result.put("msg", "사용자 ID가 없습니다.");
+			if (ntt.getNttId() == null || ntt.getNttId().equals("null") || ntt.getNttId() == "") {
+				nttSysMapper.insertNtt(ntt);
+			} else {
+				nttSysMapper.updateNtt(ntt);
 			}
-			else if(param.get("board_type") == null || param.get("board_type").equals(""))
-			{
-				result.put("result", 0);
-				result.put("code", "400");
-				result.put("msg", "게시판 정보가 없습니다.");
-			}
-			else if(param.get("board_title") == null || param.get("board_title").equals(""))
-			{
-				result.put("result", 0);
-				result.put("code", "400");
-				result.put("msg", "작성글 제목이 없습니다.");
-			}
-			else if(param.get("board_content") == null || param.get("board_content").equals(""))
-			{
-				result.put("result", 0);
-				result.put("code", "400");
-				result.put("msg", "내용이 없습니다.");
-			}
-			else
-			{
-				Integer setVal = 0;
-				System.out.println("board_no :" + param.get("board_no"));
-				if (param.get("board_no") == null || param.get("board_no").equals("") || param.get("board_no").equals("null")) {
-					System.out.println("board_no 1 :" + param.get("board_no"));
-					setVal = boardMapper.setBoardFile(param);
-				}else {
-					System.out.println("board_no 2 :" + param.get("board_no"));
-					setVal = boardMapper.setBoardFileUpdate(param);
-				}
-				
-				if(setVal > 0)
-				{
-					
-					result.put("result", 1);
-					result.put("code", "200");
-					result.put("msg", "Success");
-				}
-				else
-				{
-					result.put("result", 0);
-					result.put("code", "204");
-					result.put("msg", "게시글 저장에 실패하였습니다.");
-				}
-			}
-			
+	        fileUpload(ntt, ntt.getWrterNm());
+			result.put("result", 1);
+			result.put("code", "200");
+			result.put("msg", "Success");
 		}catch (Exception e) {
 			result.put("result", 0);
 			result.put("code", "500");
@@ -155,6 +136,11 @@ public class CUBoardServiceImpl implements CUBoardService {
 	public SearchMberNtt.NttDetail getBoardView(Long nttId) {
 		// TODO Auto-generated method stub
 		return boardMapper.getBoardView(nttId);
+	}
+	
+	public List<HashMap<String, Object>> getBoardView2(HashMap<String, Object> body) {
+		// TODO Auto-generated method stub
+		return boardMapper.getBoardView2(body);
 	}
 	
 	public List<HashMap<String, Object>> getNewsView(HashMap<String, Object> body) {
@@ -169,6 +155,10 @@ public class CUBoardServiceImpl implements CUBoardService {
 	
 	public Integer chkBoardPassword(HashMap<String, Object> body) {
 		return boardMapper.chkBoardPassword(body);
+	}
+	
+	public int boardDelete(HashMap<String, Object> body) {
+		return boardMapper.boardDelete(body);
 	}
 	
 	public HashMap<String, Object> insertOpinion(HashMap<String, Object> param){
@@ -351,5 +341,31 @@ public class CUBoardServiceImpl implements CUBoardService {
 	}
 	
 	
-	
+	 private void fileUpload(SysNtt ntt, String regId) throws FdlException {
+
+	        if(Objects.isNull(ntt.getFiles())) {
+	            return;
+	        }
+
+	        if(ntt.getFiles().length == 0) {
+	            return;
+	        }
+
+	        if(ntt.getFiles()[0].isEmpty()) {
+	            return;
+	        }
+
+	        for(MultipartFile file: ntt.getFiles()) {
+	            StringBuilder sb = new StringBuilder();
+	            InsertAtchFile insertAtchFile = InsertAtchFile.builder()
+	                    .file(file)
+	                    .path(sb.append(path).append(File.separator).append("bbs").append(File.separator).append(ntt.getBbsId()).append(File.separator).append(LocalDate.now().toString()).toString())
+	                    .frstRegisterId(regId)
+	                    .upperId(ntt.getNttId())
+	                    .fileSe("ntt")
+	                    .build();
+	            fileService.deleteAtchfileByUpperId(ntt.getNttId());
+	            fileService.insertAtchfile(insertAtchFile);
+	        }
+	    }
 }

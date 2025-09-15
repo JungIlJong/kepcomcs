@@ -18,9 +18,11 @@ public interface CUBoardMapper {
 	int setBoardFile(Map<String, Object> map);
 	int setBoardFileUpdate(Map<String, Object> map);
 	NttDetail getBoardView(Long nttId);
+	List<HashMap<String, Object>> getBoardView2(Map<String, Object> map);
 	List<HashMap<String, Object>> getNewsView(Map<String, Object> map);
 	List<HashMap<String, Object>> getNewsNextPrev(Map<String, Object> map);
 	int chkBoardPassword(Map<String, Object> map);
+	int boardDelete(HashMap<String, Object> body);
 	int insertOpinion(Map<String, Object> map);
 	int insertReport(Map<String, Object> map);
 	List<HashMap<String, Object>> getProhibitiveWordList();

@@ -86,12 +86,12 @@
 
   <script type="text/javascript">
 	$(function() {
-		if($.cookie('kepcomcsagreement') != "<%=session.getId()%>" ){
+<%-- 		if($.cookie('kepcomcsagreement') != "<%=session.getId()%>" ){ --%>
 
-			alert("비정상적인 접근입니다.\n개인정보 동의 후에 접속해 주셔야 합니다.")
-			location.href="./integrity-agree";
+// 			alert("비정상적인 접근입니다.\n개인정보 동의 후에 접속해 주셔야 합니다.")
+// 			location.href="./integrity-agree";
 			
-		}
+// 		}
 	})
 
 	window.name ="Parent_window";
@@ -119,7 +119,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>청렴·부패 신고</li>
       </ul>

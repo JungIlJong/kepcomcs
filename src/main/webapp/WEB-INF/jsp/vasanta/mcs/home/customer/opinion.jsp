@@ -27,15 +27,15 @@
 
   <script type="text/javascript">
   $(function() {
-		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){
+<%-- 		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){ --%>
 
-			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
-			location.href="./opinion-certification";
+// 			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
+// 			location.href="./opinion-certification";
 			
-		}else{
+// 		}else{
 			$('#author_name').text($.cookie('authorName'));
 			$('#author_hp').text($.cookie('authorHp'));
-		}
+// 		}
 
 		let today = new Date();   
 
@@ -53,15 +53,15 @@
 
 		    grecaptcha.execute('6Le8_iQcAAAAACCuc_W--e48akBOB61Uzu839PkO', {action: 'submit'}).then(function(token) {
 		          
-	      		if($('#customer_name').val() == ""){ 
+	      		if($('#board_author').val() == ""){ 
 	    			alert("고객님의 이름을 입력해 주세요."); return;
-	    		}else if($('#customer_email').val() == ""){
+	    		}else if($('#email').val() == ""){
 	    			alert("고객님의 이메일 주소를 입력해 주세요."); return;
-	    		}else if($('#customer_hp').val() == ""){
+	    		}else if($('#author_hp').val() == ""){
 	    		 	alert("고객님의 연락처를 입력해 주세요."); return;
-	    		}else if($('#opinion_title').val() ==""){
+	    		}else if($('#board_title').val() ==""){
 	    		 	alert("글 제목을 입력해 주세요."); return;
-	    		}else if($('#opinion_content').val() ==""){
+	    		}else if($('#board_content').val() ==""){
 	    		 	alert("글 내용을 입력해 주세요."); return;
 	    		}
 
@@ -80,16 +80,17 @@
 		            }
 				}
 
-	    		if( $('input[name=policyAgreementYN]').val() == "N"){
+	    		if( $(":input:radio[name=policyAgreementYN]:checked").val() == "N"){
 	    		 	alert("개인정보활용 여부에 동의하지 않으셨습니다.\n다시 한번 확인해 주세요."); return;
 			    }
 
     			var formData = new FormData();
 
-    			formData.append("customer_name", $('#customer_name').val());
-    			formData.append("customer_email", $('#customer_email').val()); 
-    			formData.append("customer_hp", $('#customer_hp').val()); 
-    			formData.append("customer_cp_name", $('#customer_name').val());
+    			formData.append("board_type", "1327");
+    			formData.append("board_author", $('#board_author').val());
+    			formData.append("email", $('#email').val()); 
+    			formData.append("author_hp", $('#author_hp').val()); 
+    			formData.append("cp_nm", $('#board_author').val());
     			formData.append("inquery_area", $('#inquery_area').val()); 
 
     			if($(":input:radio[name=addressYN]:checked").val() == "Y"){
@@ -102,8 +103,8 @@
         			formData.append("customer_address3", "");
            		}
 
-    			formData.append("opinion_title", $('#opinion_title').val()); 
-    			formData.append("opinion_content", $('#opinion_content').val()); 
+    			formData.append("board_title", $('#board_title').val()); 
+    			formData.append("board_content", $('#board_content').val()); 
     			formData.append("feedback_yn", $(":input:radio[name=replyYN]:checked").val());
     			formData.append("inquery_area",  $(":input:radio[name=policyAgreementYN]:checked").val()); 
 
@@ -116,7 +117,7 @@
     			$.ajax({
     	            type: "POST",
     	            enctype: 'multipart/form-data',
-    	            url: "/set/Opinion",
+    	            url: "/set/boardfile",
     	            data: formData,
     	            processData: false,
     	            contentType: false,
@@ -125,7 +126,7 @@
     	            success: function (data) {
     	            	if(parseInt(data.result))
     	        		{
-    		        		replaceUrl = "/customer/complete";
+    		        		replaceUrl = "/mber/customer/complete";
     	            		location.replace(replaceUrl);
     	        		}
     	            	else
@@ -160,7 +161,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>고객의 소리</li>
       </ul>
@@ -176,7 +177,7 @@
                   <span>이름</span>
                 </th>
                 <td>
-                  <input type="text" class="input-style" placeholder="성함을 입력해 주세요" id="customer_name">
+                  <input type="text" class="input-style" placeholder="성함을 입력해 주세요" id="board_author">
                 </td>
               </tr>
               <tr class="essencial">
@@ -184,7 +185,7 @@
                   <span>이메일</span>
                 </th>
                 <td>
-                  <input type="text" class="input-style" placeholder="이메일을 입력해 주세요" id="customer_email">
+                  <input type="text" class="input-style" placeholder="이메일을 입력해 주세요" id="email">
                 </td>
               </tr>
               <tr class="essencial">
@@ -192,7 +193,7 @@
                   <span>연락처</span>
                 </th>
                 <td>
-                  <input type="text" class="input-style" placeholder="연락처를 입력해 주세요" id="customer_hp">
+                  <input type="text" class="input-style" placeholder="연락처를 입력해 주세요" id="author_hp">
                 </td>
               </tr>
               <tr>
@@ -200,7 +201,7 @@
                   <span>고객업체명</span>
                 </th>
                 <td>
-                  <input type="text" class="input-style" placeholder="업체명을 입력해 주세요" id="customer_cp_name">
+                  <input type="text" class="input-style" placeholder="업체명을 입력해 주세요" id="cp_nm">
                 </td>
               </tr>
               <tr>
@@ -262,7 +263,7 @@
                   <span>제목</span>
                 </th>
                 <td>
-                  <input type="text" class="input-style" placeholder="제목을 입력해 주세요" id="opinion_title">
+                  <input type="text" class="input-style" placeholder="제목을 입력해 주세요" id="board_title">
                 </td>
               </tr>
               <tr class="essencial">
@@ -270,7 +271,7 @@
                   <span>내용</span>
                 </th>
                 <td>
-                  <textarea class="textarea-style" placeholder="내용을 작성해 주세요" id="opinion_content"></textarea>
+                  <textarea class="textarea-style" placeholder="내용을 작성해 주세요" id="board_content"></textarea>
                 </td>
               </tr>
               <tr class="essencial answer-tr">

@@ -104,6 +104,8 @@
                                                                     code="bbs.bbsTyCode.album"/></option>
                                                             <option value="BBS_QNA"><spring:message
                                                                     code="bbs.bbsTyCode.qna"/></option>
+                                                            <option value="BBS_DOWNLOAD"><spring:message
+                                                                    code="bbs.bbsTyCode.download"/></option>
                                                         </select>
                                                     </div>
                                                 </div>

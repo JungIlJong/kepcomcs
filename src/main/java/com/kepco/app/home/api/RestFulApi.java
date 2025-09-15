@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,7 +43,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kepco.app.common.CommonResponse;
-import com.kepco.app.domain.ntt.dto.SearchMberNtt;
+import com.kepco.app.domain.ntt.dto.SysNtt;
+import com.kepco.app.domain.ntt.service.NttSysService;
 import com.kepco.app.home.service.CUBoardService;
 import com.kepco.app.home.service.CUShopService;
 
@@ -55,14 +57,18 @@ public class RestFulApi {
     @Autowired
     private final CUShopService ShopService;
 
+    @Autowired
+    private final NttSysService NttService;
+
     @Value("${Globals.fileStorePath}")
     private String fileStorePath;
 
     private final String activeProfile;
 
-    public RestFulApi(CUBoardService boardService, CUShopService shopService, Environment env) {
+    public RestFulApi(CUBoardService boardService, CUShopService shopService, NttSysService nttSysService, Environment env) {
         BoardService = boardService;
         ShopService = shopService;
+        NttService = nttSysService;
         this.activeProfile = env.getProperty("spring.profiles.active");
     }
 
@@ -139,7 +145,7 @@ public class RestFulApi {
 
     @RequestMapping(value = "/set/boardfile", produces = "application/json; charset=utf8", method = RequestMethod.POST)
     @ResponseBody
-    public HashMap<String, Object> setBoardwithFile(MultipartHttpServletRequest multi, HttpServletRequest request, HttpServletResponse response) {
+    public HashMap<String, Object> setBoardwithFile(MultipartHttpServletRequest multi, HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "file_list", required = false) MultipartFile[] files) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         HashMap<String, Object> param = new HashMap<String, Object>();
         Integer retValue = 0;
@@ -147,99 +153,30 @@ public class RestFulApi {
         try {
             if (GoogleCHATCHA(multi.getParameter("google_token").toString())) {
                 //금칙어 목록 우선 처리
-                String strProhibitiveStatus = filterText(new String(multi.getParameter("board_content").toString().getBytes("8859_1"), "utf-8"));
-                param.put("board_content", strProhibitiveStatus);
-                param.put("board_title", new String(multi.getParameter("board_title").toString().getBytes("8859_1"), "utf-8"));
-                param.put("board_author", new String(multi.getParameter("board_author").toString().getBytes("8859_1"), "utf-8"));
-                param.put("board_type", new String(multi.getParameter("board_type").toString().getBytes("8859_1"), "utf-8"));
-                param.put("board_pwd", new String(multi.getParameter("board_pwd").toString().getBytes("8859_1"), "utf-8"));
-                param.put("user_yn", "Y");
-                param.put("board_no", new String(multi.getParameter("board_no").toString().getBytes("8859_1"), "utf-8"));
-                System.out.print("::::::::::::::::::");
-                System.out.print(multi.getParameter("board_type").toString());
-                System.out.print("::::::::::::::::::");
-                if (multi.getParameter("link_url") != null) {
-                    param.put("link_url", new String(multi.getParameter("link_url").toString().getBytes("8859_1"), "utf-8"));
-                }
-                if (multi.getParameter("name") != null) {
-                    param.put("name", new String(multi.getParameter("name").toString().getBytes("8859_1"), "utf-8"));
-                }
-                if (multi.getParameter("phone") != null) {
-                    param.put("phone", new String(multi.getParameter("phone").toString().getBytes("8859_1"), "utf-8"));
-                }
-                if (multi.getParameter("email") != null) {
-                    param.put("email", new String(multi.getParameter("email").toString().getBytes("8859_1"), "utf-8"));
-                }
-                if (multi.getParameter("board_img") != null) {
-                    param.put("main_img_file_name", new String(multi.getParameter("board_img").toString().getBytes("8859_1"), "utf-8"));
-                }
-
-                Integer rValue = 0;
-                String DBfilename = "";
-
-                if (multi.getFiles("file_list").size() > 0) {
-
-                    //constrvo.setImgpath("/resources/upload/construction/image/);
-                    String path = fileStorePath;
-                    //String path= "/resources/upload/";
-                    File dir = new File(path);
-                    if (!dir.isDirectory()) {
-                        dir.mkdirs();
-                    }
-
-                    File[] beforfile = dir.listFiles();
-                    List<MultipartFile> fileList = multi.getFiles("file_list");
-
-                    for (MultipartFile mf : fileList) {
-                        //String fileName = new String(mf.getOriginalFilename().toString().getBytes("8859_1"),"utf-8");
-                        //UUID uuid = UUID.randomUUID();
-                        //fileName = uuid.toString() + "-_-" + fileName;
-                        //String safeFile = path+fileName;
-
-                        try {
-                            if ("20".equals(multi.getParameter("board_type").toString())) {
-                                String uploadedFilename = fileUpload(multi.getFiles("file_list"), request);
-                                param.put("main_img_file_name", uploadedFilename);
-
-                            } else {
-                                //mf.transferTo(new File(safeFile))
-                                String uploadedFilename = fileUpload(multi.getFiles("file_list"), request);
-                                param.put("file_name", uploadedFilename);
-                            }
-
-
-                        } catch (IllegalStateException e) {
-                            result.put("result", String.valueOf(retValue));
-                            result.put("msg", "Save failed");
-
-                            e.printStackTrace();
-
-                        } catch (IOException e) {
-                            result.put("result", String.valueOf(retValue));
-                            result.put("msg", "Save failed");
-
-                            e.printStackTrace();
-                        }
-                    }
-                    result = BoardService.setBoardFile(param);
-                    if (Integer.parseInt(result.get("result").toString()) > 0) {
-                        result.put("result", 1);
-                        result.put("msg", "Save Completed");
-                    } else {
-                        result.put("result", 0);
-                        result.put("msg", "Save Failed");
-                    }
-                } else {
-                    result = BoardService.setBoardFile(param);
-                    if (Integer.parseInt(result.get("result").toString()) > 0) {
-                        result.put("result", 1);
-                        result.put("msg", "Save Completed");
-                    } else {
-                        result.put("result", 0);
-                        result.put("msg", "Save Failed");
-                    }
-                }
-
+                String strProhibitiveStatus = filterText(multi.getParameter("board_content"));
+                
+                SysNtt ntt = new SysNtt();
+                ntt.setNttId(Objects.toString(multi.getParameter("board_no"), null));
+				ntt.setBbsId(Objects.toString(multi.getParameter("board_type"), null));
+				ntt.setNttSj(Objects.toString(multi.getParameter("board_title"), null));
+				ntt.setNttCn(Objects.toString(multi.getParameter("board_content"), null));
+				ntt.setPassword(Objects.toString(multi.getParameter("board_pwd"), null));
+				ntt.setFrstRegisterId(Objects.toString(multi.getParameter("board_author"), null));
+				ntt.setWrterNm(Objects.toString(multi.getParameter("board_author"), null));
+				ntt.setEmail(Objects.toString(multi.getParameter("email"), null));
+				ntt.setAuthorHp(Objects.toString(multi.getParameter("author_hp"), null));
+				ntt.setOpinionTitleHead(Objects.toString(multi.getParameter("opinion_title_head"), null));
+				ntt.setCpNm(Objects.toString(multi.getParameter("cp_nm"), null));
+				ntt.setArea(Objects.toString(multi.getParameter("inquery_area"), null));
+				ntt.setAddress1(Objects.toString(multi.getParameter("customer_address1"), null));
+				ntt.setAddress2(Objects.toString(multi.getParameter("customer_address2"), null));
+				ntt.setAddress3(Objects.toString(multi.getParameter("customer_address3"), null));
+				ntt.setFeedbackYn(Objects.toString(multi.getParameter("feedback_yn"), null));
+				ntt.setLinkUrl(Objects.toString(multi.getParameter("link_url"), null));
+				ntt.setFiles(files);
+				BoardService.setBoardFile(ntt);
+                result.put("result", 1);
+                result.put("msg", "Save Completed");
             }
 
         } catch (Exception e) {
@@ -252,11 +189,38 @@ public class RestFulApi {
 
     @RequestMapping(value = "/get/board/view", produces = "application/json; charset=utf8", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity getBoardView(@RequestParam Long nttId) throws Exception {
+    public ResponseEntity getBoardView(@RequestParam Long nttId, HashMap<String, Object> param) throws Exception {
 
     	return CommonResponse.success(BoardService.getBoardView(nttId));
     }
 
+    @RequestMapping(value = "/get/board/view2", produces = "application/json; charset=utf8", method = RequestMethod.POST)
+    @ResponseBody
+    public String getBoardView2(HashMap<String, Object> param,
+                               HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        body.put("board_type", param.get("board_type"));
+        body.put("board_no", param.get("board_no"));
+        body.put("board_pwd", param.get("board_pwd"));
+        List<HashMap<String, Object>> rList = BoardService.getBoardView2(body);
+
+        JSONObject rdata = new JSONObject();
+        if (rList.size() > 0) {
+            rdata.put("result", "1");
+            rdata.put("msg", "1");
+
+            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
+
+        } else {
+            rdata.put("result", "0");
+            rdata.put("msg", "0");
+            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
+        }
+
+        return rdata.toString();
+    }
+    
     @RequestMapping(value = "/get/board/chkBoardPwd/", produces = "application/json; charset=utf8", method = RequestMethod.POST)
     @ResponseBody
     public String chkBoardPwd(@RequestBody HashMap<String, Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -282,6 +246,13 @@ public class RestFulApi {
         return rdata.toString();
     }
 
+    @RequestMapping(value = "/set/boardDelete", produces = "application/json; charset=utf8", method = RequestMethod.POST)
+    @ResponseBody
+    public int boardDelete(@RequestBody HashMap<String, Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    	HashMap<String, Object> body = new HashMap<String, Object>();
+    	body.put("board_no", param.get("board_no"));
+    	return BoardService.boardDelete(body);
+    }
 
     @RequestMapping(value = "/set/Opinion", produces = "application/json; charset=utf8", method = RequestMethod.POST)
     @ResponseBody
@@ -903,10 +874,10 @@ public class RestFulApi {
     //금지어 필터링 하기
     public String filterText(String sText) {
 
-        List<HashMap<String, Object>> prohibitiveWordList = BoardService.getProhibitiveWordList();
+        List<HashMap<String, Object>> prohibitiveWordList = NttService.getProhibitiveWordList();
         String strProhibitiveWordList = "";
         for (Map<String, Object> entry : prohibitiveWordList) {
-            Object value = entry.get("word");
+            Object value = entry.get("WORD");
             strProhibitiveWordList = strProhibitiveWordList + value.toString() + "|";
         }
         System.out.println(strProhibitiveWordList);
@@ -1015,6 +986,9 @@ public class RestFulApi {
         String strTime = dayTime.format(new Date(time));
         return strTime;
     }
-
+    
+    private String getParam(MultipartHttpServletRequest multi, String name) {
+        return Objects.toString(multi.getParameter(name), "");
+    }
 }
 

@@ -51,57 +51,34 @@
 	
 		$("#today_val").text(new Date().toISOString().substring(0, 10));
 	})
-	var board_no = <%=request.getParameter("board_no") %>;
+	var board_no =  <%=request.getParameter("board_no") %>
 	$(function() {
-		//$('#notice_type').val(board_type)
-		var board_no = <%=request.getParameter("board_no") %>;
-		if (board_no != null || board_no != "" || board_no != 'undefined'){
-			readBoardData();
-		}
+		readBoardData();
 	})
 	function gotoList(){
-		location.href="/customer/cooperation-list";
+		location.href="/mber/customer/cooperation-list";
 	}
 	function readBoardData(){
 
-		var form = {
-				board_type :  "21",
-				board_no :  <%=request.getParameter("board_no") %>,
-				board_pwd : '<%=request.getParameter("board_pwd") %>'
-		    };
-	    
 		$.ajax({
 			headers: { 
 			        'Accept': 'application/json',
 			        'Content-Type': 'application/json' 
 			},
-		    url:"/get/board/view", // 요청 할 주소
+			url:"/get/board/view?nttId="+board_no, // 요청 할 주소
 		    async:true,// false 일 경우 동기 요청으로 변경
-		    type:'POST', // GET, PUT
+		    type:'GET', // GET, PUT
 		    dataType:'json',// xml, json, script, html
-	        data: JSON.stringify(form),
 		    success:function(data) {
-				request = data;
-				if(parseInt(request.result))
-				{
-					if(request.data)
-					{
-						//var requestJson = JSON.parse(request);
-						if(request.result == "1")
-						{
-							console.log(request.data[0].board_status);
-							if (request.data[0].board_status == 0){
-								$('#board_title').val(request.data[0].board_title);
-								$('#board_author').val(request.data[0].insert_id);
-								$('#board_content').val(request.data[0].board_content);
-							}
-							else{
-								alert("문의 글을 접수중일 때에만 수정하실 수 있습니다.")
-							}
-							
-						}
-					}
+				if (data.nttStatus == 0){
+					$('#board_title').val(data.nttSj);
+					$('#board_author').val(data.wrterNm);
+					$('#board_content').val(data.nttCn);
 				}
+				else{
+					alert("문의 글을 접수중일 때에만 수정하실 수 있습니다.")
+				}
+							
 			},// 요청 완료 시
 		    error:function(jqXHR) {alert("비정상적인 접근 입니다. \n관리자에게 문의해 주세요.")},// 요청 실패.
 		    complete:function(jqXHR) {}// 요청의 실패, 성공과 상관 없이 완료 될 경우 호출
@@ -138,7 +115,7 @@
 	    			formData.append("board_author", $('#board_author').val()); 
 	    			formData.append("board_content", $('#board_content').val()); 
 	    			formData.append("board_type", board_type);
-	    			//formData.append("title", encodeURIComponent($('#title').val()));
+	    			formData.append("board_status", 1);
 	    			formData.append("file_list", $("#file_list")[0].files[0])
 	    			formData.append("board_pwd", SHA256($('#board_pwd').val())); 
 	    			formData.append("google_token", token);
@@ -168,9 +145,9 @@
 	    	            cache: false,
 	    	            timeout: 600000,
 	    	            success: function (data) {
-	    	            	if(parseInt(data.result))
+	    	            	if(parseInt(data.result) == 1)
 	    	        		{
-	    		        		replaceUrl = "/customer/cooperation-list";
+	    		        		replaceUrl = "/mber/customer/cooperation-list";
 	    	            		alert("정상적으로 등록되었습니다.");
 	    	            		location.replace(replaceUrl);
 	    		        		/*

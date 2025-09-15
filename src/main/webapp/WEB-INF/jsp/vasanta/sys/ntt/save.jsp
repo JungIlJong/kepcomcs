@@ -332,7 +332,7 @@
         document.getElementById('bbsId').addEventListener('change', function () {
             const selectedBbsId = this.value;
             const bbs = bbsList.find(item => item.bbsId == selectedBbsId);
-console.log(bbs);
+
             if (bbs) {
                 document.getElementById('fileAtchSize').value = bbs.fileAtchSize;
                 document.getElementById('fileAtchCo').value = bbs.fileAtchCo;
