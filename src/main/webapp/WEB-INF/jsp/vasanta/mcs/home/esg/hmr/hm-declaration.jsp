@@ -32,10 +32,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction.html">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/hmr/hm-introduction">인권경영</a>
+        <a href="/mber/esg/hmr/hm-introduction">인권경영</a>
       </li>
       <li>인권경영 선언문</li>
     </ul>     

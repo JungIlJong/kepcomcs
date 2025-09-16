@@ -8,7 +8,6 @@
     <%@ include file="/WEB-INF/jsp/vasanta/sys/include/head.jsp" %>
     <script type="text/javascript">
         let bbsList = [];
-
         let success = function () {
             customAlert({
                 title: '<spring:message code="common.system.info"/>',

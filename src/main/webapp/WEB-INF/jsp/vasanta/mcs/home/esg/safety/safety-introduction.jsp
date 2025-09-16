@@ -33,10 +33,10 @@
         <h1>안전보건 경영소개</h1>
         <p>한전MCS는 안전 및 보건 시스템 강화를 목표로 안전보건경영을 추진합니다.</p>
         <br>
-        <p>&#183;&nbsp;<a href="/esg/safety/safety-policy" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">안전경영 경영방침</a></p>
-        <p>&#183;&nbsp;<a href="/esg/safety/safety-organization" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">안전경영 조직도</a></p>
-        <p>&#183;&nbsp;<a href="/esg/safety/safetynews-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">안전경영 소식</a></p>
-        <p>&#183;&nbsp;<a href="/esg/safety/safetyact-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">국민을 위한 안전활동</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/safety/safety-policy" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">안전경영 경영방침</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/safety/safety-organization" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">안전경영 조직도</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/safety/safetynews-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">안전경영 소식</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/safety/safetyact/safetyact-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">국민을 위한 안전활동</a></p>
         <p>&#183;&nbsp;<a href="https://www.safetyreport.go.kr/#main" target="_blank" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;padding-right: 16px;background: url(/resources/landing/images/main/ico_link.png) no-repeat right 1px;background-size: 9px 9px;">안전신문고</a></p>
 		<!-- <div style='margin-top: 20px;'>
 
@@ -56,10 +56,10 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/esg/safety/safety-introduction.html">ESG 경영</a>
+          <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
         </li>
         <li>
-          <a href="/esg/safety/safety-introduction.html">안전경영</a>
+          <a href="/mber/esg/safety/safety-introduction">안전경영</a>
         </li>
         <li>안전보건 경영소개</li>
       </ul>

@@ -508,7 +508,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/business/competitive">사업소개</a>
+          <a href="/mber/business/competitive">사업소개</a>
         </li>
         <li>배전 및 NTM</li>
       </ul>

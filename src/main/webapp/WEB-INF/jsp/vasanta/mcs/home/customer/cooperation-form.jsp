@@ -53,7 +53,7 @@
 	})
 	var board_no =  <%=request.getParameter("board_no") %>
 	$(function() {
-		readBoardData();
+		if(board_no) readBoardData();
 	})
 	function gotoList(){
 		location.href="/mber/customer/cooperation-list";
@@ -191,7 +191,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>신사업 및 협력사업 문의·제안</li>
       </ul>

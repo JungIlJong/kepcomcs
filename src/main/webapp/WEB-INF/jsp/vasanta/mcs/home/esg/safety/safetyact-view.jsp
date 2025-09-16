@@ -124,10 +124,10 @@
 								for (i=0; i < request.data.length; i++){
 									if(request.data[i].view_type == "prev"){
 										$('#prev_post').text(request.data[i].board_title);
-										$("#prev_post_href").attr("href", "/esg/safety/safetyact-view?board_no=" + request.data[i].board_no);
+										$("#prev_post_href").attr("href", "/mber/esg/safety/safetyact-view?board_no=" + request.data[i].board_no);
 									}else{
 										$('#next_post').text(request.data[i].board_title);
-										$("#next_post_href").attr("href", "/esg/safety/safetyact-view?board_no=" + request.data[i].board_no);
+										$("#next_post_href").attr("href", "/mber/esg/safety/safetyact-view?board_no=" + request.data[i].board_no);
 									}
 								}
 							}
@@ -151,10 +151,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction.html">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction.html">안전경영</a>
+        <a href="/mber/esg/safety/safety-introduction">안전경영</a>
       </li>
       <li>국민을 위한 안전활동</li>
     </ul>  
@@ -193,7 +193,7 @@
           </li>
         </ul>
         <div class="btn-row-right">
-          <a href="/esg/safety/safetyact-list">
+          <a href="/mber/esg/safety/safetyact-list">
             <button class="btn-list">목록</button>
           </a>
         </div>

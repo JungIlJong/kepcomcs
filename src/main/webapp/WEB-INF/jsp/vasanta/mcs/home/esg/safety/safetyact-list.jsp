@@ -103,10 +103,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction.html">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction.html">안전경영</a>
+        <a href="/mber/esg/safety/safety-introduction">안전경영</a>
       </li>
       <li>국민을 위한 안전활동</li>
     </ul>  

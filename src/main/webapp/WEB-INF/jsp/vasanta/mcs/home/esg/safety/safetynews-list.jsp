@@ -82,7 +82,7 @@
 											"orderable" : false,
 											"render" : function(data, type, row, meta) {
 
-												return "<a href='/esg/safety/safetynews-view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
+												return "<a href='/mber/esg/safety/safetynews-view?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 											}
 										},
 										{
@@ -164,10 +164,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction.html">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction.html">안전경영</a>
+        <a href="/mber/esg/safety/safety-introduction">안전경영</a>
       </li>
       <li>안전경영소식</li>
     </ul>  

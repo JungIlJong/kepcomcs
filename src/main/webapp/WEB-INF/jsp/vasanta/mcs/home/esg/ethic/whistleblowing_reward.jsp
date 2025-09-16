@@ -35,7 +35,7 @@
         <a href="#">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/ethic/ethic-introduction">윤리경영</a>
+        <a href="/mber/esg/ethic/ethic-introduction">윤리경영</a>
       </li>
       <li>공익신고센터</li>
     </ul>     
@@ -48,10 +48,10 @@
 	      <div style="margin-top:50px;">
 	        <ul class="recruit-tab">
 	          <li>
-	            <a href="/esg/ethic/whistleblowing">공익신고제도</a>
+	            <a href="/mber/esg/ethic/whistleblowing">공익신고제도</a>
 	          </li>
 	          <li class="selected">
-	            <a href="/esg/ethic/whistleblowingReward">공익신고자 보호∙보상 제도</a>
+	            <a href="/mber/esg/ethic/whistleblowingReward">공익신고자 보호∙보상 제도</a>
 	          </li>
 	        </ul>
 	        <div class="recruit-desc" style="margin-top:40px;">

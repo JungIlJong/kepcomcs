@@ -150,7 +150,7 @@
           </li>
         </ul>
         <div class="btn-row-right">
-          <a href="/open-manage/punish_list">
+          <a href="/mber/open-manage/punish_list">
             <button class="btn-list">목록</button>
           </a>
         </div>

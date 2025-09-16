@@ -50,10 +50,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/mber/esg/safety/safety-introduction.html">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/mber/esg/ethic/ethic-introduction.html">윤리경영</a>
+        <a href="/mber/esg/ethic/ethic-introduction">윤리경영</a>
       </li>
       <li>신문고</li>
     </ul>     

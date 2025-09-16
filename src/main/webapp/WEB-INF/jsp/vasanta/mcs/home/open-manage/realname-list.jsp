@@ -86,7 +86,7 @@
 												}
 											},
 											{
-												"data" : "file_name",
+												"data" : "atch_file_id",
 												"sWidth" : '10%',
 												"render" : function(data, type, row, meta) {
 													var return_val = "";

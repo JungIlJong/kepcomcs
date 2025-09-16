@@ -112,10 +112,10 @@
             <a href="/">Home</a>
         </li>
         <li>
-            <a href="/esg/safety/safety-introduction">ESG 경영</a>
+            <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
         </li>
         <li>
-            <a href="/esg/social/social-activity">사회적가치</a>
+            <a href="/mber/esg/social/social-activity">사회적가치</a>
         </li>
         <li>사회공헌활동소식</li>
     </ul>
@@ -131,7 +131,7 @@
                 <a href="/mber/esg/social/energy-list">한국에너지공단</a>
             </li>
             <li>
-                <a href="/mber/esg/social/satisfy-list">고객만족도활동</a>
+                <a href="/mber/esg/social/safety-list">고객만족도활동</a>
             </li>
             <li>
                 <a href="/mber/esg/social/weak-list">취약계층발굴</a>

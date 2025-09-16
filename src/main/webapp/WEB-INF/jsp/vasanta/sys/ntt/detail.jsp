@@ -7,7 +7,7 @@
     <script type="text/javascript">
 
         function searchDetail() {
-            Ajax.get(setUrl('/api/sys/ntt/detail'), searchDetailSuccess, fail);
+            Ajax.get(setUrl('/api/sys/ntt/detail?nttId='+), searchDetailSuccess, fail);
         }
 
         function searchDetailSuccess(data) {

@@ -119,7 +119,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>고객의 소리</li>
       </ul>

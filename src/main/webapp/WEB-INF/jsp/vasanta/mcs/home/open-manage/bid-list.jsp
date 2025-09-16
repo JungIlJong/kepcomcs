@@ -37,7 +37,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/open-manage/public-notice">열린경영</a>
+          <a href="/mber/open-manage/public-notice">열린경영</a>
         </li>
         <li>입찰정보</li>
       </ul>

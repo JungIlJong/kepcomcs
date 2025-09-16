@@ -37,7 +37,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/business/competitive">사업소개</a>
+          <a href="/mber/business/competitive">사업소개</a>
         </li>
         <li>신사업 비전</li>
       </ul>

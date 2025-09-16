@@ -38,7 +38,7 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/company/overview">회사소개</a>
+        <a href="/mber/company/overview">회사소개</a>
       </li>
       <li>조직현황</li>
     </ul>

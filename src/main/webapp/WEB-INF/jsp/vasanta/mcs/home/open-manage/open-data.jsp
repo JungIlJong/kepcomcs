@@ -26,136 +26,6 @@
   <script src="/resources/landing/js/datatables.min.js"></script>
   <script src="/resources/landing/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
-  <script type="text/javascript">
-  	var iDisplayStart = 0;
-  	var iTotalRecord = 0;
-  	var iDisplayLength = 8;
-  	var setBoardType = <%=request.getParameter("board_type") %> ? <%=request.getParameter("board_type") %> : 2;
-	
-	$(document).ready(function () {
-		getBoardSet(setBoardType);
-	})
-	
-	function getBoardSet(boardType){
-
-		$("#tab_"+boardType).siblings().removeClass("selected");
-		$("#tab_"+boardType).addClass("selected");
-		
-		iDisplayStart = 0;
-		iTotalRecord = 0;
-		$("#news_list_all").html("");
-		setBoardType = boardType;
-		
-		var form = {
-		        board_type : boardType
-		};
-		form.sSearch = hashSearch();
-
-		$.ajax({
-			 headers: { 
-			        'Accept': 'application/json',
-			        'Content-Type': 'application/json' 
-			    },
-	         type: "POST",
-	         url: "/get/board/cardlistCount/"+boardType,
-	         dataType: "json", 
-	         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-	         data: JSON.stringify(form),
-	         success: function (data) {
-	         	if(parseInt(data.result))
-	     		{
-	        		iTotalRecord = data.recordsTotal;
-	        		$('#recordCount').text(iTotalRecord);
-	        		if(iTotalRecord > 0){
-	        			iDisplayStart = 0;
-	        			getBoardList();
-	        		}else if(iTotalRecord == 0){
-						$("#btn_more").hide();
-			        }
-	     		}
-	         	else
-	             {
-					alert("관리자에게 문의바랍니다.1");
-					
-	             }
-	         },
-	         error: function (e) {
-	         	alert("관리자에게 문의바랍니다.2");
-	         	console.log(e);
-	         }
-	    });
-					
-	}
-
-	function getBoardList(){
-
-		if (iDisplayStart <= iTotalRecord){
-
-			var form = {
-					board_type :  setBoardType,
-					iDisplayStart :  iDisplayStart,
-					iDisplayLength : iDisplayLength
-			    };
-			form.sSearch = hashSearch();
-
-			$.ajax({
-				 headers: { 
-				        'Accept': 'application/json',
-				        'Content-Type': 'application/json' 
-				    },
-		         type: "POST",
-		         url: "/get/board/cardlist/"+setBoardType,
-		         dataType: "json", 
-		         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-		         data: JSON.stringify(form),
-		         success: function (data) {
-					
-		         	if(parseInt(data.result))
-		     		{
-		         		iDisplayStart = iDisplayStart + data.data.length;
-		         		
-		         		var li_html = "";
-
-		         		for ( i = 0; i < data.data.length; i++) {
-		         			var ul_list = $("#ul_list"); //ul_list선언
-							console.log(data.data[i]);
-							li_html = li_html + "<a href='/open-manage/press-view?board_type="+setBoardType+"&board_no=" + data.data[i].board_no +"'>";
-              				li_html = li_html +  "<p class='news-tit'>" + data.data[i].board_title + "</p>";
-							li_html = li_html +  "<p class='news-desc'>" + data.data[i].board_content + "</p>";
-							li_html = li_html + "<p class='news-date' style='margin-top:15px;'>" + data.data[i].insert_dt + "</p>";
-							li_html = li_html + "</a>";
-
-		         			
-							$("#news_list_all").append("<li>"+li_html+"</li>"); //ul_list안쪽에 li추가
-
-		         			li_html = "";
-
-		         		}
-
-		         		if(iTotalRecord == iDisplayStart){
-							$("#btn_more").hide();
-			         	}else{
-			         		$("#btn_more").show();
-			         	}
-		         		
-		     		}
-		         	else
-		             {
-						alert("관리자에게 문의바랍니다.3");
-						
-		             }
-		         }, 
-		         error: function (e) {
-		         	alert("관리자에게 문의바랍니다.4");
-		         	console.log(e);
-		         }
-		    });
-		    
-		}
-		
-					
-	}
-  </script>
   <style>
   	/* datatable style */
 	table.dataTable thead th, 
@@ -228,7 +98,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/open-manage/public-notice">열린경영</a>
+          <a href="/mber/open-manage/public-notice">열린경영</a>
         </li>
         <li>공공데이터 개방·제공</li>
       </ul>

@@ -95,8 +95,12 @@
             THUMB_URL,
             </if>
             NTT_PWD,
+            <if test="nttStartDt != null and nttStartDt != ''">
             NTT_START_DT,
+            </if>
+            <if test="nttEndDt != null and nttEndDt != ''">
             NTT_END_DT,
+            </if>
             EMAIL,
             PHONE,
             OPINION_TITLE_HEAD,
@@ -144,8 +148,12 @@
             #{thumbUrl},
         </if>
             #{password},
-        	CASE WHEN #{nttStartDt} = '' OR #{nttStartDt} IS NULL THEN NULL ELSE '' END,
-        	CASE WHEN #{nttEndDt} = '' OR #{nttEndDt} IS NULL THEN NULL ELSE '' END,
+        <if test="nttStartDt != null and nttStartDt != ''">
+        	#{nttStartDt},
+        </if>
+        <if test="nttEndDt != null and nttEndDt != ''">
+        	#{nttEndDt},
+        </if>
         	#{email},
         	#{authorHp},
         	#{opinionTitleHead},
@@ -327,8 +335,6 @@
             DATE_FORMAT(A.FRST_REGIST_DT, '%Y-%m-%d %H:%i') FRST_REGIST_DT,
             A.LAST_UPDUSR_ID,
             DATE_FORMAT(A.LAST_UPDT_DT, '%Y-%m-%d %H:%i'),
-            A.REPORT_IDS,
-            A.BLOCK_IDS,
             B.ATCH_FILE_ID,
             B.ORIGNL_FILE_NM,
             B.FILE_EXTSN,

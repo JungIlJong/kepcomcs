@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -26,8 +27,7 @@
   <script src="/resources/landing/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
-	
-	var board_type = <%=request.getParameter("board_type") %> ? <%=request.getParameter("board_type") %> : 21;
+	var board_type = "${bbsId}";
 		$(function() {
 			setMainTable();
 		})
@@ -79,7 +79,6 @@
 												"sWidth" : '50%',
 												"orderable" : false,
 												"render" : function(data, type, row, meta) {
-					console.log(data);
 													return "<a href='/mber/customer/cooperation-pwd?board_no=" + row.board_no + "'>" + row.board_title + "</a>" || "";
 												}
 											},
@@ -176,8 +175,8 @@
   <main class="customer-main">
     <div class="page-tit">
       <div class="page-tit-wrap">
-        <h1>신사업 및 협력사업 문의·제안</h1>
-        <p>한전MCS의 강력한 현장 인프라로 에너지 산업계와 협력하고 지원하겠습니다.</p>
+        <h1><c:out value="${menuTitle}"/></h1>
+        <p><c:out value="${menuSj}"/></p>
       </div>
       <ul class="rocation">
         <li>
@@ -191,12 +190,6 @@
     </div>
     <div class="contents"> 
       <div class="conts-ani tab-list" data-trigger>
-        <div>
-          <a href="/mber/customer/cooperation-agree">
-            <button class="btn-write">작성하기</button>    
-          </a>    
-        </div>
-        <!-- 협력사업제안 list table -->
         <table id="newBusinessList" class="table display nowrap" cellspacing="0" width="100%">
           <thead>
             <tr>

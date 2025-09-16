@@ -33,8 +33,8 @@
         <h1>탄소중립소개</h1>
         <p>이산화탄소 농도가 더 이상 증가되지 않도록 “순 배출량이 0”이 되도록 해야 합니다.</p>
         <br>
-        <p>&#183;&nbsp;<a href="/esg/carbon-neutral/neutral-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">한전MCS 탄소중립활동</a></p>
-        <p>&#183;&nbsp;<a href="/esg/carbon-neutral/neutral-industry" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">한전MCS 탄소중립사업</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esgsafety/carbon/neutral/bbs/16/list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">한전MCS 탄소중립활동</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/carbon-neutral/neutral-industry" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">한전MCS 탄소중립사업</a></p>
       </div>          
     </div>
     <div class="intro-wrap">
@@ -47,10 +47,10 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/esg/safety/safety-introduction">ESG 경영</a>
+          <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
         </li>
         <li>
-          <a href="/esg/carbon-neutral/neutral-introduction">탄소중립</a>
+          <a href="/mber/esg/carbon-neutral/neutral-introduction">탄소중립</a>
         </li>
         <li>탄소중립소개</li>
       </ul>

@@ -36,7 +36,7 @@
         <h1>인권경영소개</h1>
         <p>인간의 존엄과 가치 향상을 위해 경영활동 전 과정에서 임직원을 비롯한 이해관계자의 인권을 보호하기 위해 노력하고 있습니다.</p>
         <br>
-        <p>&#183;&nbsp;<a href="/esg/hmr/hm-declaration" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">인권경영선언문</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/hmr/hm-declaration" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">인권경영선언문</a></p>
       </div>
     </div>
     <div class="intro-wrap">
@@ -49,10 +49,10 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/esg/safety/safety-introduction.html">ESG 경영</a>
+          <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
         </li>
         <li>
-          <a href="/esg/hmr/hm-introduction">인권경영</a>
+          <a href="/mber/esg/hmr/hm-introduction">인권경영</a>
         </li>
         <li>인권경영소개</li>
       </ul>

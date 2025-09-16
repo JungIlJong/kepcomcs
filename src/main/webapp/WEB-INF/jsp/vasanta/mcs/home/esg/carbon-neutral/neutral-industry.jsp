@@ -34,10 +34,10 @@
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="/esg/safety/safety-introduction">ESG 경영</a>
+        <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
       </li>
       <li>
-        <a href="/esg/carbon-neutral/neutral-introduction">탄소중립</a>
+        <a href="/mber/esg/carbon-neutral/neutral-introduction">탄소중립</a>
       </li>
       <li>탄소중립사업</li>
     </ul>      

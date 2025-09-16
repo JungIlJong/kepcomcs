@@ -113,10 +113,10 @@
             <a href="/">Home</a>
         </li>
         <li>
-            <a href="/esg/safety/safety-introduction">ESG 경영</a>
+            <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
         </li>
         <li>
-            <a href="/esg/social/social-activity">사회적가치</a>
+            <a href="/mber/esg/social/social-activity">사회적가치</a>
         </li>
         <li>사회공헌활동소식</li>
     </ul>

@@ -90,7 +90,7 @@ public class HomeViewController {
 		return "/mcs/home/checkplus_socialinquiry_success";
 	}
 	
-	@GetMapping("/esg/ethic/whistleblowingReward")
+	@GetMapping("/mber/esg/ethic/whistleblowingReward")
 	public String esg_ehic_whistleblowingReward() {
 		return "/mcs/home/esg/ethic/whistleblowing_reward";
 	}

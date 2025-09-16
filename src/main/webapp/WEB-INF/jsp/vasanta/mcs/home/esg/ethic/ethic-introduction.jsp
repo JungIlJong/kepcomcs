@@ -34,10 +34,10 @@
         <h1>윤리경영소개</h1>
         <p>기업이 경제적, 법적 책임 수행은 물론 윤리적 책임의 수행 까지도 주체적인 자세로 준수합니다.</p>
         <br>
-        <p>&#183;&nbsp;<a href="/esg/ethic/ethicpromotion-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">윤리경영홍보자료</a></p>
-        <p>&#183;&nbsp;<a href="/esg/ethic/report" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">신문고</a></p>
-        <p>&#183;&nbsp;<a href="/esg/ethic/integrity-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">청렴·윤리 소식지</a></p>
-        <p>&#183;&nbsp;<a href="/esg/ethic/punishment-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">제재현황</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esgsafety/ethic/ethicpromo/bbs/10/list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">윤리경영홍보자료</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/ethic/report" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">신문고</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/ethic/ethintegrity/bbs/39/list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">청렴·윤리 소식지</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/ethic/punishment/bbs/1314/list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">제재현황</a></p>
       </div>          
     </div>
     <div class="intro-wrap">

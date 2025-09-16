@@ -85,7 +85,7 @@
 											}
 										},
 										{
-											"data" : "file_name",
+											"data" : "atch_file_id",
 											"sWidth" : '5%',
 											"render" : function(data, type, row, meta) {
 	

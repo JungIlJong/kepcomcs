@@ -41,7 +41,7 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/customer/opinion">고객소통</a>
+          <a href="/mber/customer/opinion">고객소통</a>
         </li>
         <li>안전신고</li>
       </ul>
@@ -49,7 +49,7 @@
     <div class="contents"> 
       <div data-trigger class="conts-ani tab-list">
         <div>
-          <a href="/customer/safety-form.html">
+          <a href="/mber/customer/safety-form.html">
             <button class="btn-write">작성하기</button>    
           </a>    
         </div>
@@ -68,7 +68,7 @@
             <tr class="manager">
               <td>공지</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">신사업 문의 방법</p>
                 </a>
               </td>
@@ -79,7 +79,7 @@
             <tr>
               <td>3</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요? 사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -92,7 +92,7 @@
             <tr>
               <td>2</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요,</p>
                 </a>
               </td>
@@ -105,7 +105,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요,</p>
                 </a>
               </td>
@@ -118,7 +118,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요,</p>
                 </a>
               </td>
@@ -131,7 +131,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요? 사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -144,7 +144,7 @@
             <tr>
               <td>2</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요? 사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -157,7 +157,7 @@
             <tr>
               <td>2</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요? 사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -170,7 +170,7 @@
             <tr>
               <td>2</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요? 사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -183,7 +183,7 @@
             <tr>
               <td>2</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -196,7 +196,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -209,7 +209,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -222,7 +222,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -235,7 +235,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -248,7 +248,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요, 어떻게 해야 하나요?</p>
                 </a>
               </td>
@@ -261,7 +261,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               </td>
@@ -274,7 +274,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               </td>
@@ -287,7 +287,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               </td>
@@ -300,7 +300,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               </td>
@@ -313,7 +313,7 @@
             <tr>
               <td>1</td>
               <td>
-                <a href="/customer/safety-view">
+                <a href="/mber/customer/safety-view">
                   <p class="tbl-title">사회공헌을 한전MCS와 신사업을 하고 싶은데요</p>
                 </a>
               </td>

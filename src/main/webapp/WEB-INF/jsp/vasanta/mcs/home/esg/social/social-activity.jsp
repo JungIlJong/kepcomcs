@@ -38,7 +38,7 @@
         <p>&#183;&nbsp;<a href="/mber/esg/social/ssis-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">사회공헌 활동소식</a></p>
         <p>&#183;&nbsp;<a href="/mber/esgsafety/social/socialinquiry/bbs/15/list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">MOU체결</a></p>
         <p>&#183;&nbsp;<a href="#" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">LOVE FUND</a></p>
-        <p>&#183;&nbsp;<a href="/esg/social/socialinquiry-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">사회공헌문의&#183;제안</a></p>
+        <p>&#183;&nbsp;<a href="/mber/esg/social/socialinquiry-list" style="font-size: 14px;font-weight: 600;color: #fff;text-decoration: underline;">사회공헌문의&#183;제안</a></p>
       </div>          
     </div>
     <div class="intro-wrap">
@@ -51,10 +51,10 @@
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/esg/safety/safety-introduction.html">ESG 경영</a>
+          <a href="/mber/esg/safety/safety-introduction">ESG 경영</a>
         </li>
         <li>
-          <a href="/esg/social/social-activity.html">사회적 가치</a>
+          <a href="/mber/esg/social/social-activity">사회적 가치</a>
         </li>
         <li>사회공헌활동</li>
       </ul>
