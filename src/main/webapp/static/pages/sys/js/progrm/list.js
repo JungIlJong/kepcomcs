@@ -210,52 +210,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                                                     }
                                                 }
                                             }
-                                        },
-                                        {
-                                            extend: 'pdf',
-                                            text: `<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-pdf me-2"></i>Pdf</span>`,
-                                            className: 'dropdown-item',
-                                            exportOptions: {
-                                                columns: [0, 1, 2, 3],
-                                                format: {
-                                                    body: function (inner, coldex, rowdex) {
-                                                        if (inner.length <= 0) return inner;
-                                                        const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
-                                                        let result = '';
-                                                        el.forEach(item => {
-                                                            if (item.classList && item.classList.contains('user-name')) {
-                                                                result += item.lastChild.firstChild.textContent;
-                                                            } else {
-                                                                result += item.textContent || item.innerText || '';
-                                                            }
-                                                        });
-                                                        return result;
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        {
-                                            extend: 'copy',
-                                            text: `<i class="icon-base bx bx-copy me-1"></i>복사`,
-                                            className: 'dropdown-item',
-                                            exportOptions: {
-                                                columns: [0, 1, 2, 3],
-                                                format: {
-                                                    body: function (inner, coldex, rowdex) {
-                                                        if (inner.length <= 0) return inner;
-                                                        const el = new DOMParser().parseFromString(inner, 'text/html').body.childNodes;
-                                                        let result = '';
-                                                        el.forEach(item => {
-                                                            if (item.classList && item.classList.contains('user-name')) {
-                                                                result += item.lastChild.firstChild.textContent;
-                                                            } else {
-                                                                result += item.textContent || item.innerText || '';
-                                                            }
-                                                        });
-                                                        return result;
-                                                    }
-                                                }
-                                            }
                                         }
                                     ]
                                 },

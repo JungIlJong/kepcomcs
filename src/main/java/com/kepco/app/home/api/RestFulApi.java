@@ -161,7 +161,7 @@ public class RestFulApi {
 				ntt.setNttSj(Objects.toString(multi.getParameter("board_title"), null));
 				ntt.setNttCn(Objects.toString(multi.getParameter("board_content"), null));
 				ntt.setPassword(Objects.toString(multi.getParameter("board_pwd"), null));
-				ntt.setFrstRegisterId(Objects.toString(multi.getParameter("board_author"), null));
+				ntt.setFrstRegisterId(Objects.toString(multi.getParameter("frstRegisterId"), null));
 				ntt.setWrterNm(Objects.toString(multi.getParameter("board_author"), null));
 				ntt.setEmail(Objects.toString(multi.getParameter("email"), null));
 				ntt.setAuthorHp(Objects.toString(multi.getParameter("author_hp"), null));
@@ -173,6 +173,7 @@ public class RestFulApi {
 				ntt.setAddress3(Objects.toString(multi.getParameter("customer_address3"), null));
 				ntt.setFeedbackYn(Objects.toString(multi.getParameter("feedback_yn"), null));
 				ntt.setLinkUrl(Objects.toString(multi.getParameter("link_url"), null));
+				ntt.setSosok(Objects.toString(multi.getParameter("sosok"), null));
 				ntt.setFiles(files);
 				BoardService.setBoardFile(ntt);
                 result.put("result", 1);

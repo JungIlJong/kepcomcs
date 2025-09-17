@@ -77,7 +77,7 @@
             $('#tree').jstree(true).create_node(selectedNode.id, {
                 id: menuId,
                 text: menuNm,
-                data: {menuTy: menuTy, menuOrdr: menuOrdr, url: url, menuId: '', gnbAt: gnbAt, useAt: useAt}
+                data: {menuTy: menuTy, menuOrdr: menuOrdr, menuSj: '', url: url, menuId: '', gnbAt: gnbAt, useAt: useAt}
             }, 'last');
             $('#tree').jstree("deselect_all", selectedNode);
             $('#tree').jstree('select_node', menuId);
@@ -732,6 +732,7 @@
             let data = {
                 menuNm: 'New',
                 upperMenuId: selectedNode.id,
+                menuSj: ' ',
                 menuTy: 'DIR',
                 url: 'DIR',
                 menuDp: selectedNode.parents.length + 1,

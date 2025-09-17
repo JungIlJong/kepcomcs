@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
   headingColor = config.colors.headingColor;
 
   // Variable declaration for table
-  const dt_bbs_table = document.querySelector('.datatables-bbs'),
+  const dt_user_table = document.querySelector('.datatables-logs'),
     userView = 'app-user-view-account.html',
     statusObj = {
       1: { title: 'Pending', class: 'bg-label-warning' },
@@ -31,58 +31,49 @@ document.addEventListener('DOMContentLoaded', function (e) {
   }
 
   // Users datatable
-  if (dt_bbs_table) {
-    const dt_bbs = new DataTable(dt_bbs_table, {
+  if (dt_user_table) {
+    const dt_user = new DataTable(dt_user_table, {
       ajax: {
-        url: '/api/sys/bbs/list',
+        url: '/api/sys/accesslog/list',
         type: "GET",
         dataSrc: 'data',
         data: function (d) {
           d.minDate = $('#stDt').val();
           d.maxDate = $('#endDt').val();
-          d.bbsTyCode = $("#bbsTyCode").val();
           return d;
         }
       },
       serverSide: true,
       columns: [
         // columns according to JSON
-        { data: 'bbsId' },
-        { data: 'bbsTyCode'},
-        { data: 'bbsNm' },
-        { data: 'frstRegistDt' },
-        { data: 'useAt' },
-        { data: 'bbsId' },
+        { data: 'userNm'},
+        { data: 'menuNm' },
+        { data: 'url' },
+        { data: 'clientIp' },
+        { data: 'logDt' },
       ],
       columnDefs: [
         {
-          // For Responsive
-          responsivePriority: 2,
           targets: 0,
-          title: '게시판ID',
+          responsivePriority: 3,
+          title: '접속자명',
           render: function (data, type, full, meta) {
             return data;
           }
         },
         {
           targets: 1,
-          responsivePriority: 3,
-          title: '게시판유형',
-          searchable: false,
+          title: '메뉴명',
           render: function (data, type, full, meta) {
-            switch (data) {
-              case 'BBS_ALBUM':
-                return '앨범형(사진)';
-              case 'BBS_QNA':
-                return '질문답변형';
-              default:
-                return '일반형(목록)';
-            }
+            if (data === 'I') return '로그인';
+            else if (data === 'O') return '로그아웃';
+            return data;
           }
         },
         {
+          // Plans
           targets: 2,
-          title: '게시판명',
+          title: 'URL',
           render: function (data, type, full, meta) {
             return data;
           }
@@ -90,39 +81,17 @@ document.addEventListener('DOMContentLoaded', function (e) {
         {
           // Plans
           targets: 3,
-          title: '등록일시',
-          searchable: false,
+          title: '접속IP',
           render: function (data, type, full, meta) {
             return data;
           }
         },
         {
-          // Plans
+          // User Status
           targets: 4,
-          title: '사용여부',
+          title: '접속일시',
           render: function (data, type, full, meta) {
-            return data === 'Y' ? '<span class="badge text-bg-primary">사용</span>' : '<span class="badge text-bg-secondary">비활성</span>';
-          }
-        },
-        {
-          targets: -1,
-          title: '액션',
-          searchable: false,
-          orderable: false,
-          render: (data, type, full, meta) => {
-            return `
-              <div class="d-flex gap-1 justify-content-center">
-                <button onclick="location.href='/sys/operate/nttmng/ntt/list?bbsId=${data}'" class="btn btn-sm btn-label-info">
-                  게시물관리 바로가기
-                </button>              
-                <button onclick="location.href='detail?bbsId=${data}'" class="btn btn-sm btn-label-secondary">
-                  <i class="icon-base bx bx-pencil icon-xs"></i>수정
-                </button>              
-                <button onclick="deleteBbs('${data}')" class="btn btn-sm btn-label-danger">
-                  <i class="icon-base bx bx-trash icon-xs"></i>삭제
-                </button>
-              </div>
-            `;
+            return data;
           }
         }
       ],
@@ -235,13 +204,6 @@ document.addEventListener('DOMContentLoaded', function (e) {
                       }
                     }
                   ]
-                },
-                {
-                  text: '<i class="icon-base bx bx-plus icon-sm me-0 me-sm-2"></i><span class="d-none d-sm-inline-block">등록</span>',
-                  className: 'add-new btn btn-primary',
-                  attr: {
-                    'onclick': "location.href='save'"
-                  }
                 }
               ]
             }
@@ -309,12 +271,12 @@ document.addEventListener('DOMContentLoaded', function (e) {
         row = event.target.parentElement.closest('tr');
       }
       if (row) {
-        dt_bbs.row(row).remove().draw();
+        dt_user.row(row).remove().draw();
       }
     }
 
     function bindDeleteEvent() {
-      const userListTable = document.querySelector('.datatables-bbs');
+      const userListTable = document.querySelector('.datatables-logs');
       const modal = document.querySelector('.dtr-bs-modal');
 
       if (userListTable && userListTable.classList.contains('collapsed')) {

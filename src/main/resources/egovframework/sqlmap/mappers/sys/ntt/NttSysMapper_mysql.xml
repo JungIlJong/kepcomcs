@@ -29,6 +29,8 @@
         <result column="NTT_START_DT" property="nttStartDt" />
         <result column="NTT_END_DT" property="nttEndDt" />
         <result column="EMAIL" property="email" />
+        <result column="SOSOK" property="sosok" />
+        <result column="PHONE" property="authorHp" />
         <result column="BBS_TY_CODE" property="bbsTyCode" />
         <collection  property="files" ofType="Map" javaType="List">
             <result column="ATCH_FILE_ID" property="atchFileId" />
@@ -112,6 +114,7 @@
             ADDRESS3,
             FEEDBACK_YN,
             LINK_URL,
+            SOSOK,
             FRST_REGISTER_ID,
             FRST_REGIST_DT
         )   VALUES (
@@ -165,6 +168,7 @@
             #{address3},
             #{feedbackYn},
             #{linkUrl},
+            #{sosok},
             #{frstRegisterId},
             NOW()
         )
@@ -247,7 +251,7 @@
             A.NTT_ID,
             A.BBS_ID,
             EXISTS(SELECT 1 FROM VST_NTT D WHERE D.PARNTSCTT_ID = A.NTT_ID) PARNTSCTT_ID,
-            A.NTT_SJ,
+            IFNULL(A.NTT_SJ, B.BBS_NM) AS NTT_SJ,
             A.RDCNT,
             A.SECRET_AT,
             A.NOTICE_AT,
@@ -330,6 +334,8 @@
             A.NOTICE_AT,
             A.USE_AT,
             A.WRTER_NM,
+            A.PHONE,
+            A.SOSOK,
             DATE_FORMAT(A.NTT_START_DT, '%Y-%m-%d') AS NTT_START_DT,
             DATE_FORMAT(A.NTT_END_DT, '%Y-%m-%d') AS NTT_END_DT,
             A.FRST_REGISTER_ID,

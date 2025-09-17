@@ -95,28 +95,28 @@ public class HomeViewController {
 		return "/mcs/home/esg/ethic/whistleblowing_reward";
 	}
 
-	@GetMapping("/conscience/report")
+	@GetMapping("/mber/conscience/report")
 	public String conscience_report() {
 		return "/mcs/home/conscience/report";
 	}
 	
-	@GetMapping(value = "/conscience/report-agree")
+	@GetMapping(value = "/mber/conscience/report-agree")
 	public String conscience_report_agree() {
 		return "/mcs/home/conscience/report-agree";
 	}
 	
-	@PostMapping("/conscience/report-certification")
+	@PostMapping("/mber/conscience/report-certification")
 	public String conscience_report_certification_post(Model model, HttpServletRequest request) {
 		model.addAttribute("agreeYn",request.getParameter("agreeYn"));
 		return "/mcs/home/conscience/report-certification";
 	}
 
-	@GetMapping("/conscience/report-certification")
+	@GetMapping("/mber/conscience/report-certification")
 	public String conscience_report_certification_get() {
 		return "/mcs/home/conscience/report-certification";
 	}
 	
-	@GetMapping("/conscience/report-form")
+	@GetMapping("/mber/conscience/report-form")
 	public String conscience_report_form() {
 		return "/mcs/home/conscience/report-form";
 	}

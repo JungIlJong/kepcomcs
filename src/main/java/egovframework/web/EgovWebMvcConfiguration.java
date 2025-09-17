@@ -4,6 +4,7 @@ import com.kepco.app.core.interceptor.MenuInterceptor;
 import com.kepco.app.core.interceptor.RootMenuInterceptor;
 import com.kepco.app.core.interceptor.SettingInterceptor;
 import com.kepco.app.core.interceptor.UserMenuInterceptor;
+import com.kepco.app.domain.accesslog.mapper.AccessLogMapper;
 import com.kepco.app.domain.bbs.service.BbsRoleService;
 import com.kepco.app.domain.bbs.service.BbsRoleSysService;
 import com.kepco.app.domain.menu.mapper.MenuSysMapper;
@@ -32,6 +33,8 @@ import java.util.concurrent.TimeUnit;
 public class EgovWebMvcConfiguration implements WebMvcConfigurer {
 
 	private final MenuSysMapper menuSysMapper;
+
+	private final AccessLogMapper accessLogMapper;
 
 	private final SettingSysService settingSysService;
 
@@ -70,7 +73,7 @@ public class EgovWebMvcConfiguration implements WebMvcConfigurer {
 
 	@Bean
 	public MenuInterceptor menuInterceptor() {
-		return new MenuInterceptor(menuSysMapper);
+		return new MenuInterceptor(menuSysMapper, accessLogMapper);
 	}
 
 	@Bean

@@ -25,6 +25,10 @@ import java.util.List;
  *   2024.03.28  김선홍         최초 생성
  * </pre>
  */
+/**
+ * @author daonplace
+ *
+ */
 @Getter
 @Setter
 @Alias(value = "sysNtt")
@@ -184,4 +188,10 @@ public class SysNtt {
      * 링크URL
      */
     private String linkUrl;
+
+    
+    /**
+     * 소속
+     */
+    private String sosok;
 }

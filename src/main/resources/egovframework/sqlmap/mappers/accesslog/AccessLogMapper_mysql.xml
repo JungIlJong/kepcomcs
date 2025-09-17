@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kepco.app.domain.accesslog.mapper.AccessLogMapper">
+
+	<select id="selectAccessLogList" parameterType="HashMap" resultType="egovMap">
+		SELECT ACCESS_ID,
+		       URL,
+		       MENU_NM,
+		       CLIENT_IP,
+		       USER_ID,
+		       USER_NM,
+		       DATE_FORMAT(LOG_DT,'%Y-%m-%d') AS LOG_DT
+		FROM VST_ACCESS_LOG 
+		WHERE 1 = 1
+		<if test="(minDate != null and minDate != '') and (maxDate != null and maxDate != '')">
+		AND LOG_DT BETWEEN STR_TO_DATE(#{minDate}, '%Y-%m-%d') AND (STR_TO_DATE(#{maxDate}, '%Y-%m-%d') + 1)
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND (CLIENT_IP LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			MENU_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			URL LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			USER_ID LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			USER_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+		ORDER BY
+		<choose>
+			<when test="orderColumn != null and orderColumn != ''">
+				${orderColumn}
+			</when>
+			<otherwise>
+				LOG_DT
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="ascDesc != null and ascDesc != ''">
+				${ascDesc}
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}
+	</select>
+
+	<select id="selectAccessLogListTotCnt" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) totCnt
+		FROM VST_ACCESS_LOG
+		WHERE 1 = 1
+		<if test="(minDate != null and minDate != '') and (maxDate != null and maxDate != '')">
+			AND LOG_DT BETWEEN STR_TO_DATE(#{minDate}, '%Y-%m-%d') AND (STR_TO_DATE(#{maxDate}, '%Y-%m-%d') + 1)
+		</if>
+		<if test="searchKeyword != null and searchKeyword != ''">
+			AND (URL LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			MENU_NM LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			CLIENT_IP LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			USER_ID LIKE CONCAT('%', #{searchKeyword}, '%') OR
+			USER_NM LIKE CONCAT('%', #{searchKeyword}, '%'))
+		</if>
+	</select>
+
+	<insert id="insertAccessLog">
+		INSERT INTO VST_ACCESS_LOG (URL, MENU_NM, CLIENT_IP, USER_ID, USER_NM, LOG_DT)
+		VALUES (#{url}, #{menuNm}, #{clientIp}, #{userId}, #{userNm}, NOW())
+	</insert>
+
+</mapper>

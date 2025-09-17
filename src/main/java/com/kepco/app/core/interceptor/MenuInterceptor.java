@@ -6,6 +6,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kepco.app.core.security.util.UserDetailsUtil;
+import com.kepco.app.domain.accesslog.mapper.AccessLogMapper;
 import com.kepco.app.domain.menu.dto.Menu;
 import com.kepco.app.domain.menu.mapper.MenuSysMapper;
 
@@ -25,8 +26,11 @@ public class MenuInterceptor implements HandlerInterceptor {
 
     private final MenuSysMapper menuSysMapper;
 
-    public MenuInterceptor(MenuSysMapper menuSysMapper) {
+    private final AccessLogMapper accessMapper;
+
+    public MenuInterceptor(MenuSysMapper menuSysMapper, AccessLogMapper accessMapper) {
         this.menuSysMapper = menuSysMapper;
+        this.accessMapper = accessMapper;
     }
 
     @Override
@@ -39,8 +43,8 @@ public class MenuInterceptor implements HandlerInterceptor {
 
         List<Menu> menuList = new ArrayList<>();
 
-        List<String> authorityList = UserDetailsUtil.getAuthorityList();
-        menuList = menuSysMapper.selectMenuListByRole(authorityList);
+//        List<String> authorityList = UserDetailsUtil.getAuthorityList();
+        menuList = menuSysMapper.selectMenuList("MNGR");
 
         for (Menu menu : menuList) {
             String url = menu.getUrl();
@@ -77,9 +81,11 @@ public class MenuInterceptor implements HandlerInterceptor {
 
             List<Menu> menuList = (List<Menu>) request.getAttribute("menuList");
 
+            String menuNm = "";
             for (Menu menu : menuList) {
                 if (menu.getUrl().contains(subRequestURI)) {
                     modelAndView.addObject("menuTitle", menu.getMenuNm());
+                    menuNm = menu.getMenuNm();
                 }
                 menuMap.put(menu.getMenuId(), menu);
             }
@@ -96,6 +102,16 @@ public class MenuInterceptor implements HandlerInterceptor {
 
             if (!menuList.isEmpty()) {
                 modelAndView.addObject("menuItems", menuList.get(0));
+            }
+            
+            if (requestURI.startsWith("/sys/") && !requestURI.contains("/api")) {
+                Map<String, Object> paramMap = new HashMap<>();
+                paramMap.put("userId", UserDetailsUtil.getId());
+                paramMap.put("userNm", UserDetailsUtil.getName());
+                paramMap.put("clientIp", request.getRemoteAddr());
+                paramMap.put("url", requestURI);
+                paramMap.put("menuNm", menuNm);
+                accessMapper.insertAccessLog(paramMap);
             }
         }
     }

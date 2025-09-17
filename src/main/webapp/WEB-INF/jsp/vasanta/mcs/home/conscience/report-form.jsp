@@ -32,15 +32,15 @@
   <script src="https://www.google.com/recaptcha/api.js?render=6Le8_iQcAAAAACCuc_W--e48akBOB61Uzu839PkO"></script>
 <script type="text/javascript">
 	$(function() {
-		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){
+<%-- 		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){ --%>
 	
-			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
-			location.href="./report-certification";
+// 			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
+// 			location.href="./report-certification";
 			
-		}else{
+// 		}else{
 			$('#cn_name').text($.cookie('authorName'));
 			$('#cn_hp').text($.cookie('authorHp'));
-		}
+// 		}
 	
 		let today = new Date();   
 	
@@ -63,26 +63,25 @@
 			      		$('#cn_division').focus();
 			    		alert("소속(지점, 지사)를 입력해주세요."); return;  
 			      	}
-			      	if($('#cn_enum').val() == ""){
-			      		$('#cn_enum').focus();
-		    			alert("사번을 입력해주세요."); return;
-		    		}else if($('#cn_enum').val().length != 8){
-		    			$('#cn_enum').focus();
-		    			alert("사번은 숫자 8자리를 입력해야합니다."); return;
-		    		}
+// 			      	if($('#cn_enum').val() == ""){
+// 			      		$('#cn_enum').focus();
+// 		    			alert("사번을 입력해주세요."); return;
+// 		    		}else if($('#cn_enum').val().length != 8){
+// 		    			$('#cn_enum').focus();
+// 		    			alert("사번은 숫자 8자리를 입력해야합니다."); return;
+// 		    		}
 		    		if($('#cn_content').val() == ""){
 		    			$('#cn_content').focus();
 		    		 	alert("내용을 입력해 주세요."); return;
 		    		}
 					myForm = document.getElementById('myForm2');
 		   			var formData = new FormData(myForm);
-					console.log(formData);
-		   			formData.append("agreeYn", "Y");
-		   			formData.append("cn_name", $('#cn_name').text());
-		   			formData.append("cn_enum", $('#cn_enum').val());
-		   			formData.append("cn_division", $('#cn_division').val());
-		   			formData.append("cn_hp", $('#cn_hp').text());
-		   			formData.append("cn_content", $('#cn_content').val()); 
+		   			formData.append("board_author", $('#cn_name').text());
+		   			formData.append("frstRegisterId", $('#cn_enum').val());
+		   			formData.append("sosok", $('#cn_division').val());
+		   			formData.append("author_hp", $('#cn_hp').text());
+		   			formData.append("board_type", "1328");
+		   			formData.append("board_content", $('#cn_content').val()); 
 		   			formData.append("file_list", $("#file_list")[0].files[0])
 		   			formData.append("google_token", token);
 
@@ -104,7 +103,7 @@
 		   			$.ajax({
 		   	            type: "POST",
 		   	            enctype: 'multipart/form-data',
-		   	            url: "/insert/conscience",
+		   	         	url: "/set/boardfile",
 		   	            data: formData,
 		   	            processData: false,
 		   	            contentType: false,
@@ -113,17 +112,17 @@
 		   	            success: function (data) {
 		   	            	if(parseInt(data.result))
 		   	        		{
-		   		        		replaceUrl = "/conscience/report";
+		   		        		replaceUrl = "/mber/conscience/report";
 		   	            		alert("정상적으로 등록되었습니다.");
 		   	            		location.replace(replaceUrl);
 		   	        		}
 		   	            	else
 		   	                {
-		   						alert("관리자에게 문의바랍니다2.");
+		   						alert("관리자에게 문의바랍니다.");
 		   	                }
 		   	            },
 		   	            error: function (e) {
-		   	            	alert("관리자에게 문의바랍니다1.");
+		   	            	alert("관리자에게 문의바랍니다.");
 		   	            	console.log(e);
 		   	            }
 		   	        });
@@ -160,7 +159,7 @@
 </script>
 </head>
 <body id="mcsPage">
-  <div id="header"></div>
+  <div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>
   <!-- main -->
   <main class="esg-main esg-layout">
     <ul class="location esg-loca">

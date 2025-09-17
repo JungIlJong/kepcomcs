@@ -919,7 +919,7 @@
 			<div class="wrap">
 				<a href="https://ncp.clean.go.kr/cmn/secCtfcKMC.do?menuCode=acs&mapAcs=Y&insttCd=B554543" target="_blank">
 					<img src="/resources/landing/images/main/banner01.png" alt="한전MCS 청렴포털_부패공익신고">
-				</a> <a href="conscience/report" target="_blank">
+				</a> <a href="/mber/conscience/report" target="_blank">
 				<img src="/resources/landing/images/main/banner05.png" alt=“비위양심신고센터.">
 			</a> <a href="https://www.clean.go.kr/index.es?sid=a1" target="_blank">
 				<img src="/resources/landing/images/main/banner02.png" alt="국민권익위원회_부패공익신고">

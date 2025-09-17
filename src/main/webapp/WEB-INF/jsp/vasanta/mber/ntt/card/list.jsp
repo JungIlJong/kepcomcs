@@ -99,12 +99,12 @@
 	     		}
 	         	else
 	             {
-					alert("관리자에게 문의바랍니다.1");
+					alert("관리자에게 문의바랍니다.");
 					
 	             }
 	         },
 	         error: function (e) {
-	         	alert("관리자에게 문의바랍니다.2");
+	         	alert("관리자에게 문의바랍니다.");
 	         	console.log(e);
 	         }
 	    });

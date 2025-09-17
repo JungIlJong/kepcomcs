@@ -50,12 +50,6 @@
                 document.getElementById('btnReleaseLock').classList.add('disabled');
             }
 
-            let reportIds = data.reportIds;
-            if (reportIds !== '') {
-                document.getElementById('btnResetReport').classList.remove('disabled');
-            } else {
-                document.getElementById('btnResetReport').classList.add('disabled');
-            }
 
             <%-- 페이지 로드 시 이메일 중복체크 버튼 상태 설정 --%>
             const emlAddr = document.getElementById('emlAddr').value.trim();
@@ -68,30 +62,6 @@
                 btnDuplicateEmail.disabled = true;
                 btnDuplicateEmail.classList.add('disabled');
             }
-        }
-
-        let successReleaseLock = function (data) {
-            if (data === 1) {
-                customAlert({
-                    title: '<spring:message code="common.system.info"/>',
-                    content: '잠금이 해제되었습니다.',
-                    showCancel: false,
-                    onConfirm: function() {
-                        document.getElementById('btnReleaseLock').classList.add('disabled');
-                    }
-                });
-            }
-        }
-
-        let successResetReport = function (data) {
-            customAlert({
-                title: '<spring:message code="common.system.info"/>',
-                content: '신고 내역이 초기화되었습니다.',
-                showCancel: false,
-                onConfirm: function () {
-                    document.getElementById('btnResetReport').classList.add('disabled');
-                }
-            });
         }
 
         let successDelete = function (data) {
@@ -293,7 +263,6 @@
                                         <button type="button" class="btn btn-secondary" id="btnList"><spring:message code="button.list"/></button>
                                         <div class="d-flex">
                                             <button type="button" id="btnReleaseLock" class="btn btn-label-primary me-2"><spring:message code="button.lockRelease"/></button>
-                                            <button type="button" id="btnResetReport" class="btn btn-dark me-2">신고내역 초기화</button>
                                             <button type="button" id="btnDelete" class="btn btn-dark me-2"><spring:message code="button.delete"/></button>
                                             <button type="submit" class="btn btn-primary" id="btnUpdate"><spring:message code="button.modify"/></button>
                                         </div>
@@ -467,22 +436,6 @@
                     const data = { uuid: uuid };
 
                     Ajax.post('/api/sys/mbr/updateLock', successReleaseLock, fail, {
-                        data: JSON.stringify(data)
-                    });
-                }
-            });
-        });
-
-        <%-- 신고 초기화 버튼 클릭 시 이벤트 --%>
-        document.getElementById('btnResetReport').addEventListener('click', function () {
-            customAlert({
-                title: '<spring:message code="common.system.info"/>',
-                content: '신고내역을 초기화하시겠습니까?',
-                showCancel: true,
-                onConfirm: function () {
-                    const uuid = document.getElementById('uuid').value;
-                    const data = { uuid: uuid };
-                    Ajax.post('/api/sys/mbr/updateReport', successResetReport, fail, {
                         data: JSON.stringify(data)
                     });
                 }
