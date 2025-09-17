@@ -219,12 +219,11 @@
                             'Content-Type': 'application/json'
                         },
                         type: "POST",
-                        url: "/get/board/cardlist/2",
+                        url: "/get/board/list/1322",
                         dataType: "json",
                         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                         data: JSON.stringify(form),
                         success: function (data) {
-
                             if (parseInt(data.result)) {
                                 iDisplayStart = iDisplayStart
                                     + data.data.length;
@@ -238,21 +237,24 @@
                                         + "<div class='notice-li-wrap'>";
                                     li_html = li_html
                                         + "<div class='notice-li'>";
-                                    li_html = li_html
-                                        + "<div class='notice-photo' style='background:url(/api/file/fileDown?file_name="
-                                        + encodeURI(data.data[i].detail_img_file_name)
-                                        + ") no-repeat center center;background-size:cover'></div>";
+                                        li_html = li_html
+                                        + "<div class='notice-photo'>"
+                                        + "<img src='" + (data.data[i].thumb_url 
+                                                            ? data.data[i].thumb_url 
+                                                            : "/resources/landing/images/customer/card_list_thumb.jpg") 
+                                        + "' alt='' style='width:100%;height:100%;object-fit:cover;'>"
+                                        + "</div>";
                                     li_html = li_html
                                         + "<div class='notice-desc'>";
                                     li_html = li_html
-                                        + "<a href='/customer/press-view?board_type=2&board_no="
+                                        + "<a href='/mber/customer/press-view?board_type=1322&board_no="
                                         + data.data[i].board_no + "'>";
                                     li_html = li_html
                                         + "<p class='more'><span>.</span></p></a>";
                                     li_html = li_html
                                         + "<p class='desc_04'>NEWS</p>";
                                     li_html = li_html
-                                        + "<a href='/customer/press-view?board_type=2&board_no="
+                                        + "<a href='/mber/customer/press-view?board_type=1322&board_no="
                                         + data.data[i].board_no + "'>";
                                     li_html = li_html + "<p class='desc_05'>"
                                         + data.data[i].board_title + "</p>";
@@ -449,36 +451,29 @@
         var popupSwiperHtml = '';
 
         $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            type: "POST",
-            url: "/get/board/cardlist/17",
+            type: "GET",
+            url: "/api/mber/popups/active-list",
             dataType: "json",
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-            data: JSON.stringify(form),
-            async: false,
             success: function (data) {
-                if (parseInt(data.result) == "1") {
-                    for (i = 0; i < data.data.length; i++) {
-                        var item = data.data[i];
-                        console.log(item.detail_img_file_name);
-                        popupSwiperHtml += '<div class="swiper-slide">';
+            	console.log(data); console.log('AAAA');
+                for (i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    popupSwiperHtml += '<div class="swiper-slide">';
 
-                        if (item.link_url != null && item.link_url != '') {
-                            popupSwiperHtml += '<a href="' + item.link_url + '" target="_blank"><img src="/api/file/fileDown?file_name=' + encodeURI(item.detail_img_file_name) + '"'
-                                + ' alt = "' + item.board_title + '" '
-                                + '></a></div>';
-                        } else {
-                            popupSwiperHtml += '<img src="/api/file/fileDown?file_name=' + encodeURI(item.detail_img_file_name) + '"'
-                                + ' alt = "' + item.board_title + '" '
-                                + '></div>';
-                        }
+                    if (item.url != null && item.url != '') {
+                    	var decodedUrl = $('<textarea/>').html(item.url).text();
+                        popupSwiperHtml += '<a href="' + decodedUrl + '" target="_blank"><img src="/file/download?fileId='+item.atchFileId+'"'
+                            + ' alt = "' + item.popupNm + '" '
+                            + '></a></div>';
+                    } else {
+                        popupSwiperHtml += '<img src="/file/download?fileId='+item.atchFileId+'"'
+                            + ' alt = "' + item.popupNm + '" '
+                            + '></div>';
                     }
-                    $("#mainPopupSwiper").html(popupSwiperHtml)
-                    $("#popupCnt").text(data.data.length);
                 }
+                $("#mainPopupSwiper").html(popupSwiperHtml)
+                $("#popupCnt").text(data.data.length);
             },
             error: function () {
                 console.log("메인팝업 에러");
@@ -697,7 +692,7 @@
 							</div>
 
 							<div class="btn-row_04">
-								<a href="/business/PPaaS">
+								<a href="/mber/business/PPaaS">
 									<button class="btn-black">
 										ENERGY PPaaS <span>더보기</span>
 									</button>
@@ -726,7 +721,7 @@
 					</ul>
 				</div>
 				<div class="btn-row_01 visible">
-					<a href="/customer/press-list">
+					<a href="/mber/customer/press-list">
 						<button class="btn-black">
 							한전MCS소식 <span>더보기</span>
 						</button>
@@ -863,7 +858,7 @@
 						<li><a href="/mber/customer/opinion-agree">고객의 소리</a></li>
 						<li><a href="/mber/customer/cooperation-list">신사업 및 협력사업 문의·제안</a></li>
 						<li><a href="/mber/customer/integrity-agree">청렴·부패 신고</a></li>
-						<li><a href="/mber/customer/news-list">전력에너지 뉴스</a></li>
+						<li><a href="/mber/opinion/news/bbs/1/list">전력에너지 뉴스</a></li>
 					</ul>
 				</div>
 				<div class="svc_box">

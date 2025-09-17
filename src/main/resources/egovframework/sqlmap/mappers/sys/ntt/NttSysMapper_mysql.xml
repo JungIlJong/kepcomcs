@@ -29,6 +29,7 @@
         <result column="NTT_START_DT" property="nttStartDt" />
         <result column="NTT_END_DT" property="nttEndDt" />
         <result column="EMAIL" property="email" />
+        <result column="BBS_TY_CODE" property="bbsTyCode" />
         <collection  property="files" ofType="Map" javaType="List">
             <result column="ATCH_FILE_ID" property="atchFileId" />
             <result column="ORIGNL_FILE_NM" property="orignlFileNm" />
@@ -339,6 +340,7 @@
             B.ORIGNL_FILE_NM,
             B.FILE_EXTSN,
             B.FILE_SIZE,
+            D.BBS_TY_CODE,
             D.FILE_ATCH_SIZE,
             D.PERM_EXTSN,
             D.FILE_ATCH_CO,

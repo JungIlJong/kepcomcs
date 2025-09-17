@@ -221,13 +221,12 @@
         <p><c:out value="${menuSj}"/></p>
       </div>
       <ul class="rocation">
-        <li>
-          <a href="/">Home</a>
-        </li>
-        <li>
-            <a href="/customer/opinion">고객소통</a>
-        </li>
-        <li><c:out value="${menuTitle}"/></li>
+        <c:forEach var="m" items="${breadcrumb}">
+		    <li>
+		      <a href="${m.url}"><c:out value="${m.menuNm}" /></a>
+		    </li>
+		  </c:forEach>
+<%--         <li><c:out value="${menuTitle}"/></li> --%>
       </ul>
     </div>
     

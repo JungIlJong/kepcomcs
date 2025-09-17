@@ -289,7 +289,7 @@
         // 게시글 상세정보 가져오기
         let setDetail = function (data) {
 
-            $('#bbsId').val(data.bbsId);
+        	$('#bbsId').val(data.bbsId);
             $('#bbsId > option[value="' + data.bbsId + '"]').prop("selected", true);
             handleBbsFileInfo(data.bbsId);
 
@@ -374,8 +374,56 @@
                     window.open('/file/download?fileId=' + fileId);
                 });
             }
+            
+            if (data.bbsTyCode === 'BBS_QNA') {
+            	$("input, select").attr("disabled", true);
+            	quill.enable(false);
+            	$('.ql-toolbar button').prop('disabled', true);
+            	
+            	addAnswerRow();
+            }
+            
         }
 
+        function addAnswerRow() {
+            const answerRow = `
+                <tr id="answerRow">
+                    <th><label class="form-label" for="answerContent">메모</label></th>
+                    <td colspan="3">
+                        <textarea id="answerContent" name="answerContent" 
+                                  class="form-control" rows="5"
+                                  placeholder="메모를 입력하세요"></textarea>
+                    </td>
+                </tr>
+                <tr id="answerStatusRow">
+                    <th><label class="form-label">상태값</label></th>
+                    <td colspan="3">
+                        <div class="d-flex gap-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" 
+                                       name="answerStatus" id="statusWait" value="WAIT" checked>
+                                <label class="form-check-label" for="statusWait">대기중</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" 
+                                       name="answerStatus" id="statusIng" value="ING">
+                                <label class="form-check-label" for="statusIng">처리중</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" 
+                                       name="answerStatus" id="statusDone" value="DONE">
+                                <label class="form-check-label" for="statusDone">완료</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            $("tr:has(input[name='useAt'])").after(answerRow);
+        }
+
+
+        
         let fail = function (xhr, status, error) {
             customAlert({
                 title: '<spring:message code="common.system.info"/>',

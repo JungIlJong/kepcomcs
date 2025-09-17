@@ -37,16 +37,7 @@ public class PopupMberApi {
      */
     @GetMapping("/active-list")
     public ResponseEntity getActivePopupList(HttpServletRequest request) throws UnsupportedEncodingException {
-        String value = CookieUtil.getValue(request, cookieName);
-
-        if ("Y".equals(value)) {
-            return CommonResponse.success(Collections.emptyList());
-        }
-
-        List<Map<String, Object>> activePopupList = popupService.selectActivePopupList();
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("data", activePopupList);
-        return CommonResponse.success(resultMap);
+        return CommonResponse.success(popupService.selectActivePopupList());
     }
 
     @GetMapping("/stop")

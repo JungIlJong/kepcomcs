@@ -1,18 +1,21 @@
 package com.kepco.app.core.interceptor;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kepco.app.domain.menu.dto.Menu;
 import com.kepco.app.domain.menu.mapper.MenuSysMapper;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UserMenuInterceptor implements HandlerInterceptor {
@@ -37,31 +40,8 @@ public class UserMenuInterceptor implements HandlerInterceptor {
         final String subRequestURI = requestURI.substring(0, requestURI.lastIndexOf("/"));
 
         List<Menu> menuList = menuSysMapper.selectMenuList("MBER");
-
-//        if (requestURI.equals(INDEX_URL)) {
-//            request.setAttribute("menuList", menuList);
-//            return true;
-//        }
-//
-//        for (Menu menu : menuList) {
-//            String url = menu.getUrl();
-//            if (StringUtils.hasText(url) && !url.equals(DIR)) {
-//                url = url.substring(0, url.lastIndexOf("/"));
-//            }
-//
-//            if (url.equals(subRequestURI)) {
-//                result = true;
-//                break;
-//            }
-//        }
-
-//        if (result) {
-            request.setAttribute("menuList", menuList);
-            return true;
-//        } else {
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-//            return result;
-//        }
+        request.setAttribute("menuList", menuList);
+        return true;
     }
 
     @Override
@@ -86,6 +66,9 @@ public class UserMenuInterceptor implements HandlerInterceptor {
                 menuMap.put(menu.getMenuId(), menu);
             }
 
+            List<Menu> breadcrumb = new ArrayList<>();
+            Menu currentMenu = null;
+
             for (Menu menu : menuList) {
                 Long upperMenuId = menu.getUpperMenuId();
                 if (upperMenuId != null) {
@@ -94,7 +77,30 @@ public class UserMenuInterceptor implements HandlerInterceptor {
                         upperMenu.getChildList().add(menu);
                     }
                 }
+                
+                if (menu.getUrl() != null && menu.getUrl().contains(subRequestURI)) {
+                    currentMenu = menu;
+                }
             }
+            
+            while (currentMenu != null) {
+            	String resolvedUrl;
+
+                if ("HOME".equalsIgnoreCase(currentMenu.getMenuNm()) || currentMenu.getUpperMenuId() == 0) {
+                    resolvedUrl = "/"; 
+                } else {
+                    resolvedUrl = resolveMenuUrl(currentMenu, menuMap);
+                }
+                
+        	    currentMenu.setUrl(resolvedUrl);
+        	    breadcrumb.add(currentMenu);
+
+        	    Long upperId = currentMenu.getUpperMenuId();
+        	    currentMenu = (upperId != null) ? menuMap.get(upperId) : null;
+            }
+
+            Collections.reverse(breadcrumb);
+            modelAndView.addObject("breadcrumb", breadcrumb);
 
             if (!menuList.isEmpty()) {
                 modelAndView.addObject("menuItems", menuList.get(0));
@@ -102,4 +108,22 @@ public class UserMenuInterceptor implements HandlerInterceptor {
         }
     }
 
+    private String resolveMenuUrl(Menu menu, Map<Long, Menu> menuMap) {
+        if (!"DIR".equals(menu.getMenuTy())) {
+            return menu.getUrl(); 
+        }
+
+        for (Menu child : menu.getChildList()) {
+            if (child.getUrl() != null && !"DIR".equals(child.getMenuTy())) {
+                return child.getUrl();
+            }
+        }
+
+        for (Menu child : menu.getChildList()) {
+            String url = resolveMenuUrl(child, menuMap);
+            if (url != null) return url;
+        }
+
+        return null; 
+    }
 }

@@ -6,8 +6,8 @@
     <%@ include file="/WEB-INF/jsp/vasanta/sys/include/head.jsp" %>
     <script type="text/javascript">
 
-        function searchDetail() {
-            Ajax.get(setUrl('/api/sys/ntt/detail?nttId='+), searchDetailSuccess, fail);
+        function searchDetail() { alert('sdfsdf');
+            Ajax.get(setUrl('/api/sys/ntt/detail'), searchDetailSuccess, fail);
         }
 
         function searchDetailSuccess(data) {
