@@ -96,7 +96,7 @@
                                                             <input class="form-control" type="text" id="id" name="id" maxlength="12" placeholder="daonplace">
                                                             <button type="button" id="btnDuplicateId" class="btn btn-primary"><spring:message code="button.duplicate"/></button>
                                                         </div><div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                                        <div class="form-text">아이디는 영문 소문자로 시작하고 숫자 포함 6~12자여야 합니다.</div>
+                                                        <div class="form-text">아이디는 영문 소문자로 시작하고 6~12자여야 합니다.</div>
                                                     </td>
                                                     <th>이름<span class="text-danger ms-1">*</span></th>
                                                     <td class="form-control-validation">

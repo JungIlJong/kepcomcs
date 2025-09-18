@@ -9,11 +9,14 @@
 		       CLIENT_IP,
 		       USER_ID,
 		       USER_NM,
-		       DATE_FORMAT(LOG_DT,'%Y-%m-%d') AS LOG_DT
+		       LOG_DT
 		FROM VST_ACCESS_LOG 
 		WHERE 1 = 1
 		<if test="(minDate != null and minDate != '') and (maxDate != null and maxDate != '')">
-		AND LOG_DT BETWEEN STR_TO_DATE(#{minDate}, '%Y-%m-%d') AND (STR_TO_DATE(#{maxDate}, '%Y-%m-%d') + 1)
+		<![CDATA[ 
+			AND LOG_DT >= STR_TO_DATE(#{minDate}, '%Y-%m-%d')
+			AND LOG_DT <  DATE_ADD(STR_TO_DATE(#{maxDate}, '%Y-%m-%d'), INTERVAL 1 DAY)
+		]]>
 		</if>
 		<if test="searchKeyword != null and searchKeyword != ''">
 			AND (CLIENT_IP LIKE CONCAT('%', #{searchKeyword}, '%') OR

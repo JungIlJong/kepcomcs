@@ -201,11 +201,7 @@ window.initFvMbr = function () {
                                 return {valid: false, message: msg.idStartLowercase};
                             }
 
-                            if (!/[0-9]/.test(value)) {
-                                return {valid: false, message: msg.idMustContainNumber};
-                            }
-
-                            if (value.length < 6 || value.length > 12) {
+                            if (value.length < 4 || value.length > 12) {
                                 return {valid: false, message: msg.idLengthInvalid};
                             }
 

@@ -37,7 +37,7 @@
             idRequired: '아이디를 입력해주세요.',
             idStartLowercase: '아이디는 반드시 영문 소문자로 시작해야 합니다.',
             idMustContainNumber: '아이디에는 숫자가 반드시 포함되어야 합니다.',
-            idLengthInvalid: '아이디는 6자 이상 12자 이하로 입력해야 합니다.',
+            idLengthInvalid: '아이디는 4자 이상 12자 이하로 입력해야 합니다.',
             idReserved: 'admin, root 등의 예약어는 사용할 수 없습니다.',
             idDupCheckRequired: '아이디 중복체크를 해주세요.',
             idDuplicated: '중복된 아이디입니다.',
