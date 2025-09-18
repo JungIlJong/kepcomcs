@@ -189,9 +189,18 @@ public class SysNtt {
      */
     private String linkUrl;
 
-    
     /**
      * 소속
      */
     private String sosok;
+    
+    /**
+     * 답변
+     */
+    private String nttReply;
+    
+    /**
+     * 처리상태
+     */
+    private String nttStatus;
 }

@@ -27,15 +27,15 @@
 
   <script type="text/javascript">
   $(function() {
-		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){
+<%-- 		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){ --%>
 
-			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
-			location.href="./opinion-certification";
+// 			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
+// 			location.href="./opinion-certification";
 			
-		}else{
+// 		}else{
 			$('#author_name').text($.cookie('authorName'));
 			$('#author_hp').text($.cookie('authorHp'));
-		}
+// 		}
 
 		let today = new Date();   
 
@@ -90,7 +90,7 @@
     			formData.append("board_author", $('#board_author').val());
     			formData.append("email", $('#email').val()); 
     			formData.append("author_hp", $('#author_hp').val()); 
-    			formData.append("cp_nm", $('#board_author').val());
+    			formData.append("cp_nm", $('#cp_nm').val());
     			formData.append("inquery_area", $('#inquery_area').val()); 
 
     			if($(":input:radio[name=addressYN]:checked").val() == "Y"){

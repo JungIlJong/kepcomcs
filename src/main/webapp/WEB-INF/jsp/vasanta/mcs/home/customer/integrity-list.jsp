@@ -27,10 +27,9 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
 	<script type="text/javascript">
 	
-		var board_type = "39";
+		var board_type = "22";
 		$(function() {
 			//$('#notice_type').val(board_type)
-			console.log(board_type)
 			setMainTable();
 		})
 		
@@ -86,10 +85,10 @@
 												}
 											},
 											{
-												"data" : "insert_id",
+												"data" : "wrter_nm",
 												render : function(data, type, row, meta) {
 	
-													return row.insert_id || "";
+													return row.wrter_nm || "";
 												}
 											},
 											{

@@ -29,7 +29,7 @@
   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
   <script type="text/javascript">
 	function pwdChk(){
-		var board_type = 39;
+		var board_type = 22;
 
 		if($('#board_pwd').val() == ""){ 
 			alert("비밀번호를 입력해 주세요."); return;

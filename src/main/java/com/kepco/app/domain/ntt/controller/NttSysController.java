@@ -20,8 +20,31 @@ public class NttSysController {
     }
 
     @GetMapping("/detail")
-    public String update() {
-        return "sys/ntt/update";
+    public String update(@RequestParam("bbsId") String bbsId) {
+    	String returnUrl = "";
+    	switch (bbsId) {
+	    	case "21":
+	    		returnUrl = "sys/ntt/cooperation/update";
+	    		break;
+	    	case "22":
+	    		returnUrl = "sys/ntt/integrity/update";
+	    		break;
+	    	case "1325":
+	    		returnUrl = "sys/ntt/socialinquiry/update";
+	    		break;
+	    	case "1326":
+	    		returnUrl = "sys/ntt/socialinquiry/update";
+	    		break;
+		    case "1327":
+		    	returnUrl = "sys/ntt/opinion/update";
+		    	break;
+		    case "1328":
+		    	returnUrl = "sys/ntt/conscience/update";
+		    	break;
+		    default:
+		    	returnUrl = "sys/ntt/update";
+    	}
+        return returnUrl;
     }
 
     @GetMapping("/reply")

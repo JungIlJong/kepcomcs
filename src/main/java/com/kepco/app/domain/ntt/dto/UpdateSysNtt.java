@@ -37,7 +37,6 @@ public class UpdateSysNtt {
     /**
      * 게시판 ID
      */
-    @NotBlank
     private String bbsId;
 
     /**
@@ -48,13 +47,11 @@ public class UpdateSysNtt {
     /**
      * 제목
      */
-    @NotBlank
     private String nttSj;
 
     /**
      * 내용
      */
-    @NotBlank
     private String nttCn;
 
     /**
@@ -106,4 +103,14 @@ public class UpdateSysNtt {
      * 삭제 파일 ID 목록
      */
     private List<String> removeFileList;
+    
+    /**
+     * 답변
+     */
+    private String nttReply;
+    
+    /**
+     * 처리상태
+     */
+    private String nttStatus;
 }

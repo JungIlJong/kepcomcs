@@ -31,13 +31,14 @@
                                         <div class="app-brand justify-content-center">
                                             <a href="index.html" class="app-brand-link gap-2">
                                         <span class="app-brand-logo demo">
-                                            <img src="/static/assets/images/logo_color.svg" alt="LOGO">
+<!--                                             <img src="/static/assets/images/logo_color.svg" alt="LOGO"> -->
+                                            <img src="/resources/landing/images/main/logo.png" alt="LOGO">
                                         </span>
                                             </a>
                                         </div>
 
                                         <div class="mt-5 mb-10 text-center">
-                                            <h4>관리자 시스템</h4>
+                                            <h4>Sign In Your account</h4>
                                         </div>
 
                                         <form id="frmLogin" method="post" action="/api/login" class="mb-6">

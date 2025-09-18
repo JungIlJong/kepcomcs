@@ -5,7 +5,7 @@
     <div class="app-brand demo">
         <a href="/sys/system/menu/mngrmenu/list" class="app-brand-link">
               <span class="app-brand-logo demo mt-5 mb-10">
-                <img src="<c:out value="${logoUrl}" />" alt="LOGO-TXT" class="logo-img">
+                <img src="/resources/landing/images/main/logo.png" alt="MCS" style="width:100%; height:100%;">
               </span>
         </a>
     </div>

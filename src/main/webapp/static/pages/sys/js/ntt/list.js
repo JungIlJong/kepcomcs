@@ -100,15 +100,17 @@ document.addEventListener('DOMContentLoaded', function (e) {
           targets: 4,
           title: '답변여부',
           render: function (data, type, full, meta) {
-            if(data.replyAt === 'Y') {
-              if(data.parntscttId == 0) {
+            if(data.bbsTyCode == 'BBS_QNA') {
+              if(data.nttStatus == 0) {
                 return `<button type="button" class="badge text-bg-secondary">답변필요</button>`;
                 // node += `<td class="tblBodyItem fix200">
                 //         <div class="buttonArea center">
                 //           <a href="reply?reply=N&nttId=${'${element.nttId}'}" class="btn sml line "><spring:message code="ntt.answer.do" /></a>
                 //         </div>
                 //       </td>`
-              } else {
+              } else if(data.nttStatus == 1) {
+				  return `<button type="button" class="badge text-bg-secondary">처리중</button>`;
+			  } else {
                 return `<button type="button" class="badge text-bg-primary">답변완료</button>`
                 // node += `<td class="tblBodyItem fix200">
                 //         <div class="buttonArea center">
@@ -137,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           render: (data, type, full, meta) => {
             return `
               <div class="d-flex gap-1 justify-content-center">
-                <button onclick="location.href='detail?nttId=${data}'" class="btn btn-sm btn-label-secondary">
+                <button onclick="location.href='detail?nttId=${data}&bbsId=${full.bbsId}'" class="btn btn-sm btn-label-secondary">
                   <i class="icon-base bx bx-pencil icon-xs"></i>수정
                 </button>
                 <button onclick="deleteNtt('${data}')" class="btn btn-sm btn-label-danger">

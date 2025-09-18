@@ -32,15 +32,15 @@
   <script src="https://www.google.com/recaptcha/api.js?render=6Le8_iQcAAAAACCuc_W--e48akBOB61Uzu839PkO"></script>
 <script type="text/javascript">
 	$(function() {
-<%-- 		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){ --%>
+		if($.cookie('kepcomcssResponseNumber') != "<%=session.getAttribute("sResponseNumber")%>" ){
 	
-// 			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
-// 			location.href="./report-certification";
+			alert("비정상적인 접근입니다.\휴대폰 인증 후에 접속해 주셔야 합니다.")
+			location.href="./report-certification";
 			
-// 		}else{
+		}else{
 			$('#cn_name').text($.cookie('authorName'));
 			$('#cn_hp').text($.cookie('authorHp'));
-// 		}
+		}
 	
 		let today = new Date();   
 	

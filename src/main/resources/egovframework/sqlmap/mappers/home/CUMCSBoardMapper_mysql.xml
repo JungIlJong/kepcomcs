@@ -91,6 +91,7 @@
             A.NOTICE_AT AS notice_at,
 			A.NTT_CN AS board_content, 
 			A.NTT_STATUS AS board_status,
+			A.WRTER_NM AS wrter_nm,
 			DATE_FORMAT(A.NTT_START_DT,'%Y-%m-%d') AS ntt_start_dt,
 			DATE_FORMAT(A.NTT_END_DT,'%Y-%m-%d') AS ntt_end_dt,
 			CASE 

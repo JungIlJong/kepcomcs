@@ -1224,6 +1224,10 @@ window.initFvNtt = function () {
                     callback: {
                         message: '',
                         callback: function (input) {
+							if ($(input.element).prop('readonly')) {
+	                            return true;
+	                        }
+                        
                             const value = input.value.trim();
                             if (value === '') {
                                 return {valid: false, message: msg.nttSjRequired};

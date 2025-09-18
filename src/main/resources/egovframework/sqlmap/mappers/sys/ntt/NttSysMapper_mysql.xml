@@ -6,6 +6,7 @@
     <resultMap id="detailMap" type="Map">
         <result column="NTT_ID" property="nttId" />
         <result column="BBS_ID" property="bbsId" />
+        <result column="BBS_NM" property="bbsNm" />
         <result column="PARNTSCTT_ID" property="parntscttId" />
         <result column="NTT_SJ" property="nttSj" />
         <result column="NTT_CN" property="nttCn" />
@@ -32,6 +33,14 @@
         <result column="SOSOK" property="sosok" />
         <result column="PHONE" property="authorHp" />
         <result column="BBS_TY_CODE" property="bbsTyCode" />
+        <result column="NTT_STATUS" property="nttStatus" />
+        <result column="NTT_REPLY" property="nttReply" />
+        <result column="CP_NM" property="cpNm" />
+        <result column="AREA" property="area" />
+        <result column="ADDRESS1" property="address1" />
+        <result column="ADDRESS2" property="address2" />
+        <result column="ADDRESS3" property="address3" />
+        <result column="FEEDBACK_YN" property="feedbackYn" />
         <collection  property="files" ofType="Map" javaType="List">
             <result column="ATCH_FILE_ID" property="atchFileId" />
             <result column="ORIGNL_FILE_NM" property="orignlFileNm" />
@@ -178,8 +187,10 @@
     <update id="updateNtt" parameterType="sysNtt">
         UPDATE
             VST_NTT
-        SET
+        SET LAST_UPDUSR_ID = #{lastUpdusrId},
+        <if test="bbsId != null">
             BBS_ID = #{bbsId},
+        </if>
         <if test="parntscttId != null">
             PARNTSCTT_ID = #{parntscttId},
         </if>
@@ -226,7 +237,12 @@
         <if test="linkUrl != null">
             LINK_URL = #{linkUrl},
         </if>
-            LAST_UPDUSR_ID = #{lastUpdusrId},
+        <if test="nttReply != null">
+            NTT_REPLY= #{nttReply},
+        </if>
+        <if test="nttStatus != null">
+            NTT_STATUS = #{nttStatus},
+        </if>
             LAST_UPDT_DT = NOW()
         WHERE NTT_ID = #{nttId}
     </update>
@@ -257,6 +273,7 @@
             A.NOTICE_AT,
             A.USE_AT,
             A.WRTER_NM,
+            A.NTT_STATUS,
             A.NTT_START_DT,
             A.NTT_END_DT,
             A.FRST_REGISTER_ID,
@@ -335,7 +352,16 @@
             A.USE_AT,
             A.WRTER_NM,
             A.PHONE,
+            A.EMAIL,
             A.SOSOK,
+            A.NTT_STATUS,
+            A.NTT_REPLY,
+            A.CP_NM,
+            A.AREA,
+            A.ADDRESS1,
+            A.ADDRESS2,
+            A.ADDRESS3,
+            A.FEEDBACK_YN,
             DATE_FORMAT(A.NTT_START_DT, '%Y-%m-%d') AS NTT_START_DT,
             DATE_FORMAT(A.NTT_END_DT, '%Y-%m-%d') AS NTT_END_DT,
             A.FRST_REGISTER_ID,
@@ -346,6 +372,7 @@
             B.ORIGNL_FILE_NM,
             B.FILE_EXTSN,
             B.FILE_SIZE,
+            D.BBS_NM,
             D.BBS_TY_CODE,
             D.FILE_ATCH_SIZE,
             D.PERM_EXTSN,

@@ -38,7 +38,6 @@
   <script type="text/javascript">
 	var board_no = <%=request.getParameter("board_no") %>;
 	$(function() {
-		console.log(board_no);
 		if (board_no != null && board_no != "" && board_no != 'undefined'){
 			readBoardData();
 		}
@@ -93,7 +92,7 @@
 
 	
 	function saveNotice(){
-		var board_type = 39;
+		var board_type = 22;
 
 		grecaptcha.ready(function() {
 	          grecaptcha.execute('6Le8_iQcAAAAACCuc_W--e48akBOB61Uzu839PkO', {action: 'submit'}).then(function(token) {
