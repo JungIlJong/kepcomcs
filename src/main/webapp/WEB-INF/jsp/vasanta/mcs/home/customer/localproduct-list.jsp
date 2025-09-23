@@ -187,9 +187,9 @@
 	    <div class="local_list">
 	     	<div class="inner">
 	     		<ul>
-	     			<li><img src="/resources/landing/images/mber/customer/img_localproduct_1.png" alt="" /></li>
-	     			<li><img src="/resources/landing/images/mber/customer/img_localproduct_2.png" alt="" /></li>
-	     			<li><img src="/resources/landing/images/mber/customer/img_localproduct_3.png" alt="" /></li>
+	     			<li><img src="/resources/landing/images/customer/img_localproduct_1.png" alt="" /></li>
+	     			<li><img src="/resources/landing/images/customer/img_localproduct_2.png" alt="" /></li>
+	     			<li><img src="/resources/landing/images/customer/img_localproduct_3.png" alt="" /></li>
 	     		</ul>
 	     		<p>* 위 상품 이미지는 단순 참고용입니다.</p>
 	     	</div>
