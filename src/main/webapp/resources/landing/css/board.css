@@ -1659,6 +1659,15 @@ table.dataTable tr.selected th.select-checkbox:after {
     font-size: 1rem;
     word-break: break-all;
   }
+
+  .news-view-desc img {
+	  max-width: 100% !important;
+	  height: auto !important;
+	  display: block;
+	  margin: 0 auto;
+  }
+	
+
   .answered-box {
     background-color: #E7F8FA;
   }

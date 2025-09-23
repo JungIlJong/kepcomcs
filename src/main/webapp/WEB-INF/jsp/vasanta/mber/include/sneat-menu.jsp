@@ -83,51 +83,60 @@
     </div>
     <div class="overlay-menu-wrap">
         <div class="overlay-menu" id="overlay-menu_id">
-		    <ul class="menu-depth_01" id="menu-depth_01_id"> 
-			    <c:forEach var="depth1" items="${menuList}" varStatus="st1">
-			        <li <c:if test="${st1.index == 0}">class="visible"</c:if>>
-			            <span data-menu="${st1.index + 1}">${depth1.menuNm}</span>
-			            <c:choose>
-			                <c:when test="${not empty depth1.childList and fn:length(depth1.childList[0].childList) > 0}">
-			                    <div class="menu-fixed has-depth03">
-			                        <c:forEach var="depth2" items="${depth1.childList}">
-			                            <ul class="menu-depth_02">
-			                                <li>
-			                                    <span class="menu-d3-head"><c:out value="${depth2.menuNm}"/></span>
-			                                    <ul class="menu-depth_03">
-			                                        <c:forEach var="depth3" items="${depth2.childList}">
-			                                            <c:set var="depth3Url" value="${depth3.menuTy eq 'DIR' ? (not empty depth3.childList ? depth3.childList[0].url : '#') : depth3.url}" />
-			                                            <li>
-			                                                <a href="${depth3Url}"
-			                                                   <c:if test="${depth3.menuTy eq 'LINK'}">target="_blank"</c:if>>
-			                                                    <span><c:out value="${depth3.menuNm}"/></span>
-			                                                </a>
-			                                            </li>
-			                                        </c:forEach>
-			                                    </ul>
-			                                </li>
-			                            </ul>
-			                        </c:forEach>
-			                    </div>
-			                </c:when>
-			                <c:otherwise>
-			                    <ul class="menu-depth_02 menu-fixed">
-			                        <c:forEach var="depth2" items="${depth1.childList}">
-			                            <c:set var="depth2Url" value="${depth2.menuTy eq 'DIR' ? (not empty depth2.childList ? depth2.childList[0].url : '#') : depth2.url}" />
-			                            <li>
-			                                <a href="${depth2Url}"
-			                                   <c:if test="${depth2.menuTy eq 'LINK'}">target="_blank"</c:if>>
-			                                    <span><c:out value="${depth2.menuNm}"/></span>
-			                                </a>
-			                            </li>
-			                        </c:forEach>
-			                    </ul>
-			                </c:otherwise>
-			            </c:choose>
-			        </li>
-			    </c:forEach>
-			</ul>
-		</div>
+    <ul class="menu-depth_01" id="menu-depth_01_id"> 
+        <c:forEach var="depth1" items="${menuList}" varStatus="st1">
+            <c:if test="${depth1.gnbAt eq 'Y'}">
+                <li <c:if test="${st1.index == 0}">class="visible"</c:if>>
+                    <span data-menu="${st1.index + 1}">${depth1.menuNm}</span>
+
+                    <c:choose>
+                        <c:when test="${not empty depth1.childList}">
+                            <c:forEach var="depth2" items="${depth1.childList}">
+                                <c:choose>
+                                    <c:when test="${not empty depth2.childList}">
+                                        <div class="menu-fixed has-depth03">
+                                            <ul class="menu-depth_02">
+                                                <li>
+                                                    <span class="menu-d3-head"><c:out value="${depth2.menuNm}"/></span>
+                                                    <ul class="menu-depth_03">
+                                                        <c:forEach var="depth3" items="${depth2.childList}">
+                                                            <c:set var="depth3Url"
+                                                                   value="${depth3.menuTy eq 'DIR' ? (not empty depth3.childList ? depth3.childList[0].url : '#') : depth3.url}" />
+                                                            <li <c:if test="${depth3.menuTy eq 'LINK'}">class="safetyreport"</c:if>>
+                                                                <a href="${depth3Url}"
+                                                                   <c:if test="${depth3.menuTy eq 'LINK'}">target="_blank"</c:if>>
+                                                                    <span><c:out value="${depth3.menuNm}"/></span>
+                                                                </a>
+                                                            </li>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </c:when>
+
+                                    <c:otherwise>
+                                        <ul class="menu-depth_02 menu-fixed">
+                                            <c:set var="depth2Url"
+                                                   value="${depth2.menuTy eq 'DIR' ? (not empty depth2.childList ? depth2.childList[0].url : '#') : depth2.url}" />
+                                            <li>
+                                                <a href="${depth2Url}"
+                                                   <c:if test="${depth2.menuTy eq 'LINK'}">target="_blank"</c:if>>
+                                                    <span><c:out value="${depth2.menuNm}"/></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </c:when>
+                    </c:choose>
+                </li>
+            </c:if>
+        </c:forEach>
+    </ul>
+</div>
+
         <div class="overlay-menu-ft">
             <div class="phone-info">
                 <p>대표전화</p>

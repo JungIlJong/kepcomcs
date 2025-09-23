@@ -456,24 +456,46 @@
             dataType: "json",
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             success: function (data) {
-            	console.log(data); console.log('AAAA');
-                for (i = 0; i < data.length; i++) {
-                    var item = data[i];
-                    popupSwiperHtml += '<div class="swiper-slide">';
-
-                    if (item.url != null && item.url != '') {
-                    	var decodedUrl = $('<textarea/>').html(item.url).text();
-                        popupSwiperHtml += '<a href="' + decodedUrl + '" target="_blank"><img src="/file/download?fileId='+item.atchFileId+'"'
-                            + ' alt = "' + item.popupNm + '" '
-                            + '></a></div>';
-                    } else {
-                        popupSwiperHtml += '<img src="/file/download?fileId='+item.atchFileId+'"'
-                            + ' alt = "' + item.popupNm + '" '
-                            + '></div>';
-                    }
-                }
-                $("#mainPopupSwiper").html(popupSwiperHtml)
-                $("#popupCnt").text(data.data.length);
+            	console.log(data);
+            	if(data.length > 0) {
+	                for (i = 0; i < data.length; i++) {
+	                    var item = data[i];
+	                    popupSwiperHtml += '<div class="swiper-slide">';
+	
+	                    if (item.url != null && item.url != '') {
+	                    	var decodedUrl = $('<textarea/>').html(item.url).text();
+	                        popupSwiperHtml += '<a href="' + decodedUrl + '" target="_blank"><img src="/file/download?fileId='+item.atchFileId+'"'
+	                            + ' alt = "' + item.popupNm + '" '
+	                            + '></a></div>';
+	                    } else {
+	                        popupSwiperHtml += '<img src="/file/download?fileId='+item.atchFileId+'"'
+	                            + ' alt = "' + item.popupNm + '" '
+	                            + '></div>';
+	                    }
+	                }
+	                $("#mainPopupSwiper").html(popupSwiperHtml)
+	                $("#popupCnt").text(data.length);
+	                
+	                new Swiper(".popupslider", {
+	                    slidesPerView: 'auto',
+	                    loop: true,
+	                    autoplay: {
+	                        delay: 2000,
+	                        disableOnInteraction: false
+	                    },
+	                    navigation: {
+	                        nextEl: ".popup-button-next",
+	                        prevEl: ".popup-button-prev",
+	                    },
+	                    pagination: {
+	                        el: ".popup-pagination",
+	                        clickable: true,
+	                    },
+	                    breakpoints: {
+	                        1024: { autoplay: false, loop: false }
+	                    }
+	                });
+            	}
             },
             error: function () {
                 console.log("메인팝업 에러");
@@ -840,7 +862,7 @@
 					</div>
 				</div>
 
-				<div class="popup-pagination"></div>
+<!-- 				<div class="popup-pagination"></div> -->
 			</div>
 		</div>
 	</div>

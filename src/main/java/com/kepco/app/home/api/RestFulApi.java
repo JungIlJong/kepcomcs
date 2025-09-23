@@ -787,54 +787,54 @@ public class RestFulApi {
                     }
                     if (board_type.equals("1")) {
                         //전력 에너지 뉴스
-                        path = "/customer/news-list";
+                        path = "/mber/opinion/news/bbs/1/list";
                     } else if (board_type.equals("2")) {
                         //언론속의 한전MCS
-                        path = "/customer/press-list";
+                        path = "/mber/customer/press-list";
                     } else if (board_type.equals("3")) {
                         //path = "";
                     } else if (board_type.equals("4")) {
                         //입찰정보
-                        path = "/open-manage/contract-list";
+                        path = "/mber/open-manage/contract-list";
                     } else if (board_type.equals("5")) {
                         //채용공고
-                        path = "/open-manage/recruit-list";
+                        path = "/mber/open-manage/recruit-list";
                     } else if (board_type.equals("6")) {
                         //안전경영소식
-                        path = "/esg/safety/safetynews-list";
+                        path = "/mber/esgsafety/safety/safetynews/bbs/6/list";
                     } else if (board_type.equals("7")) {
-                        //국민을 위한 안전활동
-                        path = "/esg/safety/safetyact-list";
+                        //국민을 위한 안전활동 -- 확인
+                        path = "/mber/esg/safety/safetyact/safetyact-list";
                     } else if (board_type.equals("8")) {
                         //반부패 청렴자료
-                        path = "/esg/ethic/integrity-list";
+                        path = "/mber/esg/ethic/ethintegrity/bbs/39/list";
                     } else if (board_type.equals("9")) {
                         //제재현황
-                        path = "/esg/ethic/punishment-list";
+                        path = "/mber/esg/ethic/punishment/bbs/1314/list";
                     } else if (board_type.equals("10")) {
                         //윤리경영 홍보자료
-                        path = "/esg/ethic/ethicpromotion-list";
+                        path = "/mber/esgsafety/ethic/ethicpromo/bbs/10/list";
                     } else if (board_type.equals("11")) {
                         //사업실명제
-                        path = "/open-manage/realname-list";
+                        path = "/mber/open-manage/realname-list";
                     } else if (board_type.equals("12")) {
                         //한국사회보장정보원
-                        path = "/esg/social/ssis-list";
+                        path = "/mber/esg/social/ssis-list";
                     } else if (board_type.equals("13")) {
                         //한국에너지공단
-                        path = "/esg/social/energy-list";
+                        path = "/mber/esg/social/energy-list";
                     } else if (board_type.equals("14")) {
                         //고객만족도활동
-                        path = "/esg/social/safety-list";
+                        path = "/mber/esg/social/safety-list";
                     } else if (board_type.equals("15")) {
                         //취약계층발굴
-                        path = "/esg/social/weak-list";
+                        path = "/mber/esg/social/weak-list";
                     } else if (board_type.equals("16")) {
                         //MOU체결
-                        path = "/esg/social/mou-list";
+                        path = "/mber/esgsafety/social/socialinquiry/bbs/15/list";
                     } else if (board_type.equals("17")) {
                         //탄소중립활동
-                        path = "/esg/carbon-neutral/neutral-list";
+                        path = "/mber/esgsafety/carbon/neutral/bbs/16/list";
                     } else if (board_type.equals("21")) {
                         //신사업 및 협력사업 문의·제안
                         //path = "/customer/cooperation-list";
@@ -845,11 +845,11 @@ public class RestFulApi {
                         //사회공헌문의
                         //path = "/esg/social/socialinquiry-list";
                     } else if (board_type.equals("25")) {
-                        path = "/customer/press-explanatory";
+                        path = "/mber/opinion/press/explanator/bbs/37/list";
                     } else if (board_type.equals("28")) {
-                        path = "/customer/press-video";
+                        path = "/mber/opinion/press/pressvideo/bbs/28/list";
                     } else if (board_type.equals("27")) {
-                        path = "/customer/press-news";
+                        path = "/mber/opinion/press/pressnews/bbs/27/list";
                     }
                     if (!path.equals("")) {
                         title = title.replaceAll(search, "<span style='background : #e8e89777;'>" + search + "</span>");

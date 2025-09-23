@@ -1225,12 +1225,14 @@ window.initFvNtt = function () {
 	                        }
                         
                             const value = input.value.trim();
-                            if (value === '') {
+                            console.log(value);
+                            if (value === '') { console.log('empty');
                                 return {valid: false, message: msg.nttSjRequired};
                             }
-                            if (value.length > 2000) {
+                            if (value.length > 2000) { console.log('length');
                                 return {valid: false, message: msg.nttSjTooLong};
                             }
+                            console.log('true');
                             return true;
                         }
                     }

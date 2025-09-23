@@ -64,32 +64,7 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr id="type1">
-                                                    <th>
-                                                        <label class="form-label" for="nttSj">
-                                                            <spring:message code="title"/><span
-                                                                class="text-danger ms-1">*</span>
-                                                        </label>
-                                                    </th>
-                                                    <td colspan="3">
-                                                        <div class="form-control-validation fv-plugins-icon-container">
-                                                            <div class="flex-c gap-2">
-                                                                <div class="has-validation w-100">
-                                                                    <input class="form-control" type="text" name="nttSj"
-                                                                           id="nttSj" placeholder="예시제목1">
-                                                                </div>
-                                                                <div class="flex-c gap-1 text-nowrap" id="noticeSet">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                           name="noticeAt" id="noticeAt" value="Y"/>
-                                                                    <label class="form-check-label"
-                                                                           for="noticeAt">공지글</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr id="type2" style="display:none;">
+                                                <tr>
                                                     <th>
                                                         <label class="form-label" for="nttSj">
                                                             <spring:message code="title"/><span
@@ -313,7 +288,6 @@
 
         // 게시글 상세정보 가져오기
         let setDetail = function (data) {
-console.log(data);
         	$('#bbsId').val(data.bbsId);
             $('#bbsId > option[value="' + data.bbsId + '"]').prop("selected", true);
             handleBbsFileInfo(data.bbsId);

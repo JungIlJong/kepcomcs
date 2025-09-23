@@ -491,6 +491,28 @@
 	
 	<select id="getSearchAllBoardList" parameterType="HashMap" resultType="HashMap">
 		SELECT 
+			a.NTT_ID AS board_no, 
+			a.NTT_SJ 'title', 
+			a.NTT_CN 'value', 
+			a.NTT_STATUS AS board_status, 
+			DATE_FORMAT(a.FRST_REGIST_DT,'%Y-%m-%d') insert_dt,
+			a.FRST_REGISTER_ID AS insert_id, 
+			DATE_FORMAT(a.LAST_UPDT_DT,'%Y-%m-%d') update_dt,
+			a.LAST_UPDUSR_ID AS update_id,
+			a.bbs_id as board_type
+		FROM VST_NTT a  
+		where 1=1
+		  and a.USE_AT = 'Y'
+	   <if test="sSearch != null and sSearch != ''">
+			  and (a.NTT_SJ like CONCAT('%', #{sSearch}, '%') 
+			  	or a.NTT_CN like CONCAT('%', #{sSearch}, '%')
+			  )
+		</if>
+		order by a.FRST_REGIST_DT desc
+
+	</select>
+	<select id="getSearchAllBoardList2" parameterType="HashMap" resultType="HashMap">
+		SELECT 
 			a.board_no, 
 			a.board_title 'title', 
 			a.board_content 'value', 

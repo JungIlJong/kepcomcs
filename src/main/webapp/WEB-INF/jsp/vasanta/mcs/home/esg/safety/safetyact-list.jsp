@@ -47,7 +47,7 @@
 	         dataType: "json", 
 	         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 	         success: function (data) {
-	         	if(parseInt(data.result))
+	         	if(data)
 	     		{
 	        		iTotalRecord = data.recordsTotal;
 	        		$('#recordCount').text(iTotalRecord);

@@ -835,6 +835,13 @@
   color: #8A8F91;
   line-height: 1.5;
 }
+.news-view-desc img {
+	  max-width: 100% !important;
+	  height: auto !important;
+	  display: block;
+	  margin: 0 auto;
+  }
+  
 .recruit-view-tit {
   color: var(--color-black);
   font-size: 1rem;

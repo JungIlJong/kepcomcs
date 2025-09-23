@@ -37,7 +37,7 @@
 		getBoardSet(setBoardType);
 		
 		$("#menuTitle").text("${menuTitle}");
-		$("#menuSj").text("${menuSj}");
+		$("#menuSj, #menuSj2").text("${menuSj}");
 	})
 	
 	function getBoardSet(boardType){
@@ -60,7 +60,7 @@
 	         dataType: "json", 
 	         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 	         success: function (data) {
-	         	if(parseInt(data.result))
+	         	if(data)
 	     		{
 	        		iTotalRecord = data.recordsTotal;
 	        		$('#recordCount').text(iTotalRecord);
@@ -151,7 +151,7 @@
         </div>
       </div> -->
       <div class="conts-ani" data-trigger>
-        <p class="conts-desc_01 txt-ac tdesc"><c:out value="${menuSj}"/></p>
+        <p class="conts-desc_01 txt-ac tdesc" id="menuSj2"></p>
         <div style="margin-top:50px;" class="tab">
 	        <!--  본사 -->
 	        <div class="recruit-desc tab_cont js-tcont selected" style="margin-top:40px;">
