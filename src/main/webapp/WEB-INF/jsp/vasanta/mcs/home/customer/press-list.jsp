@@ -53,7 +53,7 @@
 				        'Content-Type': 'application/json' 
 				    },
 		         type: "POST",
-		         url: "/get/board/list/" + board_type,
+		         url: "/get/board/cardlist/" + board_type,
 		         dataType: "json", 
 		         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 		         data: JSON.stringify(form),

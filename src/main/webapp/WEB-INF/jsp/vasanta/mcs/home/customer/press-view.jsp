@@ -53,7 +53,6 @@
 					if (data.files.length > 0) {
 					    let node = '';
 					    for (let i = 0; i < data.files.length; i++) {
-					    	console.log(data.files[i].orignlFileNm);
 					        node += '<p><a href="/file/download?fileId=' + data.files[i].atchFileId + '">';
 					        node += '<span>' + data.files[i].orignlFileNm + '</span></a></p>'
 					    }
@@ -75,12 +74,11 @@
 				        'Accept': 'application/json',
 				        'Content-Type': 'application/json' 
 				},
-				url:"/api/mber/bbs/"+board_type+"/side?nttId="+board_no,
+				url:"/get/board/"+board_type+"/side?nttId="+board_no,
 			    async:true,// false 일 경우 동기 요청으로 변경
 			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html
 			    success:function(data) {
-			    	console.log(data);
 					$("#prev_post_href").prop("disabled", true);
 					$("#next_post_href").prop("disabled", true);
 					for (i=0; i < data.length; i++){

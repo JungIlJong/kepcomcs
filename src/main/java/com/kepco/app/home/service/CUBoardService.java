@@ -20,6 +20,7 @@ public interface CUBoardService {
 	HashMap<String, Object> setBoardFile(SysNtt nt);
 	
 	SearchMberNtt.NttDetail getBoardView(Long nttId);
+	List<SearchMberNtt.PreNext> selectPreAndNext(Long id, Long bbsId);
 	List<HashMap<String, Object>> getBoardView2(HashMap<String, Object> body);
 	List<HashMap<String, Object>> getNewsView(HashMap<String, Object> body);
 	

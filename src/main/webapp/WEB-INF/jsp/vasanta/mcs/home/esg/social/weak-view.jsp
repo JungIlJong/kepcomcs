@@ -77,7 +77,7 @@
 				        'Accept': 'application/json',
 				        'Content-Type': 'application/json' 
 				},
-				url:"/api/mber/bbs/"+board_type+"/side?nttId="+board_no,
+				url:"/get/board/"+board_type+"/side?nttId="+board_no,
 			    async:true,// false 일 경우 동기 요청으로 변경
 			    type:'GET', // GET, PUT
 			    dataType:'json',// xml, json, script, html

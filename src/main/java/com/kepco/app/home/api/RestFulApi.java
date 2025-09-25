@@ -74,7 +74,58 @@ public class RestFulApi {
 
     @RequestMapping(value = "/get/board/list/{board_type}", produces = "application/json; charset=utf8", method = RequestMethod.POST)
     @ResponseBody
-    public String getBoardList(@PathVariable(value = "board_type") String board_type, @RequestBody HashMap<String, Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String getBoardList(@PathVariable(value = "board_type") String board_type, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HashMap<String, Object> body = new HashMap<String, Object>();
+        Map params = request.getParameterMap();
+        Iterator i = params.keySet().iterator();
+
+        while (i.hasNext()) {
+            String key = (String) i.next();
+            String value = ((String[]) params.get(key))[0];
+            //System.out.println(key + " " + value);
+            body.put(key, value);
+        }
+        System.out.println(new ObjectMapper().writeValueAsString(body));
+        Boolean valid = true;
+        String col = "";
+
+        try {
+            String[] cols = body.get("sColumns").toString().split(",");
+            col = cols[Integer.valueOf((String) body.get("iSortCol_0"))];
+            body.put("orderCol", col);
+
+        } catch (Exception e) {
+            col = "";
+            // TODO: handle exception
+        }
+        body.put("board_type", board_type);
+        List<HashMap<String, Object>> rList = BoardService.getBoardList(body);
+        Integer totalrecord = BoardService.getBoardListCount(body);
+
+
+        JSONObject rdata = new JSONObject();
+        if (rList.size() > 0) {
+            rdata.put("result", "1");
+            rdata.put("msg", "1");
+            rdata.put("hashdata", new ArrayList());
+            rdata.put("recordsTotal", totalrecord);
+            rdata.put("recordsFiltered", totalrecord);
+            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
+        } else {
+            rdata.put("result", "0");
+            rdata.put("msg", "0");
+            rdata.put("hashdata", new ArrayList());
+            rdata.put("recordsTotal", totalrecord);
+            rdata.put("recordsFiltered", totalrecord);
+            rdata.put("data", new JSONArray(new ObjectMapper().writeValueAsString(rList)));
+        }
+
+        return rdata.toString();
+    }
+
+    @RequestMapping(value = "/get/board/cardlist/{board_type}", produces = "application/json; charset=utf8", method = RequestMethod.POST)
+    @ResponseBody
+    public String getBoardCardList(@PathVariable(value = "board_type") String board_type, @RequestBody HashMap<String, Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {
     	HashMap<String, Object> body = new HashMap<>();
 
         System.out.println(param.get("iDisplayStart"));
@@ -107,8 +158,7 @@ public class RestFulApi {
 
         return rdata.toString();
     }
-
-
+    
     @RequestMapping(value = "/set/board", produces = "application/json; charset=utf8", method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> setBoard(@RequestBody HashMap<String, Object> param, HttpServletRequest request, HttpServletResponse response) {
@@ -179,7 +229,13 @@ public class RestFulApi {
 
     	return CommonResponse.success(BoardService.getBoardView(nttId));
     }
-
+    
+    @RequestMapping(value = "/get/board/{board_type}/side", produces = "application/json; charset=utf8", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity selectPreAndNext(@RequestParam Long nttId, @PathVariable Long board_type) {
+        return CommonResponse.success(BoardService.selectPreAndNext(nttId, board_type));
+    }
+    
     @RequestMapping(value = "/get/board/chkBoardPwd/", produces = "application/json; charset=utf8", method = RequestMethod.POST)
     @ResponseBody
     public String chkBoardPwd(@RequestBody HashMap<String, Object> param, HttpServletRequest request, HttpServletResponse response) throws Exception {

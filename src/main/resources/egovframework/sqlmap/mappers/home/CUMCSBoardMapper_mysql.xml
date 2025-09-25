@@ -208,6 +208,42 @@
         WHERE VN.NTT_ID = #{nttId} AND VN.USE_AT = 'Y'
 	</select>
 	
+	<select id="selectPreAndNext"
+            parameterType="map"
+            resultType="com.kepco.app.domain.ntt.dto.SearchMberNtt$PreNext">
+     	<![CDATA[       
+            (
+			  SELECT 
+			      NTT_ID, NTT_SJ, 'prev' AS VIEW_TYPE
+			  FROM (
+			    SELECT 
+			        NTT_ID, NTT_SJ
+			    FROM VST_NTT
+			    WHERE BBS_ID = #{bbsId}
+			      AND USE_AT = 'Y'
+			      AND NTT_ID < #{nttId}
+			    ORDER BY NTT_ID DESC
+			    LIMIT 1
+			  ) t1
+			)
+			UNION ALL
+			(
+			  SELECT 
+			      NTT_ID, NTT_SJ, 'next' AS VIEW_TYPE
+			  FROM (
+			    SELECT 
+			        NTT_ID, NTT_SJ
+			    FROM VST_NTT
+			    WHERE BBS_ID = #{bbsId}
+			      AND USE_AT = 'Y'
+			      AND NTT_ID > #{nttId}
+			    ORDER BY NTT_ID ASC
+			    LIMIT 1
+			  ) t2
+			)
+		]]>		            
+    </select>
+    
 	<select id="getBoardView2" parameterType="HashMap" resultType="HashMap">
 		SELECT 
 			a.NTT_ID AS board_no, 

@@ -138,6 +138,11 @@ public class CUBoardServiceImpl implements CUBoardService {
 		return boardMapper.getBoardView(nttId);
 	}
 	
+	@Override
+    public List<SearchMberNtt.PreNext>selectPreAndNext(Long id, Long bbsId) {
+        return boardMapper.selectPreAndNext(id, bbsId);
+    }
+	
 	public List<HashMap<String, Object>> getBoardView2(HashMap<String, Object> body) {
 		// TODO Auto-generated method stub
 		return boardMapper.getBoardView2(body);
