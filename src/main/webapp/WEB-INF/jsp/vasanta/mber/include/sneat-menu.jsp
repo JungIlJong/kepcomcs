@@ -3,6 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <script src="/resources/js/sh-common.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
+<!-- <script src="/resources/landing/js/gtag.js"></script> -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-D8LW20DGXL"></script>
 <script>
 	/* 운영 */

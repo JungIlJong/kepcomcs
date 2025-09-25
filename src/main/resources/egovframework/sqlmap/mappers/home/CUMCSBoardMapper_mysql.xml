@@ -125,8 +125,8 @@
 		<!-- <if test="orderCol == null and orderCol == ''"> -->
 			ORDER BY A.NTT_ID DESC
 		<!-- </if> -->
-		<if test="iDisplayStart != null and iDisplayStart != '' and iDisplayLength != null and iDisplayLength != ''">
-			LIMIT ${iDisplayStart}, ${iDisplayLength}
+		<if test="iDisplayStart != null and iDisplayLength != null">
+		  LIMIT ${iDisplayStart}, ${iDisplayLength}
 		</if>
 	</select>
 
@@ -180,30 +180,6 @@
 		GROUP BY A.NTT_ID ) C
 	</select>
 	
-	<select id="getBoardView_origin" parameterType="HashMap" resultType="HashMap">
-		SELECT 
-			a.board_no, 
-			a.board_title, 
-			a.board_content, 
-			a.reply_content,
-			a.board_status, 
-			DATE_FORMAT(a.insert_dt,'%Y-%m-%d') insert_dt,
-			a.insert_id, 
-			DATE_FORMAT(a.update_dt,'%Y-%m-%d') update_dt,
-			a.update_id,
-			a.name,
-			a.link_url,
-			a.phone,
-			a.main_img_file_name
-		FROM board a
-		where 1=1
-		  and board_type = #{board_type}
-		  and board_no = #{board_no}
-		  and board_pwd = #{board_pwd}
-		  and USE_AT = 'Y'
-		  and del_yn = 'N'
-	</select>
-
 	<select id="getBoardView" parameterType="HashMap" resultMap="detailMap">
 		SELECT
             VN.NTT_ID,
@@ -221,7 +197,11 @@
             IF(VN.NOTICE_AT = 'Y', TRUE, FALSE)       AS NOTICE,
             IF(VN.FRST_REGISTER_ID IS NULL, TRUE, FALSE) ANONYMOUS_WRITER,
             VA.ATCH_FILE_ID,
-            CONCAT(VA.ORIGNL_FILE_NM, '.' , VA.FILE_EXTSN) AS ORIGNL_FILE_NM,
+            CASE 
+			    WHEN VA.ORIGNL_FILE_NM LIKE CONCAT('%.', VA.FILE_EXTSN)
+			    THEN VA.ORIGNL_FILE_NM
+			    ELSE CONCAT(VA.ORIGNL_FILE_NM, '.', VA.FILE_EXTSN)
+			END AS ORIGNL_FILE_NM,
             (SELECT T.BBS_NM FROM VST_BBS T WHERE T.BBS_ID = VN.BBS_ID) AS BBS_NM
         FROM VST_NTT VN
         LEFT OUTER JOIN VST_ATCHFILE VA ON VN.NTT_ID = VA.UPPER_ID

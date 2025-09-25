@@ -22,7 +22,8 @@
   <script src="/resources/landing/js/jquery.waypoints.min.js"></script>
   <script src="/resources/landing/js/pages.js"></script>
   <script src="/resources/landing/js/jquery.animateNumber.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script>
+  <script src="/resources/landing/js/ie11CustomProperties.min.js"></script>
+<!--   <script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"></script> -->
 </head>
 <body id="mcsPage">
   <div id="header"><jsp:include page="/WEB-INF/jsp/vasanta/mber/include/sneat-menu.jsp"/></div>

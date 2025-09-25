@@ -456,7 +456,6 @@
             dataType: "json",
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             success: function (data) {
-            	console.log(data);
             	if(data.length > 0) {
 	                for (i = 0; i < data.length; i++) {
 	                    var item = data[i];
@@ -476,25 +475,6 @@
 	                $("#mainPopupSwiper").html(popupSwiperHtml)
 	                $("#popupCnt").text(data.length);
 	                
-	                new Swiper(".popupslider", {
-	                    slidesPerView: 'auto',
-	                    loop: true,
-	                    autoplay: {
-	                        delay: 2000,
-	                        disableOnInteraction: false
-	                    },
-	                    navigation: {
-	                        nextEl: ".popup-button-next",
-	                        prevEl: ".popup-button-prev",
-	                    },
-	                    pagination: {
-	                        el: ".popup-pagination",
-	                        clickable: true,
-	                    },
-	                    breakpoints: {
-	                        1024: { autoplay: false, loop: false }
-	                    }
-	                });
             	}
             },
             error: function () {
@@ -551,7 +531,7 @@
 
         var popSwiper = new Swiper(".popupslider", {
             slidesPerView: 'auto',
-            loop: true,
+            loop: false,
             autoplay: {
                 delay: 2000, // 슬라이드 지연 속도 (기본 3000(ms))
                 disableOnInteraction: false

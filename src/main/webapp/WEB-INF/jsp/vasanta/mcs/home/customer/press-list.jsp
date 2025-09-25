@@ -34,73 +34,73 @@
   	var board_type = <%=request.getParameter("board_type") %> ? <%=request.getParameter("board_type") %> : 1322;
 	
 	$(document).ready(function () {
-		getBoardSet();
+		getBoardList();
 	})
 	
-	function getBoardSet(){
+	function getBoardList(){
+		if (iDisplayStart <= iTotalRecord){
+			$("#tab_"+board_type).siblings().removeClass("selected");
+			$("#tab_"+board_type).addClass("selected");
+			
+			var form = {
+					iDisplayStart :  iDisplayStart,
+					iDisplayLength : iDisplayLength
+			    };
+			
+			$.ajax({
+				 headers: { 
+				        'Accept': 'application/json',
+				        'Content-Type': 'application/json' 
+				    },
+		         type: "POST",
+		         url: "/get/board/list/" + board_type,
+		         dataType: "json", 
+		         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+		         data: JSON.stringify(form),
+		         success: function (data) {
+		         	if(parseInt(data.result))
+		     		{
+		        		iTotalRecord = data.recordsTotal;
+		        		$('#recordCount').text(iTotalRecord);
+		        		if(iTotalRecord > 0){
+		        			iDisplayStart = iDisplayStart + data.data.length;
+			         		var li_html = "";
+	
+			         		for ( i = 0; i < data.data.length; i++) {
+			         			var ul_list = $("#ul_list"); //ul_list선언
+								li_html = li_html + "<a href='/mber/customer/press-view?board_type="+board_type+"&board_no=" + data.data[i].board_no +"'>";
+	              				li_html = li_html +  "<p class='title'>" + data.data[i].board_title + "</p>";
+								li_html = li_html + "<img src='" + (data.data[i].thumb_url ? data.data[i].thumb_url :
+	                                    "/resources/landing/images/customer/card_list_thumb.jpg") + "' alt=''>";
+								li_html = li_html + "</a>";
+			         			
+								$("#news_list_all").append("<li>"+li_html+"</li>"); //ul_list안쪽에 li추가
+	
+			         			li_html = "";
+	
+			         		}
 
-		$("#tab_"+board_type).siblings().removeClass("selected");
-		$("#tab_"+board_type).addClass("selected");
-		
-		iDisplayStart = 0;
-		iTotalRecord = 0;
-		$("#news_list_all").html("");
-
-		$.ajax({
-			 headers: { 
-			        'Accept': 'application/json',
-			        'Content-Type': 'application/json' 
-			    },
-	         type: "POST",
-	         url: "/get/board/list/" + board_type,
-	         dataType: "json", 
-	         contentType : "application/x-www-form-urlencoded; charset=UTF-8",
-	         success: function (data) {
-	         	if(parseInt(data.result))
-	     		{
-	        		iTotalRecord = data.recordsTotal;
-	        		$('#recordCount').text(iTotalRecord);
-	        		if(iTotalRecord > 0){
-	        			iDisplayStart = 0;
-// 	        			iDisplayStart = iDisplayStart + data.data.length;
-		         		
-		         		var li_html = "";
-
-		         		for ( i = 0; i < data.data.length; i++) {
-		         			var ul_list = $("#ul_list"); //ul_list선언
-							li_html = li_html + "<a href='/mber/customer/press-view?board_type="+board_type+"&board_no=" + data.data[i].board_no +"'>";
-              				li_html = li_html +  "<p class='title'>" + data.data[i].board_title + "</p>";
-							li_html = li_html + "<img src='" + (data.data[i].thumb_url ? data.data[i].thumb_url :
-                                    "/resources/landing/images/customer/card_list_thumb.jpg") + "' alt=''>";
-							li_html = li_html + "</a>";
-		         			
-							$("#news_list_all").append("<li>"+li_html+"</li>"); //ul_list안쪽에 li추가
-
-		         			li_html = "";
-
-		         		}
-
-		         		if(iTotalRecord == iDisplayStart){
+			         		if(iTotalRecord == iDisplayStart){
+								$("#btn_more").hide();
+				         	}else{
+				         		$("#btn_more").show();
+				         	}
+		        		}else if(iTotalRecord == 0){
 							$("#btn_more").hide();
-			         	}else{
-			         		$("#btn_more").show();
-			         	}
-	        		}else if(iTotalRecord == 0){
-						$("#btn_more").hide();
-			        }
-	     		}
-	         	else
-	             {
-					alert("관리자에게 문의바랍니다.");
-					
-	             }
-	         },
-	         error: function (e) {
-	         	alert("관리자에게 문의바랍니다.");
-	         	console.log(e);
-	         }
-	    });
-					
+				        }
+		     		}
+		         	else
+		             {
+						alert("관리자에게 문의바랍니다.");
+						
+		             }
+		         },
+		         error: function (e) {
+		         	alert("관리자에게 문의바랍니다.");
+		         	console.log(e);
+		         }
+		    });
+		}			
 	}
   </script>
 </head>
@@ -148,54 +148,6 @@
 	        	<p class="news-num" style="text-align:right;">총 <span id="recordCount"></span>건</p>
                 <!-- 카드리스트형 -->
                 <ul class="card_list" id="news_list_all">
-                  <li>
-                    <a href="">
-                      <p class="title"><span>텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트</span></p>
-                      <img src="/resources/landing/images/customer/card_list_thumb.jpg" alt="">
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <p class="title"><span>텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트</span></p>
-                      <img src="https://www.kepcomcs.co.kr/api/file/fileDown?file_name=232_093856044.png" alt="">
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <p class="title"><span>텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트</span></p>
-                      <img src="https://www.kepcomcs.co.kr/api/file/fileDown?file_name=232_093856044.png" alt="">
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <p class="title"><span>텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트</span></p>
-                      <img src="https://www.kepcomcs.co.kr/api/file/fileDown?file_name=232_093856044.png" alt="">
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <p class="title"><span>텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트</span></p>
-                      <img src="https://www.kepcomcs.co.kr/api/file/fileDown?file_name=232_093856044.png" alt="">
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <p class="title"><span>텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트</span></p>
-                      <img src="https://www.kepcomcs.co.kr/api/file/fileDown?file_name=232_093856044.png" alt="">
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <p class="title"><span>텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트</span></p>
-                      <img src="https://www.kepcomcs.co.kr/api/file/fileDown?file_name=232_093856044.png" alt="">
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <p class="title"><span>텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트텍스트</span></p>
-                      <img src="https://www.kepcomcs.co.kr/api/file/fileDown?file_name=232_093856044.png" alt="">
-                    </a>
-                  </li>
                 </ul>
 		        <div class="btn-row" id="btn_more">
 		          <a href="javascript:getBoardList();">

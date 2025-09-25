@@ -83,7 +83,7 @@ public class UserDetailsUtil {
     }
 
     public static String getMbrId() {
-        return String.valueOf(getAuthenticatedUser().getMbrId());
+    	return String.valueOf(getAuthenticatedUser().getMbrId());
     }
 
     public static String getName() {
