@@ -1,13 +1,19 @@
 package com.kepco.app.domain.mbr.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.kepco.app.core.security.service.SnsLoginService;
 import com.kepco.app.core.security.util.UserDetailsUtil;
 import com.kepco.app.domain.authrt.dto.Authrt;
 import com.kepco.app.domain.authrt.service.AuthrtService;
@@ -16,11 +22,8 @@ import com.kepco.app.domain.block.service.BlockService;
 import com.kepco.app.domain.mbr.dto.Mbr;
 import com.kepco.app.domain.mbr.mapper.MbrMapper;
 import com.kepco.app.domain.mbr.service.MbrService;
-import com.kepco.app.domain.report.dto.InsertReport;
-import com.kepco.app.domain.report.service.ReportService;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service("mbrService")
@@ -31,8 +34,6 @@ public class MbrServiceImpl extends EgovAbstractServiceImpl implements MbrServic
     private final PasswordEncoder passwordEncoder;
 
     private final AuthrtService authrtService;
-
-    private final ReportService reportService;
 
     private final BlockService blockService;
 

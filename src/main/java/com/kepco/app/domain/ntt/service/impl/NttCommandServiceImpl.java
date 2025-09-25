@@ -1,6 +1,9 @@
 package com.kepco.app.domain.ntt.service.impl;
 
-import lombok.RequiredArgsConstructor;
+import java.io.File;
+import java.time.LocalDate;
+import java.util.Objects;
+
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kepco.app.core.security.util.UserDetailsUtil;
-import com.kepco.app.core.vo.LoginVO;
 import com.kepco.app.domain.atchfile.dto.InsertAtchFile;
 import com.kepco.app.domain.atchfile.service.FileService;
 import com.kepco.app.domain.block.dto.BlockRequest;
@@ -16,14 +18,8 @@ import com.kepco.app.domain.block.service.BlockService;
 import com.kepco.app.domain.ntt.dto.MberNtt;
 import com.kepco.app.domain.ntt.mapper.NttCommandMapper;
 import com.kepco.app.domain.ntt.service.NttCommandService;
-import com.kepco.app.domain.report.dto.InsertReport;
-import com.kepco.app.domain.report.service.ReportService;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -34,8 +30,6 @@ public class NttCommandServiceImpl extends EgovAbstractServiceImpl implements Nt
     private final FileService fileService;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final ReportService reportService;
 
     private final BlockService blockService;
 
@@ -112,12 +106,6 @@ public class NttCommandServiceImpl extends EgovAbstractServiceImpl implements Nt
                 ntt.setThumbUrl(String.format("/file/%s", fileId));
             }
         }
-    }
-
-    @Override
-    @Transactional
-    public void reportNtt(Long nttId) {
-        reportService.insertReport(new InsertReport(nttId, UserDetailsUtil.getMbrId(), "ntt"));
     }
 
     @Override

@@ -35,7 +35,5 @@ public interface NttCommandService {
      */
     void deleteNtt(Long nttId);
 
-    void reportNtt(Long nttId);
-
     void blockNtt(Long nttId);
 }

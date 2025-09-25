@@ -70,25 +70,6 @@ public class NttCommandApi {
         return ResponseEntity.ok(Collections.EMPTY_LIST);
     }
 
-    /**
-     * 게시글을 신고한다.
-     */
-    @PostMapping("/report")
-    public ResponseEntity report(@RequestBody @Valid SaveMberNtt.Report report) {
-        // "공지사항" 등 관리자 게시판의 글은 차단 불가능하도록 수정
-        List<Long> adminList = new ArrayList<>();
-        // 차단 불가 ID 수동 추가
-        adminList.add(1L);
-
-        Map<String, Object> nttDetail = nttSysService.selectNttDetail(String.valueOf(report.getNttId()));
-        if (adminList.contains(Long.parseLong((String) nttDetail.get("bbsId")))) {
-            return CommonResponse.error(CommonErrorCode.BAD_REQUEST);
-        }
-
-        nttCommandService.reportNtt(report.getNttId());
-        return ResponseEntity.ok(Collections.EMPTY_LIST);
-    }
-
     @PostMapping("/block")
     public ResponseEntity block(@RequestBody @Valid SaveMberNtt.Block block) {
         // "공지사항" 등 관리자 게시판의 글은 차단 불가능하도록 수정
